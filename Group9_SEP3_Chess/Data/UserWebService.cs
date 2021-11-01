@@ -26,9 +26,7 @@ namespace Group9_SEP3_Chess.Data
         {
             var factory = new ConnectionFactory()
             {
-                HostName = "10.154.204.126", 
-                UserName = "test", 
-                Password = "test"
+                HostName = "localhost"
             };
 
             connection = factory.CreateConnection();
