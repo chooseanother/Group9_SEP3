@@ -13,7 +13,7 @@ namespace Group9_SEP3_Chess.Data
 {
     public class UserWebService : IUserService
     {
-        private const string QUEUE_NAME = "rpc_queue";
+        private const string QUEUE_NAME = "TIER2";
 
         private readonly IConnection connection;
         private readonly IModel channel;
@@ -24,7 +24,12 @@ namespace Group9_SEP3_Chess.Data
         
         public UserWebService()
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            var factory = new ConnectionFactory()
+            {
+                HostName = "10.154.204.126", 
+                UserName = "test", 
+                Password = "test"
+            };
 
             connection = factory.CreateConnection();
             channel = connection.CreateModel();
@@ -45,14 +50,14 @@ namespace Group9_SEP3_Chess.Data
                 queue: replyQueueName,
                 autoAck: true);
         }
-        public async Task<User> RegisterUserAsync(User user, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Message> RegisterUserAsync(Message message, CancellationToken cancellationToken = default(CancellationToken))
         {
             IBasicProperties props = channel.CreateBasicProperties();
             var correlationId = Guid.NewGuid().ToString();
             props.CorrelationId = correlationId;
             props.ReplyTo = replyQueueName;
-            var message = JsonSerializer.Serialize(user);
-            var messageBytes = Encoding.UTF8.GetBytes(message);
+            var jsonMessage = JsonSerializer.Serialize(message); 
+            var messageBytes = Encoding.UTF8.GetBytes(jsonMessage);
             var tcs = new TaskCompletionSource<string>();
             callbackMapper.TryAdd(correlationId, tcs);
 
@@ -63,7 +68,7 @@ namespace Group9_SEP3_Chess.Data
                 body: messageBytes);
 
             cancellationToken.Register(() => callbackMapper.TryRemove(correlationId, out var tmp));
-            return JsonSerializer.Deserialize<User>(tcs.Task.Result);
+            return JsonSerializer.Deserialize<Message>(tcs.Task.Result);
         }
         
         public Task<string> CallAsync(string message, CancellationToken cancellationToken = default(CancellationToken))
