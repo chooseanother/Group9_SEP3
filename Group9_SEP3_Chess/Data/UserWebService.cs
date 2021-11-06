@@ -13,7 +13,7 @@ namespace Group9_SEP3_Chess.Data
 {
     public class UserWebService : IUserService
     {
-        private const string QUEUE_NAME = "TIER2";
+        private const string QUEUE_NAME = "rpc_queue";
 
         private readonly IConnection connection;
         private readonly IModel channel;
