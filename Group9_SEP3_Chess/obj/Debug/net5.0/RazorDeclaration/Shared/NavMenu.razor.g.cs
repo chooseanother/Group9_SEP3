@@ -90,7 +90,7 @@ using Group9_SEP3_Chess.Shared;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 28 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\Shared\NavMenu.razor"
+#line 23 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\Shared\NavMenu.razor"
        
     private bool collapseNavMenu = true;
 
