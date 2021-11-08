@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/Group9_SEP3_Chess.csproj": {}
+    "C:\\Users\\Nick\\RiderProjects\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj": {}
   },
   "projects": {
-    "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/Group9_SEP3_Chess.csproj": {
+    "C:\\Users\\Nick\\RiderProjects\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/Group9_SEP3_Chess.csproj",
+        "projectUniqueName": "C:\\Users\\Nick\\RiderProjects\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj",
         "projectName": "Group9_SEP3_Chess",
-        "projectPath": "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/Group9_SEP3_Chess.csproj",
-        "packagesPath": "/home/gimpe/.nuget/packages/",
-        "outputPath": "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/obj/",
+        "projectPath": "C:\\Users\\Nick\\RiderProjects\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj",
+        "packagesPath": "C:\\Users\\Nick\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Nick\\RiderProjects\\Group9_SEP3\\Group9_SEP3_Chess\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/gimpe/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Nick\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -55,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/5.0.402/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
