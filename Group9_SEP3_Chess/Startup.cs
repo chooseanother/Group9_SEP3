@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Group9_SEP3_Chess.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +10,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Group9_SEP3_Chess.Data;
 
 namespace Group9_SEP3_Chess
 {
@@ -28,7 +28,7 @@ namespace Group9_SEP3_Chess
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<IUserService, UserWebService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "kJv00WwL9G6FBNNd6eMfb+mMxHnUkgi9A+qYcz7i7dwAfLKkoiyOn5DAu56Y+g6BOVxcf+1J07uIjeLrY9X6+g==",
+  "dgSpecHash": "fpBf9aqpn48edOVZbY8MRKgzhaofjkuR4qai1E3ox0L7bwhynS68wa30sIxBde+0NVeJKZc7EMZA9OcdJSnStw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Nick\\RiderProjects\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/Group9_SEP3_Chess.csproj",
+  "expectedPackageFiles": [
+    "/home/gimpe/.nuget/packages/rabbitmq.client/6.2.2/rabbitmq.client.6.2.2.nupkg.sha512",
+    "/home/gimpe/.nuget/packages/system.memory/4.5.4/system.memory.4.5.4.nupkg.sha512",
+    "/home/gimpe/.nuget/packages/system.threading.channels/4.7.1/system.threading.channels.4.7.1.nupkg.sha512"
+  ],
   "logs": []
 }

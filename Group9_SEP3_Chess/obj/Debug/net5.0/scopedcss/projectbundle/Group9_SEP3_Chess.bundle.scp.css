@@ -1,47 +1,21 @@
 @import '';
 
-/* _content/Group9_SEP3_Chess/Pages/BoardSquareBlack.razor.rz.scp.css */
-.square[b-xh6h2n1mcn] {
-    background-color: #3b3737;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    width: 100px;
-    height: 100px;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-}
-.square:hover[b-xh6h2n1mcn] {
-    background-color: rgba(106, 202, 9, 0.8);
-}
-/* _content/Group9_SEP3_Chess/Pages/BoardSquareWhite.razor.rz.scp.css */
-.square[b-605dzcp5ur] {
-    background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.8);
-    width: 100px;
-    height: 100px;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-}
-.square:hover[b-605dzcp5ur] {
-    background-color: rgba(106, 202, 9, 0.8);
-}
 /* _content/Group9_SEP3_Chess/Shared/MainLayout.razor.rz.scp.css */
-.page[b-aucxx9nvnu] {
+.page[b-we5er46473] {
     position: relative;
     display: flex;
     flex-direction: column;
 }
 
-.main[b-aucxx9nvnu] {
+.main[b-we5er46473] {
     flex: 1;
 }
 
-.sidebar[b-aucxx9nvnu] {
+.sidebar[b-we5er46473] {
     background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
 }
 
-.top-row[b-aucxx9nvnu] {
+.top-row[b-we5er46473] {
     background-color: #f7f7f7;
     border-bottom: 1px solid #d6d5d5;
     justify-content: flex-end;
@@ -50,88 +24,88 @@
     align-items: center;
 }
 
-    .top-row[b-aucxx9nvnu]  a, .top-row .btn-link[b-aucxx9nvnu] {
+    .top-row[b-we5er46473]  a, .top-row .btn-link[b-we5er46473] {
         white-space: nowrap;
         margin-left: 1.5rem;
     }
 
-    .top-row a:first-child[b-aucxx9nvnu] {
+    .top-row a:first-child[b-we5er46473] {
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
 @media (max-width: 640.98px) {
-    .top-row:not(.auth)[b-aucxx9nvnu] {
+    .top-row:not(.auth)[b-we5er46473] {
         display: none;
     }
 
-    .top-row.auth[b-aucxx9nvnu] {
+    .top-row.auth[b-we5er46473] {
         justify-content: space-between;
     }
 
-    .top-row a[b-aucxx9nvnu], .top-row .btn-link[b-aucxx9nvnu] {
+    .top-row a[b-we5er46473], .top-row .btn-link[b-we5er46473] {
         margin-left: 0;
     }
 }
 
 @media (min-width: 641px) {
-    .page[b-aucxx9nvnu] {
+    .page[b-we5er46473] {
         flex-direction: row;
     }
 
-    .sidebar[b-aucxx9nvnu] {
+    .sidebar[b-we5er46473] {
         width: 250px;
         height: 100vh;
         position: sticky;
         top: 0;
     }
 
-    .top-row[b-aucxx9nvnu] {
+    .top-row[b-we5er46473] {
         position: sticky;
         top: 0;
         z-index: 1;
     }
 
-    .main > div[b-aucxx9nvnu] {
+    .main > div[b-we5er46473] {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
     }
 }
 /* _content/Group9_SEP3_Chess/Shared/NavMenu.razor.rz.scp.css */
-.navbar-toggler[b-k0e83sc7ng] {
+.navbar-toggler[b-70ntjix8jl] {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.top-row[b-k0e83sc7ng] {
+.top-row[b-70ntjix8jl] {
     height: 3.5rem;
     background-color: rgba(0,0,0,0.4);
 }
 
-.navbar-brand[b-k0e83sc7ng] {
+.navbar-brand[b-70ntjix8jl] {
     font-size: 1.1rem;
 }
 
-.oi[b-k0e83sc7ng] {
+.oi[b-70ntjix8jl] {
     width: 2rem;
     font-size: 1.1rem;
     vertical-align: text-top;
     top: -2px;
 }
 
-.nav-item[b-k0e83sc7ng] {
+.nav-item[b-70ntjix8jl] {
     font-size: 0.9rem;
     padding-bottom: 0.5rem;
 }
 
-    .nav-item:first-of-type[b-k0e83sc7ng] {
+    .nav-item:first-of-type[b-70ntjix8jl] {
         padding-top: 1rem;
     }
 
-    .nav-item:last-of-type[b-k0e83sc7ng] {
+    .nav-item:last-of-type[b-70ntjix8jl] {
         padding-bottom: 1rem;
     }
 
-    .nav-item[b-k0e83sc7ng]  a {
+    .nav-item[b-70ntjix8jl]  a {
         color: #d7d7d7;
         border-radius: 4px;
         height: 3rem;
@@ -140,22 +114,22 @@
         line-height: 3rem;
     }
 
-.nav-item[b-k0e83sc7ng]  a.active {
+.nav-item[b-70ntjix8jl]  a.active {
     background-color: rgba(255,255,255,0.25);
     color: white;
 }
 
-.nav-item[b-k0e83sc7ng]  a:hover {
+.nav-item[b-70ntjix8jl]  a:hover {
     background-color: rgba(255,255,255,0.1);
     color: white;
 }
 
 @media (min-width: 641px) {
-    .navbar-toggler[b-k0e83sc7ng] {
+    .navbar-toggler[b-70ntjix8jl] {
         display: none;
     }
 
-    .collapse[b-k0e83sc7ng] {
+    .collapse[b-70ntjix8jl] {
         /* Never collapse the sidebar for wide screens */
         display: block;
     }
