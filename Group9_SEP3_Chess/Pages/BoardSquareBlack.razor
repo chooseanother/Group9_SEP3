@@ -1,0 +1,16 @@
+﻿<div class="square" @onclick="ClickHandler">
+    <img class="img-fluid" src="@Image">
+</div>
+
+
+
+@functions {
+    [Parameter]
+    public String Image { get; set; }
+    
+    [Parameter]
+    public String Loaction { get; set; }
+    
+    [Parameter]
+    public EventCallback ClickHandler { get; set; }
+}

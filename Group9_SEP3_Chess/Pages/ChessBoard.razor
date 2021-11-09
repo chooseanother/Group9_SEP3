@@ -1,0 +1,111 @@
+﻿
+<div class="board" >
+    @for(int j = 8; j > 0; j--){
+        if(j % 2 == 0){
+            for (int i = 0; i < 8; i++)
+            {
+                String StartPice = "";
+                String loaction = j + letters[i];
+                
+                switch (loaction)
+                {
+                    case "8a": case "8h":
+                        StartPice = "Images/BRook.png";
+                        break;
+                    case "8b": case "8g":
+                        StartPice = "Images/BHorse.png";
+                        break;
+                    case  "8c": case "8f":
+                        StartPice = "Images/WBishop.png";
+                        break;
+                    case  "8d":
+                        StartPice = "Images/BQueen.png";
+                        break;
+                    case  "8e":
+                        StartPice = "Images/BKing.png";
+                        break;
+                    case "2a": case "2b": case "2c": case "2d": case "2e": case "2f": case "2g": case "2h":
+                        StartPice = "Images/WPawn.png";
+                        break;
+                    default:
+                        StartPice = null;
+                        break;
+                }
+                
+                if (i % 2 == 0)
+                {
+                    <BoardSquareBlack Image="@StartPice" ClickHandler="@(() => HandleClick(loaction, StartPice))"></BoardSquareBlack>
+                }
+                else
+                {
+                    <BoardSquareWhite Image="@StartPice" ClickHandler="@(() => HandleClick(loaction, StartPice))"></BoardSquareWhite>
+                }
+            }
+        }
+        else{
+            for (int i = 0; i < 8; i++)
+            {
+                String StartPice = "";
+                String loaction = j + letters[i];
+                
+                switch (loaction)
+                {
+                    case "1a": case "1h":
+                        StartPice = "Images/WRook.png";
+                        break;
+                    case "1b": case "1g":
+                        StartPice = "Images/WHorse.png";
+                        break;
+                    case "1c": case "1f":
+                        StartPice = "Images/WBishop.png";
+                        break;
+                    case "1d":
+                        StartPice = "Images/WQueen.png";
+                        break;
+                    case "1e":
+                        StartPice = "Images/WKing.png";
+                        break;
+                    case "7a": case "7b": case "7c": case "7d": case "7e": case "7f": case "7g": case "7h":
+                        StartPice = "Images/BPawn.png";
+                        break;
+                    default:
+                        StartPice = null;
+                        break;    
+                        
+                }
+                
+                if (i % 2 == 0)
+                {
+                    <BoardSquareWhite Image="@StartPice" ClickHandler="@(() => HandleClick(loaction, StartPice))"></BoardSquareWhite>
+                }
+                else
+                {
+                    <BoardSquareBlack Image="@StartPice" ClickHandler="@(() => HandleClick(loaction, StartPice))"/>
+                }
+            }
+        }}
+</div>
+
+
+<style>
+    .board {
+        display: grid;
+        grid-template-columns: auto auto auto auto auto auto auto auto;
+        grid-template-rows: auto auto auto auto auto auto auto auto;
+        background-color: #da9d1d;
+        padding: 10px;
+        width: 850px;
+        height: 850px;
+    }
+   
+</style>
+
+@code {
+    private String[] letters = new String[8] {"a", "b", "c", "d", "e", "f", "g", "h"};
+
+    private void HandleClick(String loaction, String pice)
+    {
+        Console.WriteLine("Location: "+ loaction + " Pice: " + pice);
+    }
+
+}

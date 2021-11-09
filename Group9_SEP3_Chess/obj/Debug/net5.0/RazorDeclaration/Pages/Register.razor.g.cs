@@ -12,91 +12,91 @@ namespace Group9_SEP3_Chess.Pages
     using System.Linq;
     using System.Threading.Tasks;
 #nullable restore
-#line 1 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/_Imports.razor"
+#line 1 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/_Imports.razor"
+#line 2 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.AspNetCore.Authorization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/_Imports.razor"
+#line 3 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.AspNetCore.Components.Authorization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/_Imports.razor"
+#line 4 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/_Imports.razor"
+#line 5 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/_Imports.razor"
+#line 6 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/_Imports.razor"
+#line 7 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/_Imports.razor"
+#line 8 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/_Imports.razor"
+#line 9 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Group9_SEP3_Chess;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 10 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/_Imports.razor"
+#line 10 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Group9_SEP3_Chess.Shared;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/Pages/Register.razor"
+#line 2 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\Pages\Register.razor"
 using Microsoft.AspNetCore.Components;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/Pages/Register.razor"
+#line 3 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\Pages\Register.razor"
 using Group9_SEP3_Chess.Models;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/Pages/Register.razor"
+#line 4 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\Pages\Register.razor"
 using Group9_SEP3_Chess.Data;
 
 #line default
@@ -111,7 +111,7 @@ using Group9_SEP3_Chess.Data;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 47 "/home/gimpe/Nextcloud/School/RiderProjects/SEP3/Group9_SEP3_Chess/Group9_SEP3_Chess/Pages/Register.razor"
+#line 47 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\Pages\Register.razor"
        
     private User newUserItem = new ();
     private string result;
