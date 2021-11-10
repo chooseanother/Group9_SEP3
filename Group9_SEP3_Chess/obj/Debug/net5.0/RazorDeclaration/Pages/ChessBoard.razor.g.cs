@@ -13,71 +13,78 @@ namespace Group9_SEP3_Chess.Pages
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 1 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
+#line 1 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
+#line 2 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.AspNetCore.Authorization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
+#line 3 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.AspNetCore.Components.Authorization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
+#line 4 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
+#line 5 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
+#line 6 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
+#line 7 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
+#line 8 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
+#line 9 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Group9_SEP3_Chess;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 10 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
+#line 10 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\_Imports.razor"
 using Group9_SEP3_Chess.Shared;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 1 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\Pages\ChessBoard.razor"
+using Group9_SEP3_Chess.Models;
 
 #line default
 #line hidden
@@ -90,13 +97,126 @@ using Group9_SEP3_Chess.Shared;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 103 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\Pages\ChessBoard.razor"
+#line 83 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\Pages\ChessBoard.razor"
        
     private String[] letters = new String[8] {"a", "b", "c", "d", "e", "f", "g", "h"};
+    private ChessPiece[,] chessPieces = new ChessPiece[8, 8];
+    String printoutArray = "";
 
-    private void HandleClick(String loaction, String pice)
+    protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("Location: "+ loaction + " Pice: " + pice);
+        chessPieces[0, 0] = new ChessPiece()
+        {
+            Type = "brook"
+        };
+        chessPieces[0, 1] = new ChessPiece()
+        {
+            Type = "bhorse"
+        };
+        chessPieces[0, 2] = new ChessPiece()
+        {
+            Type = "bbishop"
+        };
+        chessPieces[0, 3] = new ChessPiece()
+        {
+            Type = "bqueen"
+        };
+        chessPieces[0, 4] = new ChessPiece()
+        {
+            Type = "bking"
+        };
+        chessPieces[0, 5] = new ChessPiece()
+        {
+            Type = "bbishop"
+        };
+        chessPieces[0, 6] = new ChessPiece()
+        {
+            Type = "bhorse"
+        };
+        chessPieces[0, 7] = new ChessPiece()
+        {
+            Type = "brook"
+        };
+
+        for (int i = 0; i < chessPieces.GetLength(1); i++)
+        {
+            chessPieces[1, i] = new ChessPiece()
+            {
+                Type = "bpawn"
+            };
+        }
+        chessPieces[7, 0] = new ChessPiece()
+        {
+            Type = "wrook"
+        };
+        chessPieces[7, 1] = new ChessPiece()
+        {
+            Type = "whorse"
+        };
+        chessPieces[7, 2] = new ChessPiece()
+        {
+            Type = "wbishop"
+        };
+        chessPieces[7, 3] = new ChessPiece()
+        {
+            Type = "wqueen"
+        };
+        chessPieces[7, 4] = new ChessPiece()
+        {
+            Type = "wking"
+        };
+        chessPieces[7, 5] = new ChessPiece()
+        {
+            Type = "wbishop"
+        };
+        chessPieces[7, 6] = new ChessPiece()
+        {
+            Type = "whorse"
+        };
+        chessPieces[7, 7] = new ChessPiece()
+        {
+            Type = "wrook"
+        };
+        for (int i = 0; i < chessPieces.GetLength(1); i++)
+        {
+            chessPieces[6, i] = new ChessPiece()
+            {
+                Type = "wpawn"
+            };
+        }
+    }
+
+    private void HandleClick(int FirstLayer,int SecondLayer)
+    {
+        if(chessPieces[FirstLayer,SecondLayer]!=null && !chessPieces[FirstLayer,SecondLayer].Selected)
+        {
+            chessPieces[FirstLayer, SecondLayer].Selected = true;
+            Console.WriteLine($"Chess piece: {chessPieces[FirstLayer,SecondLayer].Type} was selected");
+        }
+        else
+        if(chessPieces[FirstLayer,SecondLayer]==null){
+            ChessPiece temp = chessPieces[FirstLayer, SecondLayer];
+            bool fckingNoKill = false;
+            for (int i = 0; i < chessPieces.GetLength(0); i++)
+            {
+                for (int j = 0; j < chessPieces.GetLength(1); j++)
+                {
+                    if (chessPieces[i, j] != null && chessPieces[i, j].Selected && !fckingNoKill)
+                    {
+                        chessPieces[FirstLayer, SecondLayer] = chessPieces[i, j];
+                        Console.WriteLine($"Chess piece{chessPieces[i,j].Type} was moved to another location");
+                        chessPieces[FirstLayer,SecondLayer].Selected = false;
+                        chessPieces[i, j] = null;
+                        fckingNoKill = true;
+                    }
+                }
+            }
+        }
+        else if (chessPieces[FirstLayer, SecondLayer] != null && chessPieces[FirstLayer, SecondLayer].Selected)
+        {
+            chessPieces[FirstLayer, SecondLayer].Selected = false;
+            Console.WriteLine($"Chess piece: {chessPieces[FirstLayer,SecondLayer].Type} was unselected");
+        }
     }
 
 

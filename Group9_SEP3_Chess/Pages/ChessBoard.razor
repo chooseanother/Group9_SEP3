@@ -1,89 +1,69 @@
-﻿
-<div class="board" >
-    @for(int j = 8; j > 0; j--){
-        if(j % 2 == 0){
-            for (int i = 0; i < 8; i++)
+﻿@using Group9_SEP3_Chess.Models
+
+<div class="board">
+    @for (int i = 0; i < chessPieces.GetLength(0); i++)
+    {
+        if(i%2==0)
+        {
+            for (int j = 0; j < chessPieces.GetLength(1); j++)
             {
-                String StartPice = "";
-                String loaction = j + letters[i];
-                
-                switch (loaction)
+                int verticalaxis = i;
+                int horizontalaxis = j;
+                if (chessPieces[i, j] != null)
                 {
-                    case "8a": case "8h":
-                        StartPice = "Images/BRook.png";
-                        break;
-                    case "8b": case "8g":
-                        StartPice = "Images/BHorse.png";
-                        break;
-                    case  "8c": case "8f":
-                        StartPice = "Images/WBishop.png";
-                        break;
-                    case  "8d":
-                        StartPice = "Images/BQueen.png";
-                        break;
-                    case  "8e":
-                        StartPice = "Images/BKing.png";
-                        break;
-                    case "2a": case "2b": case "2c": case "2d": case "2e": case "2f": case "2g": case "2h":
-                        StartPice = "Images/WPawn.png";
-                        break;
-                    default:
-                        StartPice = null;
-                        break;
-                }
-                
-                if (i % 2 == 0)
-                {
-                    <BoardSquareBlack Image="@StartPice" ClickHandler="@(() => HandleClick(loaction, StartPice))"></BoardSquareBlack>
+                    if (j % 2 == 0)
+                    {
+                        <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis,horizontalaxis))"/>
+                    }
+                    else
+                    {
+                        <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis,horizontalaxis))"/>
+                    }
                 }
                 else
                 {
-                    <BoardSquareWhite Image="@StartPice" ClickHandler="@(() => HandleClick(loaction, StartPice))"></BoardSquareWhite>
+                    if (j % 2 == 0)
+                    {
+                        <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis,horizontalaxis))"/>
+                    }
+                    else
+                    {
+                        <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis,horizontalaxis))"/>
+                    }
                 }
             }
         }
-        else{
-            for (int i = 0; i < 8; i++)
+        else
+        {
+            for (int j = 0; j < chessPieces.GetLength(1); j++)
             {
-                String StartPice = "";
-                String loaction = j + letters[i];
-                
-                switch (loaction)
+                int verticalaxis = i;
+                int horizontalaxis = j;
+                if (chessPieces[i, j] != null)
                 {
-                    case "1a": case "1h":
-                        StartPice = "Images/WRook.png";
-                        break;
-                    case "1b": case "1g":
-                        StartPice = "Images/WHorse.png";
-                        break;
-                    case "1c": case "1f":
-                        StartPice = "Images/WBishop.png";
-                        break;
-                    case "1d":
-                        StartPice = "Images/WQueen.png";
-                        break;
-                    case "1e":
-                        StartPice = "Images/WKing.png";
-                        break;
-                    case "7a": case "7b": case "7c": case "7d": case "7e": case "7f": case "7g": case "7h":
-                        StartPice = "Images/BPawn.png";
-                        break;
-                    default:
-                        StartPice = null;
-                        break;    
-                        
-                }
-                
-                if (i % 2 == 0)
-                {
-                    <BoardSquareWhite Image="@StartPice" ClickHandler="@(() => HandleClick(loaction, StartPice))"></BoardSquareWhite>
+                    if (j % 2 == 0)
+                    {
+                        <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis,horizontalaxis))"/>
+                    }
+                    else
+                    {
+                        <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis,horizontalaxis))"/>
+                    }
                 }
                 else
                 {
-                    <BoardSquareBlack Image="@StartPice" ClickHandler="@(() => HandleClick(loaction, StartPice))"/>
+                    if (j % 2 == 0)
+                    {
+                        <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis,horizontalaxis))"/>
+                    }
+                    else
+                    {
+                        <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis,horizontalaxis))"/>
+                    }
                 }
             }
-        }}
+        }
+    }
 </div>
 
 
@@ -102,10 +82,124 @@
 
 @code {
     private String[] letters = new String[8] {"a", "b", "c", "d", "e", "f", "g", "h"};
+    private ChessPiece[,] chessPieces = new ChessPiece[8, 8];
+    String printoutArray = "";
 
-    private void HandleClick(String loaction, String pice)
+    protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("Location: "+ loaction + " Pice: " + pice);
+        chessPieces[0, 0] = new ChessPiece()
+        {
+            Type = "brook"
+        };
+        chessPieces[0, 1] = new ChessPiece()
+        {
+            Type = "bhorse"
+        };
+        chessPieces[0, 2] = new ChessPiece()
+        {
+            Type = "bbishop"
+        };
+        chessPieces[0, 3] = new ChessPiece()
+        {
+            Type = "bqueen"
+        };
+        chessPieces[0, 4] = new ChessPiece()
+        {
+            Type = "bking"
+        };
+        chessPieces[0, 5] = new ChessPiece()
+        {
+            Type = "bbishop"
+        };
+        chessPieces[0, 6] = new ChessPiece()
+        {
+            Type = "bhorse"
+        };
+        chessPieces[0, 7] = new ChessPiece()
+        {
+            Type = "brook"
+        };
+
+        for (int i = 0; i < chessPieces.GetLength(1); i++)
+        {
+            chessPieces[1, i] = new ChessPiece()
+            {
+                Type = "bpawn"
+            };
+        }
+        chessPieces[7, 0] = new ChessPiece()
+        {
+            Type = "wrook"
+        };
+        chessPieces[7, 1] = new ChessPiece()
+        {
+            Type = "whorse"
+        };
+        chessPieces[7, 2] = new ChessPiece()
+        {
+            Type = "wbishop"
+        };
+        chessPieces[7, 3] = new ChessPiece()
+        {
+            Type = "wqueen"
+        };
+        chessPieces[7, 4] = new ChessPiece()
+        {
+            Type = "wking"
+        };
+        chessPieces[7, 5] = new ChessPiece()
+        {
+            Type = "wbishop"
+        };
+        chessPieces[7, 6] = new ChessPiece()
+        {
+            Type = "whorse"
+        };
+        chessPieces[7, 7] = new ChessPiece()
+        {
+            Type = "wrook"
+        };
+        for (int i = 0; i < chessPieces.GetLength(1); i++)
+        {
+            chessPieces[6, i] = new ChessPiece()
+            {
+                Type = "wpawn"
+            };
+        }
+    }
+
+    private void HandleClick(int FirstLayer,int SecondLayer)
+    {
+        if(chessPieces[FirstLayer,SecondLayer]!=null && !chessPieces[FirstLayer,SecondLayer].Selected)
+        {
+            chessPieces[FirstLayer, SecondLayer].Selected = true;
+            Console.WriteLine($"Chess piece: {chessPieces[FirstLayer,SecondLayer].Type} was selected");
+        }
+        else
+        if(chessPieces[FirstLayer,SecondLayer]==null){
+            ChessPiece temp = chessPieces[FirstLayer, SecondLayer];
+            bool fckingNoKill = false;
+            for (int i = 0; i < chessPieces.GetLength(0); i++)
+            {
+                for (int j = 0; j < chessPieces.GetLength(1); j++)
+                {
+                    if (chessPieces[i, j] != null && chessPieces[i, j].Selected && !fckingNoKill)
+                    {
+                        chessPieces[FirstLayer, SecondLayer] = chessPieces[i, j];
+                        Console.WriteLine($"Chess piece{chessPieces[i,j].Type} was moved to another location");
+                        chessPieces[FirstLayer,SecondLayer].Selected = false;
+                        chessPieces[i, j] = null;
+                        fckingNoKill = true;
+                    }
+                }
+            }
+        }
+        else if (chessPieces[FirstLayer, SecondLayer] != null && chessPieces[FirstLayer, SecondLayer].Selected)
+        {
+            chessPieces[FirstLayer, SecondLayer].Selected = false;
+            Console.WriteLine($"Chess piece: {chessPieces[FirstLayer,SecondLayer].Type} was unselected");
+        }
     }
 
 }
+

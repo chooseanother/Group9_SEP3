@@ -4,41 +4,41 @@ namespace Group9_SEP3_Chess.Models
 {
     public class ChessPiece
     {
-        private String loaction { get; set; }
-
-        public String getPiece(String type)
+        public String Type { get; set; }
+        public bool Selected { get; set; }
+        public String GetPiece()
         {
-            switch (type)
+            switch (Type.ToLower())
             {
                 //Black
-                case "BRook":
+                case "brook":
                     return "Images/BRook.png";
-                case "BHorse":
+                case "bhorse":
                     return "Images/BHorse.png";
-                case  "BBishop": 
+                case  "bbishop": 
                     return "Images/BBishop.png";
-                case  "BQueen":
+                case  "bqueen":
                     return "Images/BQueen.png";
-                case  "BKing":
+                case  "bking":
                     return "Images/BKing.png";
-                case "BPawn": 
+                case "bpawn": 
                     return "Images/BPawn.png";
                 
                 //White
-                case "WRook": 
+                case "wrook": 
                     return "Images/WRook.png";
-                case "WHorse":
+                case "whorse":
                     return "Images/WHorse.png";
-                case "WBishop":
+                case "wbishop":
                     return "Images/WBishop.png";
-                case "WQueen":
+                case "wqueen":
                     return "Images/WQueen.png";
-                case "WKing":
+                case "wking":
                     return "Images/WKing.png";
-                case "WPawn": 
+                case "wpawn": 
                     return "Images/WPawn.png";
                 default:
-                    return null;
+                    return "none";
             }
         } 
     }
