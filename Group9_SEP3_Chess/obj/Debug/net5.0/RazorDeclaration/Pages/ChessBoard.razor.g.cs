@@ -97,115 +97,125 @@ using Group9_SEP3_Chess.Models;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 83 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\Pages\ChessBoard.razor"
+#line 93 "C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\Pages\ChessBoard.razor"
        
     private String[] letters = new String[8] {"a", "b", "c", "d", "e", "f", "g", "h"};
     private ChessPiece[,] chessPieces = new ChessPiece[8, 8];
     String printoutArray = "";
+    String UpgradeSelected = "";
 
     protected override async Task OnInitializedAsync()
     {
         chessPieces[0, 0] = new ChessPiece()
         {
-            Type = "brook"
+            Type = "black-rook"
         };
         chessPieces[0, 1] = new ChessPiece()
         {
-            Type = "bhorse"
+            Type = "black-horse"
         };
         chessPieces[0, 2] = new ChessPiece()
         {
-            Type = "bbishop"
+            Type = "black-bishop"
         };
         chessPieces[0, 3] = new ChessPiece()
         {
-            Type = "bqueen"
+            Type = "black-queen"
         };
         chessPieces[0, 4] = new ChessPiece()
         {
-            Type = "bking"
+            Type = "black-king"
         };
         chessPieces[0, 5] = new ChessPiece()
         {
-            Type = "bbishop"
+            Type = "black-bishop"
         };
         chessPieces[0, 6] = new ChessPiece()
         {
-            Type = "bhorse"
+            Type = "black-horse"
         };
         chessPieces[0, 7] = new ChessPiece()
         {
-            Type = "brook"
+            Type = "black-rook"
         };
 
         for (int i = 0; i < chessPieces.GetLength(1); i++)
         {
             chessPieces[1, i] = new ChessPiece()
             {
-                Type = "bpawn"
+                Type = "black-pawn"
             };
         }
         chessPieces[7, 0] = new ChessPiece()
         {
-            Type = "wrook"
+            Type = "white-rook"
         };
         chessPieces[7, 1] = new ChessPiece()
         {
-            Type = "whorse"
+            Type = "white-horse"
         };
         chessPieces[7, 2] = new ChessPiece()
         {
-            Type = "wbishop"
+            Type = "white-bishop"
         };
         chessPieces[7, 3] = new ChessPiece()
         {
-            Type = "wqueen"
+            Type = "white-queen"
         };
         chessPieces[7, 4] = new ChessPiece()
         {
-            Type = "wking"
+            Type = "white-king"
         };
         chessPieces[7, 5] = new ChessPiece()
         {
-            Type = "wbishop"
+            Type = "white-bishop"
         };
         chessPieces[7, 6] = new ChessPiece()
         {
-            Type = "whorse"
+            Type = "white-horse"
         };
         chessPieces[7, 7] = new ChessPiece()
         {
-            Type = "wrook"
+            Type = "white-rook"
         };
         for (int i = 0; i < chessPieces.GetLength(1); i++)
         {
             chessPieces[6, i] = new ChessPiece()
             {
-                Type = "wpawn"
+                Type = "white-pawn"
             };
         }
     }
 
-    private void HandleClick(int FirstLayer,int SecondLayer)
+    private void HandleClick(int FirstLayer, int SecondLayer)
     {
-        if(chessPieces[FirstLayer,SecondLayer]!=null && !chessPieces[FirstLayer,SecondLayer].Selected)
+    //Checks if you select a chess piece and then sets its status to selected
+        if (chessPieces[FirstLayer, SecondLayer] != null && !chessPieces[FirstLayer, SecondLayer].Selected)
         {
             chessPieces[FirstLayer, SecondLayer].Selected = true;
-            Console.WriteLine($"Chess piece: {chessPieces[FirstLayer,SecondLayer].Type} was selected");
+            Console.WriteLine($"Chess piece: {chessPieces[FirstLayer, SecondLayer].Type} was selected");
         }
-        else
-        if(chessPieces[FirstLayer,SecondLayer]==null){
+    //Checks if you selected a empty square
+        else if (chessPieces[FirstLayer, SecondLayer] == null)
+        {
             ChessPiece temp = chessPieces[FirstLayer, SecondLayer];
             bool fckingNoKill = false;
+    //searches the whole board for any selected pieces
             for (int i = 0; i < chessPieces.GetLength(0); i++)
             {
                 for (int j = 0; j < chessPieces.GetLength(1); j++)
                 {
+    //finds if any piece has been selected and checks for multiple selected pieces
                     if (chessPieces[i, j] != null && chessPieces[i, j].Selected && !fckingNoKill)
                     {
+    //rewrites the current selected square with the piece it found
                         chessPieces[FirstLayer, SecondLayer] = chessPieces[i, j];
-                        Console.WriteLine($"Chess piece{chessPieces[i,j].Type} was moved to another location");
-                        chessPieces[FirstLayer,SecondLayer].Selected = false;
+                        Console.WriteLine($"Chess piece{chessPieces[i, j].Type} was moved to another location");
+                        
+    //after moving it, it setts the selection status to false
+                        chessPieces[FirstLayer, SecondLayer].Selected = false;
+                        
+    //the selected pieces original location gets deleted 
                         chessPieces[i, j] = null;
                         fckingNoKill = true;
                     }
@@ -215,8 +225,39 @@ using Group9_SEP3_Chess.Models;
         else if (chessPieces[FirstLayer, SecondLayer] != null && chessPieces[FirstLayer, SecondLayer].Selected)
         {
             chessPieces[FirstLayer, SecondLayer].Selected = false;
-            Console.WriteLine($"Chess piece: {chessPieces[FirstLayer,SecondLayer].Type} was unselected");
+            Console.WriteLine($"Chess piece: {chessPieces[FirstLayer, SecondLayer].Type} was unselected");
         }
+    }
+
+
+    private void UpdateChessPiece()
+    {
+        Console.WriteLine(UpgradeSelected);
+        bool NoMultipleUpgrades = false;
+        
+        for (int i = 0; i < chessPieces.GetLength(0); i++)
+        {
+            for (int j = 0; j < chessPieces.GetLength(1); j++)
+            {
+                if (chessPieces[i, j] != null && chessPieces[i, j].Selected && !NoMultipleUpgrades)
+                {
+                    if (chessPieces[i, j].Type.Contains("black"))
+                    {
+                        chessPieces[i, j].Type = "black-" + UpgradeSelected;
+                        chessPieces[i, j].Selected = false;
+                        NoMultipleUpgrades = true;
+                    }
+                    else
+                    {
+                        chessPieces[i, j].Type = "white-" + UpgradeSelected;
+                        chessPieces[i, j].Selected = false;
+                        NoMultipleUpgrades = true;
+                    }
+                    
+                }
+            }
+        }
+        
     }
 
 

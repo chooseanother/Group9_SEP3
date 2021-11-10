@@ -11,31 +11,31 @@ namespace Group9_SEP3_Chess.Models
             switch (Type.ToLower())
             {
                 //Black
-                case "brook":
+                case "black-rook":
                     return "Images/BRook.png";
-                case "bhorse":
+                case "black-horse":
                     return "Images/BHorse.png";
-                case  "bbishop": 
+                case  "black-bishop": 
                     return "Images/BBishop.png";
-                case  "bqueen":
+                case  "black-queen":
                     return "Images/BQueen.png";
-                case  "bking":
+                case  "black-king":
                     return "Images/BKing.png";
-                case "bpawn": 
+                case "black-pawn": 
                     return "Images/BPawn.png";
                 
                 //White
-                case "wrook": 
+                case "white-rook": 
                     return "Images/WRook.png";
-                case "whorse":
+                case "white-horse":
                     return "Images/WHorse.png";
-                case "wbishop":
+                case "white-bishop":
                     return "Images/WBishop.png";
-                case "wqueen":
+                case "white-queen":
                     return "Images/WQueen.png";
-                case "wking":
+                case "white-king":
                     return "Images/WKing.png";
-                case "wpawn": 
+                case "white-pawn": 
                     return "Images/WPawn.png";
                 default:
                     return "none";
