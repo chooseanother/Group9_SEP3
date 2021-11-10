@@ -1,5 +1,5 @@
-.square {
-    background-color: #3b3737;
+.square[b-605dzcp5ur] {
+    background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.8);
     width: 80px;
     height: 80px;
@@ -7,6 +7,6 @@
     vertical-align: middle;
     cursor: pointer;
 }
-.square:hover {
+.square:hover[b-605dzcp5ur] {
     background-color: rgba(106, 202, 9, 0.8);
 }

@@ -74,8 +74,8 @@
         grid-template-rows: auto auto auto auto auto auto auto auto;
         background-color: #da9d1d;
         padding: 10px;
-        width: 850px;
-        height: 850px;
+        width: 680px;
+        height: 680px;
     }
    
 </style>
@@ -170,24 +170,30 @@
 
     private void HandleClick(int FirstLayer,int SecondLayer)
     {
+        //Checks if you select a chess piece and then sets its status to selected
         if(chessPieces[FirstLayer,SecondLayer]!=null && !chessPieces[FirstLayer,SecondLayer].Selected)
         {
             chessPieces[FirstLayer, SecondLayer].Selected = true;
             Console.WriteLine($"Chess piece: {chessPieces[FirstLayer,SecondLayer].Type} was selected");
         }
-        else
-        if(chessPieces[FirstLayer,SecondLayer]==null){
+        //Checks if you selected a empty square
+        else if(chessPieces[FirstLayer,SecondLayer]==null){
             ChessPiece temp = chessPieces[FirstLayer, SecondLayer];
             bool fckingNoKill = false;
+            //searches the whole board for any selected pieces
             for (int i = 0; i < chessPieces.GetLength(0); i++)
             {
                 for (int j = 0; j < chessPieces.GetLength(1); j++)
                 {
+                    //finds if any piece has been selected and checks for multiple selected pieces
                     if (chessPieces[i, j] != null && chessPieces[i, j].Selected && !fckingNoKill)
                     {
+                        //rewrites the current selected square with the piece it found
                         chessPieces[FirstLayer, SecondLayer] = chessPieces[i, j];
                         Console.WriteLine($"Chess piece{chessPieces[i,j].Type} was moved to another location");
+                        //after moving it, it setts the selection status to false
                         chessPieces[FirstLayer,SecondLayer].Selected = false;
+                        //the selected pieces original location gets deleted 
                         chessPieces[i, j] = null;
                         fckingNoKill = true;
                     }
