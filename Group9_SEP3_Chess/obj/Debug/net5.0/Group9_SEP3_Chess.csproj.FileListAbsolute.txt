@@ -18,10 +18,7 @@ C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Group
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Group9_SEP3_Chess.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Group9_SEP3_Chess.RazorComponent.input.cache
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\RazorDeclaration\App.razor.g.cs
-C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\RazorDeclaration\Pages\Counter.razor.g.cs
-C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\RazorDeclaration\Pages\FetchData.razor.g.cs
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\RazorDeclaration\Pages\Index.razor.g.cs
-C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\RazorDeclaration\Shared\SurveyPrompt.razor.g.cs
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\RazorDeclaration\_Imports.razor.g.cs
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\RazorDeclaration\Shared\MainLayout.razor.g.cs
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\RazorDeclaration\Shared\NavMenu.razor.g.cs
@@ -31,10 +28,7 @@ C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Group
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Group9_SEP3_Chess.TagHelpers.output.cache
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Group9_SEP3_Chess.RazorCoreGenerate.cache
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Razor\App.razor.g.cs
-C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Razor\Pages\Counter.razor.g.cs
-C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Razor\Pages\FetchData.razor.g.cs
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Razor\Pages\Index.razor.g.cs
-C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Razor\Shared\SurveyPrompt.razor.g.cs
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Razor\_Imports.razor.g.cs
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Razor\Shared\MainLayout.razor.g.cs
 C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Razor\Shared\NavMenu.razor.g.cs
@@ -127,3 +121,6 @@ D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Group9_SEP3_Chess.dll
 D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\ref\Group9_SEP3_Chess.dll
 D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Group9_SEP3_Chess.pdb
 D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Group9_SEP3_Chess.genruntimeconfig.cache
+C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\bin\Debug\net5.0\RabbitMQ.Client.dll
+C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\RazorDeclaration\Pages\Register.razor.g.cs
+C:\Users\Nick\RiderProjects\Group9_SEP3\Group9_SEP3_Chess\obj\Debug\net5.0\Razor\Pages\Register.razor.g.cs
