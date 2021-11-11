@@ -1,0 +1,46 @@
+@page "/play"
+@using Group9_SEP3_Chess.Models
+<h3>Challenge User</h3>
+
+<EditForm Model="@newChallenge" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    <div class="form-group">
+        Select turn length:<br/>
+        <InputSelect @bind-Value="newChallenge.TurnLength">
+            <option></option>
+            @foreach (var tl in turnLengths)
+            {
+                <option>@tl</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        User to challenge:<br/>
+        <InputText @bind-Value="newChallenge.Username"/>
+    </div>
+    <p class="actions">
+        <button class="btn btn-dark" type="submit">Challenge</button>
+    </p>
+</EditForm>
+
+
+@code {
+    private readonly IList<string> turnLengths = new List<string> {"2 minutes", "1 day", "7 days"};
+    private Challenge newChallenge = new();
+
+    protected override void OnInitialized()
+    {
+        
+    }
+    
+    private async Task HandleValidSubmit()
+    {
+        newChallenge.Challenger = "CurrentUser";
+    }
+    
+    private void HandleInvalidSubmit()
+    {
+        
+    }
+}

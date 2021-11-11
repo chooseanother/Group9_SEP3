@@ -28,6 +28,7 @@ namespace Group9_SEP3_Chess
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            services.AddSingleton<IRabbitMQ, RabbitMQService>();
             services.AddScoped<IUserService, UserWebService>();
         }
 

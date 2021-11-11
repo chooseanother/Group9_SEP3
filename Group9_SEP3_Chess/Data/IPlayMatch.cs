@@ -1,11 +1,10 @@
-using System.Threading;
 using System.Threading.Tasks;
 using Group9_SEP3_Chess.Models;
 
 namespace Group9_SEP3_Chess.Data
 {
-    public interface IUserService
+    public interface IPlayMatch
     {
-        Task<string> RegisterUserAsync(User user);
+        Task ChallengeUser(Challenge challenge);
     }
 }
