@@ -13,11 +13,15 @@
 *.sln.docstates
 
 # Build results
-[Dd]ebug/
-[Rr]elease/
+Debug/
+debug/
+Release/
+release/
 x64/
-[Bb]in/
-[Oo]bj/
+bin/
+Bin/
+obj/
+Obj/
 # build folder is nowadays used for build scripts and should not be ignored
 #build/
 
