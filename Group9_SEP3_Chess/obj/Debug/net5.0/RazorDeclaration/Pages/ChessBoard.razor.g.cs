@@ -220,7 +220,6 @@ using Group9_SEP3_Chess.Models;
                 chessPieces[FirstLayer, SecondLayer].Selected = true;
                 Console.WriteLine($"Chess piece:{chessPieces[FirstLayer,SecondLayer].Type} was selected");
             }
-        Console.WriteLine("Here");
         if (selected != null)
         {
             chessPieces[FirstLayer, SecondLayer] = selected;
