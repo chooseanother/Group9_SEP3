@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Nick\\RiderProjects\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj": {}
+    "D:\\CSharp\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Nick\\RiderProjects\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj": {
+    "D:\\CSharp\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Nick\\RiderProjects\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj",
+        "projectUniqueName": "D:\\CSharp\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj",
         "projectName": "Group9_SEP3_Chess",
-        "projectPath": "C:\\Users\\Nick\\RiderProjects\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj",
-        "packagesPath": "C:\\Users\\Nick\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Nick\\RiderProjects\\Group9_SEP3\\Group9_SEP3_Chess\\obj\\",
+        "projectPath": "D:\\CSharp\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj",
+        "packagesPath": "C:\\Users\\Rokas Paulauskas\\.nuget\\packages\\",
+        "outputPath": "D:\\CSharp\\Group9_SEP3\\Group9_SEP3_Chess\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Nick\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Rokas Paulauskas\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"

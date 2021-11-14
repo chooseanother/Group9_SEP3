@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "5Adnu45eo7VgKA/M9UEOn6f/+m4sXu1hi0aW3WvgUDVmZL6n+zmnwToOeek8qL6zZByarQUMwePykdGXFg4jfg==",
+  "dgSpecHash": "IYCa32f47iUNja2UN9zZ2AXJL9wZTgavuNS2A+FK6bT/YgubOhIpMh76IeXLZ3KbZNJ86ovC9DuLFYWJzKKQDw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Nick\\RiderProjects\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj",
+  "projectFilePath": "D:\\CSharp\\Group9_SEP3\\Group9_SEP3_Chess\\Group9_SEP3_Chess.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Nick\\.nuget\\packages\\rabbitmq.client\\6.2.2\\rabbitmq.client.6.2.2.nupkg.sha512",
-    "C:\\Users\\Nick\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
-    "C:\\Users\\Nick\\.nuget\\packages\\system.threading.channels\\4.7.1\\system.threading.channels.4.7.1.nupkg.sha512"
+    "C:\\Users\\Rokas Paulauskas\\.nuget\\packages\\rabbitmq.client\\6.2.2\\rabbitmq.client.6.2.2.nupkg.sha512",
+    "C:\\Users\\Rokas Paulauskas\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
+    "C:\\Users\\Rokas Paulauskas\\.nuget\\packages\\system.threading.channels\\4.7.1\\system.threading.channels.4.7.1.nupkg.sha512"
   ],
   "logs": []
 }

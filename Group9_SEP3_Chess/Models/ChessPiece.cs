@@ -1,11 +1,22 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Group9_SEP3_Chess.Models
 {
     public class ChessPiece
     {
+        [JsonPropertyName("type")]
         public String Type { get; set; }
+        [JsonPropertyName("selected")]
         public bool Selected { get; set; }
+        [JsonPropertyName("oldPosition")]
+        public Position OldPosition { get; set; }
+        [JsonPropertyName("newPosition")]
+        public Position NewPosition { get; set; }
+
+        public ChessPiece()
+        {
+        }
         public String GetPiece()
         {
             switch (Type.ToLower())
