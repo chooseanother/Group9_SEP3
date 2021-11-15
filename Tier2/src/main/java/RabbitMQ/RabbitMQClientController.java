@@ -1,7 +1,9 @@
 package RabbitMQ;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.rabbitmq.client.*;
+import model.ChessBoard;
 import model.ChessPiece;
 import model.Message;
 import model.Model;
@@ -74,6 +76,15 @@ public class RabbitMQClientController implements RabbitMQClient {
                             toSendUpgrade.setObject(gson.toJson(upgradedChessPiece));
                             System.out.println(toSendUpgrade.getObject());
                             response = gson.toJson(toSendUpgrade);
+                            break;
+                        case "Load":
+                            System.out.println("[.] Load");
+                            Message toLoadChessPieces = new Message();
+                            toLoadChessPieces.setAction("Load ChessBoard");
+                            ChessPiece[][] chessBoard = model.getChessBoard();
+                            toLoadChessPieces.setObject(gson.toJson(chessBoard));
+                            System.out.println(toLoadChessPieces.getObject());
+                            response = gson.toJson(toLoadChessPieces);
                             break;
 
 

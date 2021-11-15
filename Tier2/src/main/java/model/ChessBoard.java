@@ -141,7 +141,9 @@ public class ChessBoard {
         }
         return null;
     }
-
+    public ChessPiece[][] getChessBoard(){
+        return chessPieces;
+    }
     /**
      * Returns the selected chess piece
      * @return piece

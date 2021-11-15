@@ -46,4 +46,9 @@ public class ModelManager implements Model{
 
         return chessBoard.UpgradeChessPiece(upgradeSelected);
     }
+
+    @Override
+    public ChessPiece[][] getChessBoard() {
+        return chessBoard.getChessBoard();
+    }
 }
