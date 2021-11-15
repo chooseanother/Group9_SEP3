@@ -9,7 +9,7 @@ import model.Model;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public class RabbitMQClientController implements RabbitMQClient{
+public class RabbitMQClientController implements RabbitMQClient {
     private static final String RPC_QUEUE_NAME = "rpc_queue";
     private Model model;
     private ConnectionFactory factory;
@@ -44,10 +44,10 @@ public class RabbitMQClientController implements RabbitMQClient{
 
                 try {
                     String jsonMessage = new String(delivery.getBody(), "UTF-8");
-                    Message message = gson.fromJson(jsonMessage,Message.class);
+                    Message message = gson.fromJson(jsonMessage, Message.class);
+                    System.out.println("Message received");
 
-
-                    switch (message.getAction()){
+                    switch (message.getAction()) {
                         case "Register":
                             System.out.println(" [.] message(" + message + ")");
                             String result = model.registerUser(message.getUsername(), message.getPassword(), message.getEmail());
@@ -56,28 +56,25 @@ public class RabbitMQClientController implements RabbitMQClient{
                         case "Move":
                             System.out.println("[.] Move");
                             Message toSend = new Message();
-//                            toSend.setAction("Move");
-//                            ChessPiece chessPiece = model.MoveChessPiece(message.getFirstLayer(), message.getSecondLayer());
-//                            toSend.setObject(chessPiece);
-//                            response = gson.toJson(toSend);
-                            ChessPiece chessPiece = model.MoveChessPiece(message.getFirstLayer(), message.getSecondLayer());
-                        if(chessPiece!=null){
-                            toSend.setObject(gson.toJson(chessPiece));
-                            toSend.setAction("Sending A chess Piece");
-                        }else{
-                            toSend.setAction("No chess Piece");
-                        }
+                            ChessPiece movedChessPiece = model.MoveChessPiece(message.getFirstLayer(), message.getSecondLayer());
+                            if (movedChessPiece != null) {
+                                toSend.setObject(gson.toJson(movedChessPiece));
+                                toSend.setAction("Sending A chess Piece");
+                            } else {
+                                toSend.setAction("No chess Piece");
+                            }
                             System.out.println(toSend.getObject());
                             response = gson.toJson(toSend);
                             break;
                         case "Upgrade":
                             System.out.println("[.] Upgrade");
                             Message toSendUpgrade = new Message();
-                            toSendUpgrade.setAction("Upgrade");
-//                            toSendUpgrade.setObject(model.UpgradeChessPiece(message.getUpgradeSelected()));
+                            toSendUpgrade.setAction("Upgrade Chess Piece");
+                            ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getUpgradeSelected());
+                            toSendUpgrade.setObject(gson.toJson(upgradedChessPiece));
+                            System.out.println(toSendUpgrade.getObject());
                             response = gson.toJson(toSendUpgrade);
                             break;
-
 
 
                     }
@@ -115,7 +112,8 @@ public class RabbitMQClientController implements RabbitMQClient{
                 }
             };
 
-            channel.basicConsume(RPC_QUEUE_NAME, false, deliverCallback, (consumerTag -> { }));
+            channel.basicConsume(RPC_QUEUE_NAME, false, deliverCallback, (consumerTag -> {
+            }));
             // Wait and be prepared to consume the message from RPC client.
             while (true) {
                 synchronized (monitor) {
