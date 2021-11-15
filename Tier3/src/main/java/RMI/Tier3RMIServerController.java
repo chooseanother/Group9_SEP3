@@ -61,4 +61,16 @@ public class Tier3RMIServerController
             return false;
         }
     }
+
+    @Override public boolean MovePiece(int moveId, int matchId, String piece, String color, String startPosition, String endPosition){
+        try {
+            persistence.MovePiece(moveId, matchId, piece, color, startPosition, endPosition);
+            return true;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
 }
