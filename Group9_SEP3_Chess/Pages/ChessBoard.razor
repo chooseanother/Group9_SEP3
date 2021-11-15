@@ -1,5 +1,6 @@
 ﻿@using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
+@using System.Text.Json
 @inject IMatchService _matchService
 <div class="board">
     @for (int i = 0; i < chessPieces.GetLength(0); i++)
@@ -130,7 +131,7 @@
         {
             Type = "black-rook"
         };
-
+        
         for (int i = 0; i < chessPieces.GetLength(1); i++)
         {
             chessPieces[1, i] = new ChessPiece()
@@ -177,6 +178,8 @@
                 Type = "white-pawn"
             };
         }
+        // 2D array of custom object serialization is not supported, need to consult with somebody
+        //await _matchService.LoadChessPieces(new Message(){Action = "Load"});
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)

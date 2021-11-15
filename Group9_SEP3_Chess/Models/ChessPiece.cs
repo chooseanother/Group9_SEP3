@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
 namespace Group9_SEP3_Chess.Models
@@ -6,7 +7,7 @@ namespace Group9_SEP3_Chess.Models
     public class ChessPiece
     {
         [JsonPropertyName("type")]
-        public String Type { get; set; }
+        public string Type { get; set; }
         [JsonPropertyName("selected")]
         public bool Selected { get; set; }
         [JsonPropertyName("oldPosition")]
@@ -51,6 +52,6 @@ namespace Group9_SEP3_Chess.Models
                 default:
                     return "none";
             }
-        } 
+        }
     }
 }
