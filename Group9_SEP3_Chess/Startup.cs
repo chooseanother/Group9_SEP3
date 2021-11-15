@@ -29,6 +29,7 @@ namespace Group9_SEP3_Chess
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<IUserService, UserWebService>();
+            services.AddScoped<IMatchService, MatchService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

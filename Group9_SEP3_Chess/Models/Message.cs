@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json.Serialization;
 
 namespace Group9_SEP3_Chess.Models
@@ -14,6 +15,12 @@ namespace Group9_SEP3_Chess.Models
         [JsonPropertyName("password")]
 
         public string Password { get; set; }
+        [JsonPropertyName("firstLayer")]
+        public int FirstLayer { get; set; }
+        [JsonPropertyName("secondLayer")]
+        public int SecondLayer { get; set; }
+        [JsonPropertyName("object")]
+        public object Object { get; set; }
         
         public override string ToString()
         {
