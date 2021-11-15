@@ -5,8 +5,8 @@ public class Message {
     private String username;
     private String password;
     private String email;
-    private int FirstLayer;
-    private int SecondLayer;
+    private int firstLayer;
+    private int secondLayer;
     private Object object;
     private String upgradeSelected;
 
@@ -15,8 +15,8 @@ public class Message {
         this.password="";
         this.email="";
         this.username="";
-        this.FirstLayer = 0;
-        this.SecondLayer = 0;
+        this.firstLayer = 0;
+        this.secondLayer = 0;
         this.object = new Object();
         this.upgradeSelected = "";
     }
@@ -41,19 +41,19 @@ public class Message {
     }
 
     public int getFirstLayer() {
-        return FirstLayer;
+        return firstLayer;
     }
 
     public void setFirstLayer(int firstLayer) {
-        FirstLayer = firstLayer;
+        this.firstLayer = firstLayer;
     }
 
     public int getSecondLayer() {
-        return SecondLayer;
+        return secondLayer;
     }
 
     public void setSecondLayer(int secondLayer) {
-        SecondLayer = secondLayer;
+        this.secondLayer = secondLayer;
     }
 
     public Object getObject() {

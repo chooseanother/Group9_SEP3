@@ -60,7 +60,7 @@ public class RabbitMQClientController implements RabbitMQClient{
                             response = gson.toJson(toSend);
                             break;
                         case "Upgrade":
-                            System.out.println("[.] Upgradde");
+                            System.out.println("[.] Upgrade");
                             Message toSendUpgrade = new Message();
                             toSendUpgrade.setAction("Upgrade");
                             toSendUpgrade.setObject(model.UpgradeChessPiece(message.getUpgradeSelected()));
