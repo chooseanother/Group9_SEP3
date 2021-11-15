@@ -1,4 +1,4 @@
 package persistence;
 
-public interface Persistence extends UserPersistence {
+public interface Persistence extends UserPersistence, MatchPersistence {
 }

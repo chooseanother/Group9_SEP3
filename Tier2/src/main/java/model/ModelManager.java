@@ -12,11 +12,14 @@ public class ModelManager implements Model{
     private ITier2RMIClient iTier2RMIClient;
     private RabbitMQClient rabbitMQClient;
     private ChessBoard chessBoard; //Should be match
+    private int moveId;
 
     public ModelManager() throws RemoteException {
         iTier2RMIClient = new Tier2RMIClient();
         chessBoard = new ChessBoard();
         rabbitMQClient = new RabbitMQClientController(this);
+        moveId = 0;
+
         try{
             rabbitMQClient.initRPCQueue();
         }catch (Exception e){
@@ -37,8 +40,17 @@ public class ModelManager implements Model{
 
     @Override
     public ChessPiece MoveChessPiece(int firstLayer, int secondLayer) {
+        try {
+            moveId++;
+            ChessPiece toMove = chessBoard.HandleClick(firstLayer, secondLayer);
+            if(iTier2RMIClient.MovePiece(toMove, moveId, 0 )){
+               return toMove;
+            }
 
-        return chessBoard.HandleClick(firstLayer, secondLayer);
+        } catch (RemoteException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
