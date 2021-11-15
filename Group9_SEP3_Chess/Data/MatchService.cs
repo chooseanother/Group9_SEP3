@@ -106,7 +106,7 @@ namespace Group9_SEP3_Chess.Data
             return null;
         }
 
-        public async Task<ChessPiece[]> LoadChessPieces(Message message, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ChessPiece[,]> LoadChessPieces(Message message, CancellationToken cancellationToken = default(CancellationToken))
         {
             IBasicProperties props = channel.CreateBasicProperties();
             var correlationId = Guid.NewGuid().ToString();
@@ -125,12 +125,12 @@ namespace Group9_SEP3_Chess.Data
 
             cancellationToken.Register(() => callbackMapper.TryRemove(correlationId, out var tmp));
             Message response = JsonSerializer.Deserialize<Message>(tcs.Task.Result);
-            if (response.Action.Equals("Upgrade Chess Piece"))
+            if (response.Action.Equals("Load ChessBoard"))
             {
                 Console.WriteLine(response.Object);
                ChessPiece[,] chessPieces = JsonSerializer.Deserialize<ChessPiece[,]>(response.Object);
                 
-                return null;
+                return chessPieces;
             }
             return null;
         }

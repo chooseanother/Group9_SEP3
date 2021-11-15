@@ -198,8 +198,8 @@ using System.Text.Json;
                 Type = "white-pawn"
             };
         }
-        //await _matchService.LoadChessPieces(new Message(){Action = "Load"});
-        Console.WriteLine(JsonSerializer.Serialize(chessPieces));
+        // 2D array of custom object serialization is not supported, need to consult with somebody
+        // await _matchService.LoadChessPieces(new Message(){Action = "Load"});
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
