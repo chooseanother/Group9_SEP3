@@ -127,9 +127,10 @@ namespace Group9_SEP3_Chess.Data
             Message response = JsonSerializer.Deserialize<Message>(tcs.Task.Result);
             if (response.Action.Equals("Upgrade Chess Piece"))
             {
-                ChessPiece[] chessPieces = JsonSerializer.Deserialize<ChessPiece[]>(response.Object);
                 Console.WriteLine(response.Object);
-                return chessPieces;
+               ChessPiece[,] chessPieces = JsonSerializer.Deserialize<ChessPiece[,]>(response.Object);
+                
+                return null;
             }
             return null;
         }

@@ -96,6 +96,13 @@ using Group9_SEP3_Chess.Data;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 3 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\Pages\ChessBoard.razor"
+using System.Text.Json;
+
+#line default
+#line hidden
+#nullable disable
     public partial class ChessBoard : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -104,7 +111,7 @@ using Group9_SEP3_Chess.Data;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 94 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\Pages\ChessBoard.razor"
+#line 95 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\Pages\ChessBoard.razor"
        
     private ChessPiece[,] chessPieces = new ChessPiece[8, 8];
     String printoutArray = "";
@@ -144,7 +151,7 @@ using Group9_SEP3_Chess.Data;
         {
             Type = "black-rook"
         };
-
+        
         for (int i = 0; i < chessPieces.GetLength(1); i++)
         {
             chessPieces[1, i] = new ChessPiece()
@@ -191,6 +198,8 @@ using Group9_SEP3_Chess.Data;
                 Type = "white-pawn"
             };
         }
+        //await _matchService.LoadChessPieces(new Message(){Action = "Load"});
+        Console.WriteLine(JsonSerializer.Serialize(chessPieces));
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
