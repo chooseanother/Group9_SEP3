@@ -7,12 +7,14 @@ package model;
 
 public class ChessBoard {
     private ChessPiece [][] chessPieces;
+    private ChessPiece selected;
 
     /**
      *  Creating a chess board and setting the default chess pieces locations
      */
     public ChessBoard(){
         chessPieces = new ChessPiece[8][8];
+        selected = null;
 
         //black
         chessPieces[0][0] = new ChessPiece("black-rook");
@@ -50,7 +52,7 @@ public class ChessBoard {
      * @param secondLayer Horizontal layer
      */
     public void HandleClick(int firstLayer, int secondLayer){
-        ChessPiece selected = null;
+        //ChessPiece selected = null;
 
         for (int i = 0; i < 8; i++){
 
@@ -125,5 +127,13 @@ public class ChessBoard {
             }
         }
 
+    }
+
+    /**
+     * Returns the selected chess piece
+     * @return piece
+     */
+    public ChessPiece getSelected(){
+        return selected;
     }
 }

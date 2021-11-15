@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 public class ModelManager implements Model{
     private ITier2RMIClient iTier2RMIClient;
     private RabbitMQClient rabbitMQClient;
+    private ChessBoard chessBoard; //Should be match
 
     public ModelManager() throws RemoteException {
         iTier2RMIClient = new Tier2RMIClient();
@@ -31,5 +32,17 @@ public class ModelManager implements Model{
             e.printStackTrace();
         }
         return "Failed registration";
+    }
+
+    @Override
+    public ChessPiece MoveChessPiece(int firstLayer, int secondLayer) {
+        chessBoard.HandleClick(firstLayer, secondLayer);
+        return chessBoard.getSelected();
+    }
+
+    @Override
+    public ChessPiece UpgradeChessPiece(String upgradeSelected) {
+        chessBoard.UpdateChessPiece(upgradeSelected);
+        return chessBoard.getSelected();
     }
 }

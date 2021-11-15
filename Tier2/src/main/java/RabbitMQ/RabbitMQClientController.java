@@ -45,9 +45,32 @@ public class RabbitMQClientController implements RabbitMQClient{
                     String jsonMessage = new String(delivery.getBody(), "UTF-8");
                     Message message = gson.fromJson(jsonMessage,Message.class);
 
-                    System.out.println(" [.] message(" + message + ")");
-                    String result = model.registerUser(message.getUsername(),message.getPassword(),message.getEmail());
-                    response = gson.toJson(new Message(result, message.getUsername(), message.getPassword(), message.getEmail()));
+
+                    switch (message.getAction()){
+                        case "Register":
+                            System.out.println(" [.] message(" + message + ")");
+                            String result = model.registerUser(message.getUsername(), message.getPassword(), message.getEmail());
+                            response = gson.toJson(new Message(result, message.getUsername(), message.getPassword(), message.getEmail()));
+                            break;
+                        case "Move":
+                            System.out.println("[.] Move");
+                            Message toSend = new Message();
+                            toSend.setAction("Move");
+                            toSend.setObject(model.MoveChessPiece(message.getFirstLayer(), message.getSecondLayer()));
+                            response = gson.toJson(toSend);
+                            break;
+                        case "Upgrade":
+                            System.out.println("[.] Upgradde");
+                            Message toSendUpgrade = new Message();
+                            toSendUpgrade.setAction("Upgrade");
+                            toSendUpgrade.setObject(model.UpgradeChessPiece(message.getUpgradeSelected()));
+                            response = gson.toJson(toSendUpgrade);
+                            break;
+
+
+
+                    }
+
 
 //                    switch (message.getAction().toLowerCase()){
 //                        case"register": System.out.println(" [x] Received '" + "Action: " + message.getAction() + " Username: " + message.getUsername() + " Password: " + message.getPassword()
