@@ -119,18 +119,20 @@ public class ChessBoard {
      */
     public ChessPiece UpgradeChessPiece(String UpgradeSelected) {
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < chessPieces.length; i++) {
 
-            for (int j = 0; j < 8; j++) {
+            for (int j = 0; j < chessPieces[i].length; j++) {
 
                 if (chessPieces[i][j] != null && chessPieces[i][j].getSelected()) {
 
                     if (chessPieces[i][j].getType().contains("black")) {
                         chessPieces[i][j].setType("black-" + UpgradeSelected);
                         chessPieces[i][j].setSelected(false);
+                        chessPieces[i][j].setOldPosition(new Position(i,j));
                         return chessPieces[i][j];
                     } else {
                         chessPieces[i][j].setType("white-" + UpgradeSelected);
+                        chessPieces[i][j].setOldPosition(new Position(i,j));
                         chessPieces[i][j].setSelected(false);
                         return chessPieces[i][j];
                     }
@@ -139,7 +141,9 @@ public class ChessBoard {
         }
         return null;
     }
-
+    public ChessPiece[][] getChessBoard(){
+        return chessPieces;
+    }
     /**
      * Returns the selected chess piece
      * @return piece

@@ -65,4 +65,9 @@ public class ModelManager implements Model{
         }
        return null;
     }
+
+    @Override
+    public ChessPiece[][] getChessBoard() {
+        return chessBoard.getChessBoard();
+    }
 }
