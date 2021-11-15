@@ -2,6 +2,7 @@ package RabbitMQ;
 
 import com.google.gson.Gson;
 import com.rabbitmq.client.*;
+import model.ChessPiece;
 import model.Message;
 import model.Model;
 
@@ -55,15 +56,25 @@ public class RabbitMQClientController implements RabbitMQClient{
                         case "Move":
                             System.out.println("[.] Move");
                             Message toSend = new Message();
-                            toSend.setAction("Move");
-                            toSend.setObject(model.MoveChessPiece(message.getFirstLayer(), message.getSecondLayer()));
+//                            toSend.setAction("Move");
+//                            ChessPiece chessPiece = model.MoveChessPiece(message.getFirstLayer(), message.getSecondLayer());
+//                            toSend.setObject(chessPiece);
+//                            response = gson.toJson(toSend);
+                            ChessPiece chessPiece = model.MoveChessPiece(message.getFirstLayer(), message.getSecondLayer());
+                        if(chessPiece!=null){
+                            toSend.setObject(gson.toJson(chessPiece));
+                            toSend.setAction("Sending A chess Piece");
+                        }else{
+                            toSend.setAction("No chess Piece");
+                        }
+                            System.out.println(toSend.getObject());
                             response = gson.toJson(toSend);
                             break;
                         case "Upgrade":
                             System.out.println("[.] Upgrade");
                             Message toSendUpgrade = new Message();
                             toSendUpgrade.setAction("Upgrade");
-                            toSendUpgrade.setObject(model.UpgradeChessPiece(message.getUpgradeSelected()));
+//                            toSendUpgrade.setObject(model.UpgradeChessPiece(message.getUpgradeSelected()));
                             response = gson.toJson(toSendUpgrade);
                             break;
 
@@ -93,6 +104,7 @@ public class RabbitMQClientController implements RabbitMQClient{
 //                    response += gson.toJson(message);
                 } catch (RuntimeException e) {
                     System.out.println(" [.] " + e.toString());
+                    e.printStackTrace();
                 } finally {
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, response.getBytes("UTF-8"));
                     channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);

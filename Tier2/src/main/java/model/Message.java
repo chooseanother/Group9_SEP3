@@ -7,7 +7,7 @@ public class Message {
     private String email;
     private int firstLayer;
     private int secondLayer;
-    private Object object;
+    private String object;
     private String upgradeSelected;
 
     public Message(){
@@ -17,7 +17,7 @@ public class Message {
         this.username="";
         this.firstLayer = 0;
         this.secondLayer = 0;
-        this.object = new Object();
+        this.object = "";
         this.upgradeSelected = "";
     }
 
@@ -60,7 +60,7 @@ public class Message {
         return object;
     }
 
-    public void setObject(Object object) {
+    public void setObject(String object) {
         this.object = object;
     }
 

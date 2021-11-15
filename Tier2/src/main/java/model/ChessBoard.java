@@ -1,20 +1,21 @@
 package model;
 
+
 /**
  * @author Nick/Rokas
  * @version 1.0
  */
 
 public class ChessBoard {
-    private ChessPiece [][] chessPieces;
-    private ChessPiece selected;
+    private ChessPiece[][] chessPieces;
+//    private ChessPiece selected;
 
     /**
-     *  Creating a chess board and setting the default chess pieces locations
+     * Creating a chess board and setting the default chess pieces locations
      */
-    public ChessBoard(){
+    public ChessBoard() {
         chessPieces = new ChessPiece[8][8];
-        selected = null;
+//        selected = null;
 
         //black
         chessPieces[0][0] = new ChessPiece("black-rook");
@@ -26,8 +27,8 @@ public class ChessBoard {
         chessPieces[0][6] = new ChessPiece("black-horse");
         chessPieces[0][7] = new ChessPiece("black-rook");
 
-        for (int i = 0; i < 8; i++){
-            chessPieces[0][i] = new ChessPiece("black-pawn");
+        for (int i = 0; i < 8; i++) {
+            chessPieces[1][i] = new ChessPiece("black-pawn");
         }
 
         //white
@@ -48,43 +49,38 @@ public class ChessBoard {
 
     /**
      * A method to handle chess piece clicks. It can select, move, attack, deselect a piece
-     * @param firstLayer Vertical layer
+     *
+     * @param firstLayer  Vertical layer
      * @param secondLayer Horizontal layer
      */
-    public void HandleClick(int firstLayer, int secondLayer){
-        //ChessPiece selected = null;
+    public ChessPiece HandleClick(int firstLayer, int secondLayer) {
+        ChessPiece selected = null;
+        String buildString = "";
+        for (int i = 0; i < chessPieces.length; i++) {
 
-        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < chessPieces[i].length; j++) {
 
-            for (int j = 0; j < 8; j++){
+                if (chessPieces[i][j] != null && chessPieces[i][j].getSelected() && selected == null) {
 
-                if (chessPieces[i][j] != null && chessPieces[i][j].getSelected() && selected == null){
-
-                    if(chessPieces[i][j].getNewPosition() == null){
-                        chessPieces[i][j].setOldPosition(new Position(i,j));
+                    if (chessPieces[i][j].getNewPosition() == null) {
+                        chessPieces[i][j].setOldPosition(new Position(i, j));
                     } else {
                         chessPieces[i][j].setOldPosition(chessPieces[i][j].getNewPosition());
                     }
                     selected = chessPieces[i][j];
-                    System.out.println("Chess piece: "+ selected.getType() +" was found to be selected\"");
                 }
             }
         }
-
-        if (chessPieces[firstLayer][secondLayer] != null){
+        if (chessPieces[firstLayer][secondLayer] != null) {
             chessPieces[firstLayer][secondLayer].setSelected(true);
-            System.out.println("Chess piece: "+ chessPieces[firstLayer][secondLayer].getType() + "was selected");
         }
-
-        if(selected != null){
-            chessPieces[firstLayer][secondLayer] = selected;
+        if (selected != null) {
+            selected.setNewPosition(new Position(firstLayer, secondLayer));
+            chessPieces[firstLayer][secondLayer] = selected.copy();
+            chessPieces[firstLayer][secondLayer].setOldPosition(selected.getOldPosition());
             chessPieces[firstLayer][secondLayer].setNewPosition(new Position(firstLayer, secondLayer));
-
-            System.out.println("Coordinates old:" + selected.getOldPosition().toString() +
-                    "Coordinates new:" + chessPieces[firstLayer][secondLayer].getNewPosition().toString());
-
-            if(selected.getOldPosition().getVerticalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getVerticalAxis()
-                    || selected.getOldPosition().getHorizontalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getHorizontalAxis()){
+            if (selected.getOldPosition().getVerticalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getVerticalAxis()
+                    || selected.getOldPosition().getHorizontalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getHorizontalAxis()) {
                 chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()] = null;
             }
 
@@ -92,48 +88,63 @@ public class ChessBoard {
 
                 for (int j = 0; j < 8; j++) {
 
-                    if(chessPieces[i][j] != null){
-                        chessPieces [i][j].setSelected(false);
+                    if (chessPieces[i][j] != null) {
+                        chessPieces[i][j].setSelected(false);
                     }
                 }
             }
+        }
+        for (int i = 0; i < chessPieces.length; i++) {
+            for (int j = 0; j < chessPieces[i].length; j++) {
+                if (chessPieces[i][j] != null) {
+                    buildString += "'" + chessPieces[i][j].getType() + "'";
+                } else {
+                    buildString += "''";
+                }
+            }
+            buildString += "\n";
+        }
+        System.out.println(buildString);
+        if (selected != null) {
+            return selected;
+        } else {
+            return null;
         }
     }
 
     /**
      * A method to upgrade a chess piece
+     *
      * @param UpgradeSelected the type of upgrade
      */
-    public void UpdateChessPiece(String UpgradeSelected){
-
-        boolean NoMultipleUpgrades = false;
+    public ChessPiece UpgradeChessPiece(String UpgradeSelected) {
 
         for (int i = 0; i < 8; i++) {
 
             for (int j = 0; j < 8; j++) {
 
-                if(chessPieces[i][j] != null && chessPieces[i][j].getSelected() && !NoMultipleUpgrades){
+                if (chessPieces[i][j] != null && chessPieces[i][j].getSelected()) {
 
-                    if(chessPieces[i][j].getType().contains("black")){
+                    if (chessPieces[i][j].getType().contains("black")) {
                         chessPieces[i][j].setType("black-" + UpgradeSelected);
                         chessPieces[i][j].setSelected(false);
-                        NoMultipleUpgrades = true;
+                        return chessPieces[i][j];
                     } else {
                         chessPieces[i][j].setType("white-" + UpgradeSelected);
                         chessPieces[i][j].setSelected(false);
-                        NoMultipleUpgrades = true;
+                        return chessPieces[i][j];
                     }
                 }
             }
         }
-
+        return null;
     }
 
     /**
      * Returns the selected chess piece
      * @return piece
      */
-    public ChessPiece getSelected(){
-        return selected;
-    }
+//    public ChessPiece getSelected(){
+//        return selected;
+//    }
 }

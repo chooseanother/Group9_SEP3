@@ -15,6 +15,7 @@ public class ModelManager implements Model{
 
     public ModelManager() throws RemoteException {
         iTier2RMIClient = new Tier2RMIClient();
+        chessBoard = new ChessBoard();
         rabbitMQClient = new RabbitMQClientController(this);
         try{
             rabbitMQClient.initRPCQueue();
@@ -36,13 +37,13 @@ public class ModelManager implements Model{
 
     @Override
     public ChessPiece MoveChessPiece(int firstLayer, int secondLayer) {
-        chessBoard.HandleClick(firstLayer, secondLayer);
-        return chessBoard.getSelected();
+
+        return chessBoard.HandleClick(firstLayer, secondLayer);
     }
 
     @Override
     public ChessPiece UpgradeChessPiece(String upgradeSelected) {
-        chessBoard.UpdateChessPiece(upgradeSelected);
-        return chessBoard.getSelected();
+
+        return chessBoard.UpgradeChessPiece(upgradeSelected);
     }
 }

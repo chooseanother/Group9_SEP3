@@ -6,15 +6,15 @@ package model;
  */
 
 public class Position {
-    private int VerticalAxis;
-    private int HorizontalAxis;
+    private int verticalAxis;
+    private int horizontalAxis;
 
     /**
      * Creating a Position and setting the x and z axis to 0
      */
     public Position(int VerticalAxis, int HorizontalAxis){
-        this.VerticalAxis = VerticalAxis;
-        this.HorizontalAxis = HorizontalAxis;
+        this.verticalAxis = VerticalAxis;
+        this.horizontalAxis = HorizontalAxis;
     }
 
     /**
@@ -22,7 +22,7 @@ public class Position {
      * @return Vertical AXis
      */
     public int getVerticalAxis() {
-        return VerticalAxis;
+        return verticalAxis;
     }
 
     /**
@@ -30,7 +30,7 @@ public class Position {
      * @param verticalAxis Vertical Axis
      */
     public void setVerticalAxis(int verticalAxis) {
-        VerticalAxis = verticalAxis;
+        this.verticalAxis = verticalAxis;
     }
 
     /**
@@ -38,7 +38,7 @@ public class Position {
      * @return Horizontal Axis
      */
     public int getHorizontalAxis() {
-        return HorizontalAxis;
+        return horizontalAxis;
     }
 
     /**
@@ -46,7 +46,7 @@ public class Position {
      * @param horizontalAxis Horizontal Axis
      */
     public void setHorizontalAxis(int horizontalAxis) {
-        HorizontalAxis = horizontalAxis;
+        this.horizontalAxis = horizontalAxis;
     }
 
     /**
@@ -54,6 +54,6 @@ public class Position {
      * @return coordinates
      */
     @Override public String toString(){
-        return "Coordinates (Y,X): " + VerticalAxis+ ", " + HorizontalAxis;
+        return "Coordinates (Y,X): " + verticalAxis + ", " + horizontalAxis;
     }
 }

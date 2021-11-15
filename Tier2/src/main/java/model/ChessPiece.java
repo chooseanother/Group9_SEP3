@@ -7,9 +7,9 @@ package model;
 
 public class ChessPiece {
     private String type;
-    private Boolean Selected;
-    private Position OldPosition;
-    private Position NewPosition;
+    private Boolean selected;
+    private Position oldPosition;
+    private Position newPosition;
 
     /**
      * Creating a ChessPiece and initializing all the variables
@@ -17,9 +17,9 @@ public class ChessPiece {
      */
     public ChessPiece(String type){
         this.type = type;
-        Selected = false;
-        OldPosition = new Position(0,0);
-        NewPosition = new Position(0,0);
+        selected = false;
+        oldPosition = null;
+        newPosition = null;
     }
 
     /**
@@ -43,7 +43,7 @@ public class ChessPiece {
      * @return selected
      */
     public Boolean getSelected() {
-        return Selected;
+        return selected;
     }
 
     /**
@@ -51,7 +51,7 @@ public class ChessPiece {
      * @param selected selected
      */
     public void setSelected(Boolean selected) {
-        Selected = selected;
+        this.selected = selected;
     }
 
     /**
@@ -59,7 +59,7 @@ public class ChessPiece {
      * @return old position
      */
     public Position getOldPosition() {
-        return OldPosition;
+        return oldPosition;
     }
 
     /**
@@ -67,7 +67,7 @@ public class ChessPiece {
      * @param oldPosition old position
      */
     public void setOldPosition(Position oldPosition) {
-        OldPosition = oldPosition;
+        this.oldPosition = oldPosition;
     }
 
     /**
@@ -75,7 +75,7 @@ public class ChessPiece {
      * @return new position
      */
     public Position getNewPosition() {
-        return NewPosition;
+        return newPosition;
     }
 
     /**
@@ -83,7 +83,7 @@ public class ChessPiece {
      * @param newPosition new position
      */
     public void setNewPosition(Position newPosition) {
-        NewPosition = newPosition;
+        this.newPosition = newPosition;
     }
 
     /**
@@ -123,6 +123,10 @@ public class ChessPiece {
             default:
                 return "none";
         }
+
+    }
+    public ChessPiece copy (){
+            return new ChessPiece(type);
 
     }
 
