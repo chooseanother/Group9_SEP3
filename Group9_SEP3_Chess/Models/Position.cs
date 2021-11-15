@@ -12,8 +12,6 @@ namespace Group9_SEP3_Chess.Models
 
         public Position()
         {
-            VerticalAxis = 0;
-            HorizontalAxis = 0;
         }
 
         public override string ToString()

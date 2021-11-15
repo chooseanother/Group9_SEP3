@@ -65,13 +65,73 @@ namespace Group9_SEP3_Chess.Data
 
             cancellationToken.Register(() => callbackMapper.TryRemove(correlationId, out var tmp));
             Message response = JsonSerializer.Deserialize<Message>(tcs.Task.Result);
-            ChessPiece chessPiece = (ChessPiece) response.Object;
-            return chessPiece;
+            if (response.Action.Equals("Sending A chess Piece"))
+            {
+                ChessPiece chessPiece = JsonSerializer.Deserialize<ChessPiece>(response.Object);
+                Console.WriteLine(response.Object);
+                Console.WriteLine("Old position"+chessPiece.OldPosition.ToString());
+                Console.WriteLine(chessPiece.Selected);
+                Console.WriteLine(chessPiece.NewPosition.ToString());
+                return chessPiece;
+            }
+            return null;
+            
         }
 
-        public Task<ChessPiece> UpgradeChessPiece(Message message,CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ChessPiece> UpgradeChessPiece(Message message,CancellationToken cancellationToken = default(CancellationToken))
         {
-            throw new System.NotImplementedException();
+            IBasicProperties props = channel.CreateBasicProperties();
+            var correlationId = Guid.NewGuid().ToString();
+            props.CorrelationId = correlationId;
+            props.ReplyTo = replyQueueName;
+            var jsonMessage = JsonSerializer.Serialize(message); 
+            var messageBytes = Encoding.UTF8.GetBytes(jsonMessage);
+            var tcs = new TaskCompletionSource<string>();
+            callbackMapper.TryAdd(correlationId, tcs);
+
+            channel.BasicPublish(
+                exchange: "",
+                routingKey: QUEUE_NAME,
+                basicProperties: props,
+                body: messageBytes);
+
+            cancellationToken.Register(() => callbackMapper.TryRemove(correlationId, out var tmp));
+            Message response = JsonSerializer.Deserialize<Message>(tcs.Task.Result);
+            if (response.Action.Equals("Upgrade Chess Piece"))
+            {
+                ChessPiece chessPiece = JsonSerializer.Deserialize<ChessPiece>(response.Object);
+                Console.WriteLine(response.Object);
+                return chessPiece;
+            }
+            return null;
+        }
+
+        public async Task<ChessPiece[]> LoadChessPieces(Message message, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            IBasicProperties props = channel.CreateBasicProperties();
+            var correlationId = Guid.NewGuid().ToString();
+            props.CorrelationId = correlationId;
+            props.ReplyTo = replyQueueName;
+            var jsonMessage = JsonSerializer.Serialize(message); 
+            var messageBytes = Encoding.UTF8.GetBytes(jsonMessage);
+            var tcs = new TaskCompletionSource<string>();
+            callbackMapper.TryAdd(correlationId, tcs);
+
+            channel.BasicPublish(
+                exchange: "",
+                routingKey: QUEUE_NAME,
+                basicProperties: props,
+                body: messageBytes);
+
+            cancellationToken.Register(() => callbackMapper.TryRemove(correlationId, out var tmp));
+            Message response = JsonSerializer.Deserialize<Message>(tcs.Task.Result);
+            if (response.Action.Equals("Upgrade Chess Piece"))
+            {
+                ChessPiece[] chessPieces = JsonSerializer.Deserialize<ChessPiece[]>(response.Object);
+                Console.WriteLine(response.Object);
+                return chessPieces;
+            }
+            return null;
+        }
         }
     }
-}

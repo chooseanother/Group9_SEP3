@@ -89,6 +89,13 @@ using Group9_SEP3_Chess.Models;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 2 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\Pages\ChessBoard.razor"
+using Group9_SEP3_Chess.Data;
+
+#line default
+#line hidden
+#nullable disable
     public partial class ChessBoard : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -97,9 +104,8 @@ using Group9_SEP3_Chess.Models;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 93 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\Pages\ChessBoard.razor"
+#line 94 "D:\CSharp\Group9_SEP3\Group9_SEP3_Chess\Pages\ChessBoard.razor"
        
-    private String[] letters = new String[8] {"a", "b", "c", "d", "e", "f", "g", "h"};
     private ChessPiece[,] chessPieces = new ChessPiece[8, 8];
     String printoutArray = "";
     String UpgradeSelected = "";
@@ -187,50 +193,19 @@ using Group9_SEP3_Chess.Models;
         }
     }
 
-    private void HandleClick(int FirstLayer, int SecondLayer)
+    private async Task HandleClick(int FirstLayer, int SecondLayer)
     {
-        ChessPiece selected = null;
-        
-            
-            for (int i = 0; i < chessPieces.GetLength(0); i++)
-            {
-                for (int j = 0; j < chessPieces.GetLength(1); j++)
-                {
-                    if (chessPieces[i, j] != null && chessPieces[i, j].Selected && selected == null)
-                    {
-                        if(chessPieces[i,j].NewPosition==null){
-                            chessPieces[i, j].OldPosition = new Position()
-                            {
-                                VerticalAxis = i,
-                                HorizontalAxis = j
-                            };
-                        }
-                        else
-                        {
-                            chessPieces[i, j].OldPosition = chessPieces[i, j].NewPosition;
-                        }
-                        selected = chessPieces[i, j];
-                        Console.WriteLine($"Chess piece:{selected.Type} was found to be selected");
-                    }
-                }
-            }
-        
-            if (chessPieces[FirstLayer, SecondLayer] != null)
-            {
-                chessPieces[FirstLayer, SecondLayer].Selected = true;
-                Console.WriteLine($"Chess piece:{chessPieces[FirstLayer,SecondLayer].Type} was selected");
-            }
+        Message message = new Message();
+        message.FirstLayer = FirstLayer;
+        message.SecondLayer = SecondLayer;
+        message.Action = "Move";
+        ChessPiece selected = await _matchService.MoveChessPiece(message);
         if (selected != null)
         {
             chessPieces[FirstLayer, SecondLayer] = selected;
-            chessPieces[FirstLayer, SecondLayer].NewPosition = new Position()
-            {
-                VerticalAxis = FirstLayer,
-                HorizontalAxis = SecondLayer
-            };
             Console.WriteLine($"Coordinates old: {selected.OldPosition.ToString()} Coordinates new: {chessPieces[FirstLayer,SecondLayer].NewPosition.ToString()}");
-            if(selected.OldPosition.VerticalAxis!=chessPieces[FirstLayer,SecondLayer].NewPosition.VerticalAxis ||
-               selected.OldPosition.HorizontalAxis!=chessPieces[FirstLayer,SecondLayer].NewPosition.HorizontalAxis){
+            if(chessPieces[FirstLayer,SecondLayer].OldPosition.VerticalAxis != chessPieces[FirstLayer,SecondLayer].NewPosition.VerticalAxis
+            || chessPieces[FirstLayer,SecondLayer].OldPosition.HorizontalAxis != chessPieces[FirstLayer,SecondLayer].NewPosition.HorizontalAxis){
                 chessPieces[selected.OldPosition.VerticalAxis, selected.OldPosition.HorizontalAxis] = null;
             }
             for (int i = 0; i < chessPieces.GetLength(0); i++)
@@ -248,40 +223,23 @@ using Group9_SEP3_Chess.Models;
     }
 
 
-    private void UpdateChessPiece()
+    private async Task UpdateChessPiece()
     {
         
-        bool NoMultipleUpgrades = false;
-        
-        for (int i = 0; i < chessPieces.GetLength(0); i++)
-        {
-            for (int j = 0; j < chessPieces.GetLength(1); j++)
-            {
-                if (chessPieces[i, j] != null && chessPieces[i, j].Selected && !NoMultipleUpgrades)
-                {
-                    if (chessPieces[i, j].Type.Contains("black"))
-                    {
-                        chessPieces[i, j].Type = "black-" + UpgradeSelected;
-                        chessPieces[i, j].Selected = false;
-                        NoMultipleUpgrades = true;
-                    }
-                    else
-                    {
-                        chessPieces[i, j].Type = "white-" + UpgradeSelected;
-                        chessPieces[i, j].Selected = false;
-                        NoMultipleUpgrades = true;
-                    }
-                    
-                }
-            }
-        }
-        
+        Message message = new Message();
+        message.Action = "Upgrade";
+        message.UpgradeSelected = UpgradeSelected;
+        Console.WriteLine("method called");
+        ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
+        chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
+
     }
 
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IMatchService _matchService { get; set; }
     }
 }
 #pragma warning restore 1591
