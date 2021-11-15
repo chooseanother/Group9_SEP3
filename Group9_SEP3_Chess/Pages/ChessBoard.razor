@@ -186,23 +186,12 @@
         message.SecondLayer = SecondLayer;
         message.Action = "Move";
         ChessPiece selected = await _matchService.MoveChessPiece(message);
-
-        if (chessPieces[FirstLayer, SecondLayer] != null)
-            {
-                chessPieces[FirstLayer, SecondLayer].Selected = true;
-                Console.WriteLine($"Chess piece:{chessPieces[FirstLayer,SecondLayer].Type} was selected");
-            }
         if (selected != null)
         {
             chessPieces[FirstLayer, SecondLayer] = selected;
-            chessPieces[FirstLayer, SecondLayer].NewPosition = new Position()
-            {
-                VerticalAxis = FirstLayer,
-                HorizontalAxis = SecondLayer
-            };
             Console.WriteLine($"Coordinates old: {selected.OldPosition.ToString()} Coordinates new: {chessPieces[FirstLayer,SecondLayer].NewPosition.ToString()}");
-            if(selected.OldPosition.VerticalAxis!=chessPieces[FirstLayer,SecondLayer].NewPosition.VerticalAxis ||
-               selected.OldPosition.HorizontalAxis!=chessPieces[FirstLayer,SecondLayer].NewPosition.HorizontalAxis){
+            if(chessPieces[FirstLayer,SecondLayer].OldPosition.VerticalAxis != chessPieces[FirstLayer,SecondLayer].NewPosition.VerticalAxis
+            || chessPieces[FirstLayer,SecondLayer].OldPosition.HorizontalAxis != chessPieces[FirstLayer,SecondLayer].NewPosition.HorizontalAxis){
                 chessPieces[selected.OldPosition.VerticalAxis, selected.OldPosition.HorizontalAxis] = null;
             }
             for (int i = 0; i < chessPieces.GetLength(0); i++)
@@ -220,34 +209,16 @@
     }
 
 
-    private void UpdateChessPiece()
+    private async Task UpdateChessPiece()
     {
         
-        bool NoMultipleUpgrades = false;
-        
-        for (int i = 0; i < chessPieces.GetLength(0); i++)
-        {
-            for (int j = 0; j < chessPieces.GetLength(1); j++)
-            {
-                if (chessPieces[i, j] != null && chessPieces[i, j].Selected && !NoMultipleUpgrades)
-                {
-                    if (chessPieces[i, j].Type.Contains("black"))
-                    {
-                        chessPieces[i, j].Type = "black-" + UpgradeSelected;
-                        chessPieces[i, j].Selected = false;
-                        NoMultipleUpgrades = true;
-                    }
-                    else
-                    {
-                        chessPieces[i, j].Type = "white-" + UpgradeSelected;
-                        chessPieces[i, j].Selected = false;
-                        NoMultipleUpgrades = true;
-                    }
-                    
-                }
-            }
-        }
-        
+        Message message = new Message();
+        message.Action = "Upgrade";
+        message.UpgradeSelected = UpgradeSelected;
+        Console.WriteLine("method called");
+        ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
+        chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
+
     }
 
 }

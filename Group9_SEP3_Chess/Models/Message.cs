@@ -20,8 +20,9 @@ namespace Group9_SEP3_Chess.Models
         [JsonPropertyName("secondLayer")]
         public int SecondLayer { get; set; }
         [JsonPropertyName("object")]
-        public object Object { get; set; }
-        
+        public String Object { get; set; }
+        [JsonPropertyName("upgradeSelected")]
+        public String UpgradeSelected { get; set; }
         public override string ToString()
         {
             return $"Action: {Action} Username: {Username} Email: {Email} Password: {Password}";
