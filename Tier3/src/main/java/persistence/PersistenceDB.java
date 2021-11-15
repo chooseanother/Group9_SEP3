@@ -21,4 +21,9 @@ public class PersistenceDB implements Persistence{
     public void MovePiece(int moveId, int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
         MatchDb.MovePiece(moveId, matchId, piece, color, startPosition, endPosition);
     }
+
+    @Override
+    public void UpgradePiece(String upgradeSelected) throws SQLException{
+        MatchDb.UpgradePiece(upgradeSelected);
+    }
 }

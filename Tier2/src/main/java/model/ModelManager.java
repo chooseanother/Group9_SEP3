@@ -55,7 +55,14 @@ public class ModelManager implements Model{
 
     @Override
     public ChessPiece UpgradeChessPiece(String upgradeSelected) {
-
-        return chessBoard.UpgradeChessPiece(upgradeSelected);
+        try {
+            ChessPiece toUpgrade = chessBoard.UpgradeChessPiece(upgradeSelected);
+            if (iTier2RMIClient.UpgradePiece(upgradeSelected)) {
+                return toUpgrade;
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+       return null;
     }
 }
