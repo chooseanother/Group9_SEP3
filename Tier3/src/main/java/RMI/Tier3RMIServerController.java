@@ -72,5 +72,16 @@ public class Tier3RMIServerController
         }
     }
 
+    @Override
+    public boolean UpgradePiece(String upgradeSelected) throws RemoteException {
+        try {
+            persistence.UpgradePiece(upgradeSelected);
+            return true;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }

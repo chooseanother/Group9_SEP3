@@ -20,4 +20,9 @@ public class MatchDb implements MatchPersistence{
             statement.executeUpdate();
         }
     }
+
+    @Override
+    public void UpgradePiece(String upgradeSelected) throws SQLException {
+        // Should load into the database
+    }
 }

@@ -41,4 +41,13 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
             return false;
         }
     }
+
+    @Override public boolean UpgradePiece(String upgradeSelected){
+        try {
+            return tier3.UpgradePiece(upgradeSelected);
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
