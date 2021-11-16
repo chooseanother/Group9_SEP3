@@ -68,20 +68,24 @@ public class ChessBoard {
             for (int j = 0; j < chessPieces[i].length; j++) {
 
                 if (chessPieces[i][j] != null && chessPieces[i][j].getSelected() && selected == null) {
-
-                    if (chessPieces[i][j].getNewPosition() == null) {
-                        chessPieces[i][j].setOldPosition(new Position(i, j));
-                        chessPieces[i][j].setNewPosition(new Position(firstLayer,secondLayer));
+                    selected = chessPieces[i][j].copy();
+                    if (selected.getNewPosition() == null) {
+                        selected.setOldPosition(new Position(i, j));
+                        selected.setNewPosition(new Position(firstLayer,secondLayer));
                     } else {
-                        chessPieces[i][j].setOldPosition(chessPieces[i][j].getNewPosition());
-                        chessPieces[i][j].setNewPosition(new Position(firstLayer,secondLayer));
+                        selected.setOldPosition(chessPieces[i][j].getNewPosition());
+                        selected.setNewPosition(new Position(firstLayer,secondLayer));
                     }
-                    selected = chessPieces[i][j];
+
                 }
             }
         }
         if (chessPieces[firstLayer][secondLayer] != null) {
             chessPieces[firstLayer][secondLayer].setSelected(true);
+        }
+       if(selected!=null && selected.getOldPosition().getVerticalAxis() == firstLayer && selected.getOldPosition().getHorizontalAxis() == secondLayer){
+            chessPieces[firstLayer][secondLayer].setSelected(false);
+            selected=null;
         }
         if (selected != null) {
             selected.setNewPosition(new Position(firstLayer, secondLayer));
