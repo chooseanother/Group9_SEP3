@@ -33,9 +33,10 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
 
     }
 
-    @Override public boolean MovePiece(ChessPiece piece, int moveId, int matchId) throws RemoteException {
+    @Override public boolean MovePiece(ChessPiece piece, int matchId) throws RemoteException {
         try {
-           return tier3.MovePiece(moveId, matchId, piece.getType(), piece.getType(), piece.getOldPosition().toString(), piece.getNewPosition().toString());
+           return tier3.MovePiece( matchId, piece.getType(), piece.getColor(), piece.getOldPosition().getVerticalAxis()+":"+piece.getOldPosition().getHorizontalAxis()
+                   , piece.getNewPosition().getVerticalAxis()+":"+piece.getNewPosition().getHorizontalAxis());
         } catch (Exception e) {
             e.printStackTrace();
             return false;

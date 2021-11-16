@@ -1,6 +1,10 @@
 package model;
 
 
+import RMI.ITier2RMIClient;
+
+import java.rmi.RemoteException;
+
 /**
  * @author Nick/Rokas
  * @version 1.0
@@ -18,31 +22,34 @@ public class ChessBoard {
 //        selected = null;
 
         //black
-        chessPieces[0][0] = new ChessPiece("black-rook");
-        chessPieces[0][1] = new ChessPiece("black-horse");
-        chessPieces[0][2] = new ChessPiece("black-bishop");
-        chessPieces[0][3] = new ChessPiece("black-queen");
-        chessPieces[0][4] = new ChessPiece("black-king");
-        chessPieces[0][5] = new ChessPiece("black-bishop");
-        chessPieces[0][6] = new ChessPiece("black-horse");
-        chessPieces[0][7] = new ChessPiece("black-rook");
+        String black = "Black";
+        chessPieces[0][0] = new ChessPiece("Rook", black, new Position(0, 0));
+        chessPieces[0][1] = new ChessPiece("Horse", black, new Position(0, 1));
+        chessPieces[0][2] = new ChessPiece("Bishop", black, new Position(0, 2));
+        chessPieces[0][3] = new ChessPiece("Queen", black, new Position(0, 3));
+        chessPieces[0][4] = new ChessPiece("King", black, new Position(0, 4));
+        chessPieces[0][5] = new ChessPiece("Bishop", black, new Position(0, 5));
+        chessPieces[0][6] = new ChessPiece("Horse", black, new Position(0, 6));
+        chessPieces[0][7] = new ChessPiece("Rook", black, new Position(0, 7));
 
         for (int i = 0; i < 8; i++) {
-            chessPieces[1][i] = new ChessPiece("black-pawn");
+            chessPieces[1][i] = new ChessPiece("Pawn", black, new Position(1, i));
         }
 
         //white
-        chessPieces[7][0] = new ChessPiece("white-rook");
-        chessPieces[7][1] = new ChessPiece("white-horse");
-        chessPieces[7][2] = new ChessPiece("white-bishop");
-        chessPieces[7][3] = new ChessPiece("white-queen");
-        chessPieces[7][4] = new ChessPiece("white-king");
-        chessPieces[7][5] = new ChessPiece("white-bishop");
-        chessPieces[7][6] = new ChessPiece("white-horse");
-        chessPieces[7][7] = new ChessPiece("white-rook");
+        String white = "White";
+        chessPieces[7][0] = new ChessPiece("Rook", white, new Position(7, 0));
+        chessPieces[7][1] = new ChessPiece("Horse", white, new Position(7, 1));
+        chessPieces[7][2] = new ChessPiece("Bishop", white, new Position(7, 2));
+        chessPieces[7][3] = new ChessPiece("Queen", white, new Position(7, 3));
+        chessPieces[7][4] = new ChessPiece("King", white, new Position(7, 4));
+        chessPieces[7][5] = new ChessPiece("Bishop", white, new Position(7, 5));
+        chessPieces[7][6] = chessPieces[0][6] = new ChessPiece("Horse", white, new Position(7, 6));
+        chessPieces[7][7] = chessPieces[0][7] = new ChessPiece("Rook", white, new Position(7, 7));
 
         for (int i = 0; i < 8; i++) {
-            chessPieces[6][i] = new ChessPiece("white-pawn");
+            chessPieces[6][i] = chessPieces[0][7] = new ChessPiece("Pawn", white, new Position(6, i));
+            ;
         }
 
     }
@@ -53,7 +60,7 @@ public class ChessBoard {
      * @param firstLayer  Vertical layer
      * @param secondLayer Horizontal layer
      */
-    public ChessPiece HandleClick(int firstLayer, int secondLayer) {
+    public ChessPiece MoveAttackChessPiece(int firstLayer, int secondLayer, ITier2RMIClient iTier2RMIClient, int matchID)throws RemoteException {
         ChessPiece selected = null;
         String buildString = "";
         for (int i = 0; i < chessPieces.length; i++) {
@@ -64,8 +71,10 @@ public class ChessBoard {
 
                     if (chessPieces[i][j].getNewPosition() == null) {
                         chessPieces[i][j].setOldPosition(new Position(i, j));
+                        chessPieces[i][j].setNewPosition(new Position(firstLayer,secondLayer));
                     } else {
                         chessPieces[i][j].setOldPosition(chessPieces[i][j].getNewPosition());
+                        chessPieces[i][j].setNewPosition(new Position(firstLayer,secondLayer));
                     }
                     selected = chessPieces[i][j];
                 }
@@ -76,23 +85,26 @@ public class ChessBoard {
         }
         if (selected != null) {
             selected.setNewPosition(new Position(firstLayer, secondLayer));
-            chessPieces[firstLayer][secondLayer] = selected.copy();
-            chessPieces[firstLayer][secondLayer].setOldPosition(selected.getOldPosition());
-            chessPieces[firstLayer][secondLayer].setNewPosition(new Position(firstLayer, secondLayer));
-            if (selected.getOldPosition().getVerticalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getVerticalAxis()
-                    || selected.getOldPosition().getHorizontalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getHorizontalAxis()) {
-                chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()] = null;
-            }
 
-            for (int i = 0; i < 8; i++) {
-
-                for (int j = 0; j < 8; j++) {
-
-                    if (chessPieces[i][j] != null) {
-                        chessPieces[i][j].setSelected(false);
+                if (iTier2RMIClient.MovePiece(selected, matchID)) {
+                    chessPieces[firstLayer][secondLayer] = selected.copy();
+                    chessPieces[firstLayer][secondLayer].setNewPosition(new Position(firstLayer, secondLayer));
+                    if (selected.getOldPosition().getVerticalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getVerticalAxis()
+                            || selected.getOldPosition().getHorizontalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getHorizontalAxis()) {
+                        chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()] = null;
                     }
+
+                    for (int i = 0; i < 8; i++) {
+
+                        for (int j = 0; j < 8; j++) {
+
+                            if (chessPieces[i][j] != null) {
+                                chessPieces[i][j].setSelected(false);
+                            }
+                        }
+                    }
+                    return chessPieces[firstLayer][secondLayer];
                 }
-            }
         }
         for (int i = 0; i < chessPieces.length; i++) {
             for (int j = 0; j < chessPieces[i].length; j++) {
@@ -105,11 +117,7 @@ public class ChessBoard {
             buildString += "\n";
         }
         System.out.println(buildString);
-        if (selected != null) {
-            return selected;
-        } else {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -117,23 +125,17 @@ public class ChessBoard {
      *
      * @param UpgradeSelected the type of upgrade
      */
-    public ChessPiece UpgradeChessPiece(String UpgradeSelected) {
+    public ChessPiece UpgradeChessPiece(String UpgradeSelected,ITier2RMIClient iTier2RMIClient)throws RemoteException {
 
-        for (int i = 0; i < chessPieces.length; i++) {
+       if(iTier2RMIClient.UpgradePiece(UpgradeSelected)) {
+            for (int i = 0; i < chessPieces.length; i++) {
 
-            for (int j = 0; j < chessPieces[i].length; j++) {
+                for (int j = 0; j < chessPieces[i].length; j++) {
 
-                if (chessPieces[i][j] != null && chessPieces[i][j].getSelected()) {
-
-                    if (chessPieces[i][j].getType().contains("black")) {
-                        chessPieces[i][j].setType("black-" + UpgradeSelected);
+                    if (chessPieces[i][j] != null && chessPieces[i][j].getSelected()) {
+                        chessPieces[i][j].setType(UpgradeSelected);
                         chessPieces[i][j].setSelected(false);
-                        chessPieces[i][j].setOldPosition(new Position(i,j));
-                        return chessPieces[i][j];
-                    } else {
-                        chessPieces[i][j].setType("white-" + UpgradeSelected);
-                        chessPieces[i][j].setOldPosition(new Position(i,j));
-                        chessPieces[i][j].setSelected(false);
+                        chessPieces[i][j].setOldPosition(chessPieces[i][j].getNewPosition());
                         return chessPieces[i][j];
                     }
                 }
@@ -141,7 +143,8 @@ public class ChessBoard {
         }
         return null;
     }
-    public ChessPiece[][] getChessBoard(){
+
+    public ChessPiece[][] getChessBoard() {
         return chessPieces;
     }
     /**

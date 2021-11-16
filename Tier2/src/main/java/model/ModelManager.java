@@ -12,13 +12,11 @@ public class ModelManager implements Model{
     private ITier2RMIClient iTier2RMIClient;
     private RabbitMQClient rabbitMQClient;
     private ChessBoard chessBoard; //Should be match
-    private int moveId;
 
     public ModelManager() throws RemoteException {
         iTier2RMIClient = new Tier2RMIClient();
         chessBoard = new ChessBoard();
         rabbitMQClient = new RabbitMQClientController(this);
-        moveId = 0;
 
         try{
             rabbitMQClient.initRPCQueue();
@@ -41,29 +39,30 @@ public class ModelManager implements Model{
     @Override
     public ChessPiece MoveChessPiece(int firstLayer, int secondLayer) {
         try {
-            moveId++;
-            ChessPiece toMove = chessBoard.HandleClick(firstLayer, secondLayer);
-            if(iTier2RMIClient.MovePiece(toMove, moveId, 0 )){
-               return toMove;
+            ChessPiece toMove = chessBoard.MoveAttackChessPiece(firstLayer, secondLayer,iTier2RMIClient,1);
+            if(toMove==null){
+                System.out.println("Chess Piece was not moved, as it was not saved");
             }
+               return toMove;
 
         } catch (RemoteException e){
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     @Override
     public ChessPiece UpgradeChessPiece(String upgradeSelected) {
-        try {
-            ChessPiece toUpgrade = chessBoard.UpgradeChessPiece(upgradeSelected);
-            if (iTier2RMIClient.UpgradePiece(upgradeSelected)) {
-                return toUpgrade;
+       try {
+            ChessPiece toUpgrade = chessBoard.UpgradeChessPiece(upgradeSelected, iTier2RMIClient);
+            if(toUpgrade==null){
+                System.out.println("Chess piece was not upgraded as it was not saved");
             }
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-       return null;
+            return toUpgrade;
+        }catch (RemoteException e){
+           e.printStackTrace();
+           return null;
+       }
     }
 
     @Override

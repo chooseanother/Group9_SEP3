@@ -13,7 +13,7 @@ public interface ITier3RMIServer
 {
 	public boolean registerUser(User user) throws RemoteException;
 
-	public boolean MovePiece(int moveId, int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
+	public boolean MovePiece( int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
 
 	public boolean UpgradePiece(String upgradeSelected) throws RemoteException;
 

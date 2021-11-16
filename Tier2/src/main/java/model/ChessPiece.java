@@ -10,16 +10,18 @@ public class ChessPiece {
     private Boolean selected;
     private Position oldPosition;
     private Position newPosition;
+    private String color;
 
     /**
      * Creating a ChessPiece and initializing all the variables
      * @param type type
      */
-    public ChessPiece(String type){
+    public ChessPiece(String type,String color,Position newPosition){
         this.type = type;
         selected = false;
         oldPosition = null;
-        newPosition = null;
+        this.newPosition=newPosition;
+        this.color=color;
     }
 
     /**
@@ -79,6 +81,13 @@ public class ChessPiece {
     }
 
     /**
+     * Returns the color of a piece
+     * @return color
+     */
+    public String getColor(){
+        return color;
+    }
+    /**
      * Set new position
      * @param newPosition new position
      */
@@ -92,7 +101,7 @@ public class ChessPiece {
      */
     public String getPiece(){
 
-        switch (type.toLowerCase()) {
+        switch (color.toLowerCase()+"-"+type.toLowerCase()) {
             //Black
             case "black-rook":
                 return "Images/BRook.png";
@@ -126,7 +135,9 @@ public class ChessPiece {
 
     }
     public ChessPiece copy (){
-            return new ChessPiece(type);
+            ChessPiece chessPiece = new ChessPiece(type,color,newPosition);
+            chessPiece.setOldPosition(oldPosition);
+            return chessPiece;
 
     }
 

@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 public interface ITier2RMIClient extends Remote {
     boolean registerUser(String username, String password, String email) throws RemoteException;
 
-    public boolean MovePiece(ChessPiece chessPiece, int moveId, int matchId) throws RemoteException;
+    public boolean MovePiece(ChessPiece chessPiece, int matchId) throws RemoteException;
 
     public boolean UpgradePiece(String upgradeSelected) throws RemoteException;
 }
