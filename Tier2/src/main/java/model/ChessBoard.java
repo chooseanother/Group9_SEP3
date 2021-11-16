@@ -24,12 +24,12 @@ public class ChessBoard {
         //black
         String black = "Black";
         chessPieces[0][0] = new ChessPiece("Rook", black, new Position(0, 0));
-        chessPieces[0][1] = new ChessPiece("Horse", black, new Position(0, 1));
+        chessPieces[0][1] = new ChessPiece("Knight", black, new Position(0, 1));
         chessPieces[0][2] = new ChessPiece("Bishop", black, new Position(0, 2));
         chessPieces[0][3] = new ChessPiece("Queen", black, new Position(0, 3));
         chessPieces[0][4] = new ChessPiece("King", black, new Position(0, 4));
         chessPieces[0][5] = new ChessPiece("Bishop", black, new Position(0, 5));
-        chessPieces[0][6] = new ChessPiece("Horse", black, new Position(0, 6));
+        chessPieces[0][6] = new ChessPiece("Knight", black, new Position(0, 6));
         chessPieces[0][7] = new ChessPiece("Rook", black, new Position(0, 7));
 
         for (int i = 0; i < 8; i++) {
@@ -39,13 +39,13 @@ public class ChessBoard {
         //white
         String white = "White";
         chessPieces[7][0] = new ChessPiece("Rook", white, new Position(7, 0));
-        chessPieces[7][1] = new ChessPiece("Horse", white, new Position(7, 1));
+        chessPieces[7][1] = new ChessPiece("Knight", white, new Position(7, 1));
         chessPieces[7][2] = new ChessPiece("Bishop", white, new Position(7, 2));
         chessPieces[7][3] = new ChessPiece("Queen", white, new Position(7, 3));
         chessPieces[7][4] = new ChessPiece("King", white, new Position(7, 4));
         chessPieces[7][5] = new ChessPiece("Bishop", white, new Position(7, 5));
-        chessPieces[7][6] = chessPieces[0][6] = new ChessPiece("Horse", white, new Position(7, 6));
-        chessPieces[7][7] = chessPieces[0][7] = new ChessPiece("Rook", white, new Position(7, 7));
+        chessPieces[7][6] = new ChessPiece("Knight", white, new Position(7, 6));
+        chessPieces[7][7] = new ChessPiece("Rook", white, new Position(7, 7));
 
         for (int i = 0; i < 8; i++) {
             chessPieces[6][i] = chessPieces[0][7] = new ChessPiece("Pawn", white, new Position(6, i));
