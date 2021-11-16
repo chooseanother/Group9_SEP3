@@ -30,6 +30,7 @@ namespace Group9_SEP3_Chess
             services.AddServerSideBlazor();
             services.AddSingleton<IRabbitMQ, RabbitMQService>();
             services.AddScoped<IUserService, UserWebService>();
+            services.AddScoped<IPlayMatch, PlayMatchWebService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
