@@ -14,19 +14,21 @@ namespace Group9_SEP3_Chess.Models
         public Position OldPosition { get; set; }
         [JsonPropertyName("newPosition")]
         public Position NewPosition { get; set; }
+        [JsonPropertyName("color")]
+        public string Color { get; set; }
 
         public ChessPiece()
         {
         }
         public String GetPiece()
         {
-            switch (Type.ToLower())
+            switch (Color.ToLower()+"-"+Type.ToLower())
             {
                 //Black
                 case "black-rook":
                     return "Images/BRook.png";
-                case "black-horse":
-                    return "Images/BHorse.png";
+                case "black-knight":
+                    return "Images/BKnight.png";
                 case  "black-bishop": 
                     return "Images/BBishop.png";
                 case  "black-queen":
@@ -39,8 +41,8 @@ namespace Group9_SEP3_Chess.Models
                 //White
                 case "white-rook": 
                     return "Images/WRook.png";
-                case "white-horse":
-                    return "Images/WHorse.png";
+                case "white-knight":
+                    return "Images/WKnight.png";
                 case "white-bishop":
                     return "Images/WBishop.png";
                 case "white-queen":
