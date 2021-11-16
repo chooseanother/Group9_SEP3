@@ -10,6 +10,7 @@ public class PersistenceDB implements Persistence{
 
     public PersistenceDB(){
         userDB = new UserDB();
+        MatchDb = new MatchDb();
     }
 
     @Override
