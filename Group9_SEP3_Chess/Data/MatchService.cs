@@ -100,7 +100,7 @@ namespace Group9_SEP3_Chess.Data
             if (response.Action.Equals("Upgrade Chess Piece"))
             {
                 ChessPiece chessPiece = JsonSerializer.Deserialize<ChessPiece>(response.Object);
-                Console.WriteLine(response.Object);
+                Console.WriteLine(response.Object + chessPiece.Type);
                 return chessPiece;
             }
             return null;

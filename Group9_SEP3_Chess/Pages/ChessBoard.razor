@@ -70,10 +70,10 @@
 <div class="UpgradePart">
     <label>Select upgrade: </label>
     <select @bind="UpgradeSelected">
-        <option>rook</option>
-        <option>horse</option>
-        <option>bishop</option>
-        <option>queen</option>
+        <option>Rook</option>
+        <option>Knight</option>
+        <option>Bishop</option>
+        <option>Queen</option>
     </select>
 
     <button class="btn btn-outline-dark" @onclick="UpdateChessPiece">Upgrade</button>
@@ -99,83 +99,103 @@
 
     protected override async Task OnInitializedAsync()
     {
+        string black = "Black";
         chessPieces[0, 0] = new ChessPiece()
         {
-            Type = "black-rook"
+            Type = "rook",
+            Color = black
         };
         chessPieces[0, 1] = new ChessPiece()
         {
-            Type = "black-horse"
+            Type = "Knight",
+            Color = black
         };
         chessPieces[0, 2] = new ChessPiece()
         {
-            Type = "black-bishop"
+            Type = "bishop",
+            Color = black
         };
         chessPieces[0, 3] = new ChessPiece()
         {
-            Type = "black-queen"
+            Type = "queen",
+            Color = black
         };
         chessPieces[0, 4] = new ChessPiece()
         {
-            Type = "black-king"
+            Type = "king",
+            Color = black
         };
         chessPieces[0, 5] = new ChessPiece()
         {
-            Type = "black-bishop"
+            Type = "bishop",
+            Color = black
         };
         chessPieces[0, 6] = new ChessPiece()
         {
-            Type = "black-horse"
+            Type = "Knight",
+            Color = black
         };
         chessPieces[0, 7] = new ChessPiece()
         {
-            Type = "black-rook"
+            Type = "rook",
+            Color = black
         };
         
         for (int i = 0; i < chessPieces.GetLength(1); i++)
         {
             chessPieces[1, i] = new ChessPiece()
             {
-                Type = "black-pawn"
+                Type = "pawn",
+                Color = black
             };
         }
+        string white = "White";
         chessPieces[7, 0] = new ChessPiece()
         {
-            Type = "white-rook"
+            Type = "rook",
+            Color = white
         };
         chessPieces[7, 1] = new ChessPiece()
         {
-            Type = "white-horse"
+            Type = "Knight",
+            Color = white
         };
         chessPieces[7, 2] = new ChessPiece()
         {
-            Type = "white-bishop"
+            Type = "bishop",
+            Color = white
         };
         chessPieces[7, 3] = new ChessPiece()
         {
-            Type = "white-queen"
+            Type = "queen",
+            Color = white
         };
         chessPieces[7, 4] = new ChessPiece()
         {
-            Type = "white-king"
+            Type = "king",
+            Color = white
         };
         chessPieces[7, 5] = new ChessPiece()
         {
-            Type = "white-bishop"
+            Type = "bishop",
+            Color = white
         };
         chessPieces[7, 6] = new ChessPiece()
         {
-            Type = "white-horse"
+            Type = "Knight",
+            Color = white
         };
         chessPieces[7, 7] = new ChessPiece()
         {
-            Type = "white-rook"
+            Type = "rook",
+            Color = white
         };
         for (int i = 0; i < chessPieces.GetLength(1); i++)
         {
             chessPieces[6, i] = new ChessPiece()
             {
-                Type = "white-pawn"
+                Type = "pawn",
+                Color = white
             };
         }
         // 2D array of custom object serialization is not supported, need to consult with somebody
