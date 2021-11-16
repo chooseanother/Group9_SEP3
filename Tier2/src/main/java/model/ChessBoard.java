@@ -125,17 +125,20 @@ public class ChessBoard {
      *
      * @param UpgradeSelected the type of upgrade
      */
-    public ChessPiece UpgradeChessPiece(String UpgradeSelected,ITier2RMIClient iTier2RMIClient)throws RemoteException {
+    public ChessPiece UpgradeChessPiece(String UpgradeSelected,ITier2RMIClient iTier2RMIClient,int matchID)throws RemoteException {
 
-       if(iTier2RMIClient.UpgradePiece(UpgradeSelected)) {
             for (int i = 0; i < chessPieces.length; i++) {
 
                 for (int j = 0; j < chessPieces[i].length; j++) {
 
                     if (chessPieces[i][j] != null && chessPieces[i][j].getSelected()) {
-                        chessPieces[i][j].setType(UpgradeSelected);
-                        chessPieces[i][j].setSelected(false);
-                        chessPieces[i][j].setOldPosition(chessPieces[i][j].getNewPosition());
+                        ChessPiece selected = chessPieces[i][j].copy();
+                        selected.setType(UpgradeSelected);
+                        selected.setSelected(false);
+                        selected.setOldPosition(new Position(i,j));
+                        selected.setNewPosition(new Position(i,j));
+                        if(iTier2RMIClient.UpgradePiece(selected,matchID)) {
+                        chessPieces[i][j] = selected.copy();
                         return chessPieces[i][j];
                     }
                 }

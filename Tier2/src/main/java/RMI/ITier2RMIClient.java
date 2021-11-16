@@ -10,5 +10,5 @@ public interface ITier2RMIClient extends Remote {
 
     public boolean MovePiece(ChessPiece chessPiece, int matchId) throws RemoteException;
 
-    public boolean UpgradePiece(String upgradeSelected) throws RemoteException;
+    public boolean UpgradePiece(ChessPiece chessPiece,int matchId) throws RemoteException;
 }

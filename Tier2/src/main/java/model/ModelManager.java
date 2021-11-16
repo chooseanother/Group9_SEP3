@@ -54,7 +54,7 @@ public class ModelManager implements Model{
     @Override
     public ChessPiece UpgradeChessPiece(String upgradeSelected) {
        try {
-            ChessPiece toUpgrade = chessBoard.UpgradeChessPiece(upgradeSelected, iTier2RMIClient);
+            ChessPiece toUpgrade = chessBoard.UpgradeChessPiece(upgradeSelected, iTier2RMIClient,1);
             if(toUpgrade==null){
                 System.out.println("Chess piece was not upgraded as it was not saved");
             }

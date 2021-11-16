@@ -2,6 +2,7 @@ package RMI;/*
  * 12.09.2018 Original version
  */
 
+import model.ChessPiece;
 import model.User;
 
 import java.rmi.Remote;
@@ -15,7 +16,7 @@ public interface ITier3RMIServer
 
 	public boolean MovePiece( int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
 
-	public boolean UpgradePiece(String upgradeSelected) throws RemoteException;
+	public boolean UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
 
 	public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }

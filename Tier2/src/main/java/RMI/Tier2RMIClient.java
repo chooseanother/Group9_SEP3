@@ -43,9 +43,10 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         }
     }
 
-    @Override public boolean UpgradePiece(String upgradeSelected){
+    @Override public boolean UpgradePiece(ChessPiece chessPiece, int matchID){
         try {
-            return tier3.UpgradePiece(upgradeSelected);
+            return tier3.UpgradePiece(matchID, chessPiece.getType(), chessPiece.getColor(), chessPiece.getOldPosition().getVerticalAxis()+":"+chessPiece.getOldPosition().getHorizontalAxis()
+                    , chessPiece.getNewPosition().getVerticalAxis()+":"+chessPiece.getNewPosition().getHorizontalAxis());
         } catch (Exception e){
             e.printStackTrace();
             return false;

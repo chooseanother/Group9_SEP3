@@ -73,9 +73,9 @@ public class Tier3RMIServerController
     }
 
     @Override
-    public boolean UpgradePiece(String upgradeSelected) throws RemoteException {
+    public boolean UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException {
         try {
-            persistence.UpgradePiece(upgradeSelected);
+            persistence.UpgradePiece( matchId,  piece,  color,  startPosition, endPosition);
             return true;
         } catch (SQLException e){
             e.printStackTrace();
