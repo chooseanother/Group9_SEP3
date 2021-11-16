@@ -5,6 +5,8 @@ public class Message {
     private String username;
     private String password;
     private String email;
+    private String Data;
+
     public Message(){
         this.action="";
         this.password="";
@@ -49,6 +51,14 @@ public class Message {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setData(String data) {
+        Data = data;
+    }
+
+    public String getData() {
+        return Data;
     }
 
     @Override
