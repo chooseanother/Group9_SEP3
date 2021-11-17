@@ -5,7 +5,7 @@ public class Message {
     private String username;
     private String password;
     private String email;
-    private String Data;
+    private String data;
 
     public Message(){
         this.action="";
@@ -19,6 +19,15 @@ public class Message {
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+
+    public Message(String action) {
+        this.action = action;
+    }
+
+    public Message(String action, String data) {
+        this.action = action;
+        this.data = data;
     }
 
     public String getAction() {
@@ -54,11 +63,11 @@ public class Message {
     }
 
     public void setData(String data) {
-        Data = data;
+        this.data = data;
     }
 
     public String getData() {
-        return Data;
+        return data;
     }
 
     @Override
@@ -68,6 +77,7 @@ public class Message {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", data='" + data + '\'' +
                 '}';
     }
 }

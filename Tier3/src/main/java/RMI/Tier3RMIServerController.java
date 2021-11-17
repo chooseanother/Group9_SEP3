@@ -3,7 +3,9 @@ package RMI;/*
  */
 
 import RMI.ITier3RMIServer;
+import model.Challenge;
 import model.User;
+import persistence.ChallengePersistence;
 import persistence.Persistence;
 import persistence.PersistenceDB;
 
@@ -15,6 +17,8 @@ import java.rmi.registry.Registry;
 import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Tier3RMIServerController
@@ -61,4 +65,65 @@ public class Tier3RMIServerController
             return false;
         }
     }
+
+    @Override
+    public boolean validateChallenge(Challenge challenge) throws RemoteException {
+        try {
+            persistence.createChallenge(challenge);
+            System.out.println(challenge + " was created.");
+            return true;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public ArrayList<Challenge> loadChallenges() throws RemoteException {
+        try {
+            ArrayList<Challenge> challenges = persistence.loadChallenges();
+            return challenges;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<Challenge> loadChallenges(String username) throws RemoteException {
+        try {
+            ArrayList<Challenge> challenges = persistence.loadChallenges(username);
+            return challenges;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public boolean acceptChallenge(Challenge challenge) throws RemoteException {
+        try {
+            int matchId = persistence.createMatch(challenge.getTurnTime(), "Friendly");
+//            persistence.createMatchParticipation(challenge.)
+            return persistence.deleteChallenge(challenge);
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean rejectChallenge(Challenge challenge) throws RemoteException {
+        try {
+            return persistence.deleteChallenge(challenge);
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+//    @Override
+//    public void createMatch(String challenger, String challenged, int turnTime) throws RemoteException {
+//
+//    }
 }

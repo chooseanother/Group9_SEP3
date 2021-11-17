@@ -1,10 +1,14 @@
 package RMI;
 
+import model.Challenge;
 import model.User;
 
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClient {
     private ITier3RMIServer tier3;
@@ -30,4 +34,65 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
             }
 
     }
+
+    @Override
+    public boolean validateChallenge(Challenge challenge) throws RemoteException {
+        try{
+            return tier3.validateChallenge(challenge);
+        }catch (IllegalArgumentException e){
+            return false;
+            // actions to counter illegal data
+        }
+    }
+
+    @Override
+    public ArrayList<Challenge> loadChallenges() throws RemoteException {
+        try {
+            ArrayList<Challenge> challenges = (ArrayList<Challenge>) tier3.loadChallenges();
+            return challenges;
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<Challenge> loadChallenges(String username) throws RemoteException {
+        try {
+            ArrayList<Challenge> challenges = (ArrayList<Challenge>) tier3.loadChallenges(username);
+            return challenges;
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public boolean acceptChallenge(Challenge challenge) throws RemoteException {
+        try {
+            return tier3.acceptChallenge(challenge);
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean rejectChallenge(Challenge challenge) throws RemoteException {
+        try {
+            return tier3.rejectChallenge(challenge);
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+//    @Override
+//    public void createMatch(String challenger, String challenged, int turnTime) throws RemoteException {
+//        try {
+//            tier3.createMatch(challenger, challenged, turnTime);
+//        } catch (IllegalArgumentException e){
+//            e.printStackTrace();
+//        }
+//    }
 }

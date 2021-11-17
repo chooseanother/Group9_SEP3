@@ -1,37 +1,39 @@
 package model;
 
-public class Challenge {
-    private User challenger;
-    private User challenged;
-    private String turnTime;
+import java.io.Serializable;
 
-    public Challenge(User challenger, User challenged, String turnTime) {
+public class Challenge implements Serializable {
+    private String challenger;
+    private String challenged;
+    private int turnTime;
+
+    public Challenge(String challenger, String challenged, int turnTime) {
         this.challenger = challenger;
         this.challenged = challenged;
         this.turnTime = turnTime;
     }
 
-    public void setChallenger(User challenger) {
+    public void setChallenger(String challenger) {
         this.challenger = challenger;
     }
 
-    public void setChallenged(User challenged) {
+    public void setChallenged(String challenged) {
         this.challenged = challenged;
     }
 
-    public void setTurnTime(String turnTime) {
+    public void setTurnTime(int turnTime) {
         this.turnTime = turnTime;
     }
 
-    public User getChallenger() {
+    public String getChallenger() {
         return challenger;
     }
 
-    public User getChallenged() {
+    public String getChallenged() {
         return challenged;
     }
 
-    public String getTurnTime() {
+    public int getTurnTime() {
         return turnTime;
     }
 }
