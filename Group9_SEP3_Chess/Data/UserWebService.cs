@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Group9_SEP3_Chess.Models;
 
-
 namespace Group9_SEP3_Chess.Data
 {
     public class UserWebService : IUserService
@@ -21,6 +20,17 @@ namespace Group9_SEP3_Chess.Data
                 Email = user.Email,
                 Username = user.Username,
                 Password = user.Password
+            });
+            return response.Action;
+        }
+
+        public async Task<string> ValidateLogin(string userName, string password)
+        {
+            var response = await _rabbitMq.SendRequestAsync(new Message
+            {
+                Action = "Login",
+                Username = userName,
+                Password = password
             });
             return response.Action;
         }

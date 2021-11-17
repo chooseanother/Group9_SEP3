@@ -1,0 +1,63 @@
+@page "/Login"
+@using Group9_SEP3_Chess.Data
+@namespace Group9_SEP3_Chess.LoginComponent
+@inject NavigationManager nvgManager;
+@inject IUserService UserService;
+
+<link href="Login.css" rel="stylesheet">
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="login">
+            <label>User name:</label>
+            <input type="text" placeholder="user name" @bind-value="userName"/>
+        </div>
+        <div class="login">
+            <label id="pass">Password:</label>
+            <input type="password" placeholder="password" @bind-value="password"/>
+        </div>
+        <div style="color:red">@errorMessage</div>
+        <button id="btn1"class="btn btn-outline-dark" type="submit" @onclick="PerformLogin">Login</button>
+    </NotAuthorized>
+    <Authorized>
+       <button id="btn2" class="btn btn-outline-dark" type="submit" @onclick="PerformLogout">Logout</button>
+    </Authorized>
+</AuthorizeView>
+
+
+
+@code {
+    private string userName;
+    private string password;
+    private string errorMessage;
+
+    public async Task PerformLogin()
+    {
+        errorMessage = "";
+        try
+        {
+            ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateLogin(userName, password);
+            UserService.ValidateLogin(userName, password);
+            nvgManager.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+    }
+
+    public async Task PerformLogout()
+    {
+        errorMessage = "";
+        userName = "";
+        password = "";
+        try
+        {
+            ((CustomAuthenticationStateProvider) AuthenticationStateProvider).Logout();
+            nvgManager.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            
+        }
+    }
+}

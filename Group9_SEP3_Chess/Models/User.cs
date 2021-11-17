@@ -24,6 +24,16 @@ namespace Group9_SEP3_Chess.Models
         [DataType(DataType.EmailAddress)]
         [Compare("Email")]
         public string ConfirmEmail { get; set; }
+        public int ScorePoints { get; set; }
+        [DataType(DataType.ScorePoints)]
+        public int Wins { get; set; }
+        [DataType(DataType.Wins)]
+        public int Losses { get; set; }
+        [DataType(DataType.Losses)]
+        public int Draws { get; set; }
+        [DataType(DataType.Draws)]
+        public int GamesPlayed { get; set; }
+        [DataType(DataType.GamesPlayed)]
 
 
         public override string ToString()
