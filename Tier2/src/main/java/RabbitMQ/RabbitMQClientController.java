@@ -2,10 +2,12 @@ package RabbitMQ;
 
 import com.google.gson.Gson;
 import com.rabbitmq.client.*;
+import model.Challenge;
 import model.Message;
 import model.Model;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 public class RabbitMQClientController implements RabbitMQClient{
@@ -46,9 +48,52 @@ public class RabbitMQClientController implements RabbitMQClient{
                     Message message = gson.fromJson(jsonMessage,Message.class);
 
                     System.out.println(" [.] message(" + message + ")");
-                    String result = model.registerUser(message.getUsername(),message.getPassword(),message.getEmail());
-                    response = gson.toJson(new Message(result, message.getUsername(), message.getPassword(), message.getEmail()));
+                    switch (message.getAction()) {
+                        case "Register":
+                            String result = model.registerUser(message.getUsername(), message.getPassword(), message.getEmail());
+                            response = gson.toJson(new Message(result, message.getUsername(), message.getPassword(), message.getEmail()));
+                            break;
+                        case "Create challenge":
+                            String challengeJson = message.getData();
+                            Challenge challenge = gson.fromJson(challengeJson,Challenge.class);
+                            result = model.validateChallenge(challenge);
+                            response = gson.toJson(new Message(result));
+                            break;
+                        case "Get challenges":
+                            ArrayList<Challenge> challenges = new ArrayList<>();
+                            if (message.getData() == null){
+                                challenges = model.loadChallenges();
+                            }
+                            else {
+                                challenges = model.loadChallenges(message.getData());
+                            }
+                            String jsonChallenges = gson.toJson(challenges);
+                            response = gson.toJson(new Message("Returning challenges",jsonChallenges));
+                            break;
+                        case "Accept challenge":
+                            challenge = gson.fromJson(message.getData(),Challenge.class);
+                            if (model.acceptChallenge(challenge)){
+                                response = gson.toJson(new Message("Success"));
+                            }
+                            else {
+                                response = gson.toJson(new Message("Fail"));
+                            }
 
+                            break;
+                        case "Reject challenge":
+                            challenge = gson.fromJson(message.getData(),Challenge.class);
+                            if (model.rejectChallenge(challenge)){
+                                response = gson.toJson(new Message("Success"));
+                            }
+                            else{
+                                response = gson.toJson(new Message("Fail"));
+                            }
+
+                            break;
+                        default:
+                            break;
+                    }
+                    System.out.println("Response "+response);
 //                    switch (message.getAction().toLowerCase()){
 //                        case"register": System.out.println(" [x] Received '" + "Action: " + message.getAction() + " Username: " + message.getUsername() + " Password: " + message.getPassword()
 //                                + " Email: " + message.getEmail() + "'");
