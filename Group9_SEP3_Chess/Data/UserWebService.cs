@@ -34,10 +34,10 @@ namespace Group9_SEP3_Chess.Data
                 Password = password
             });
             return JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
-            {
+                {
 
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
         }
     }
 }
