@@ -19,14 +19,14 @@
                 }
             </InputSelect>
         </div>
-        <div style="display: flex;">
+        <div style="display: flex;align-items: center">
             <div class="form-group">
                 User to challenge:<br/>
                 <InputText @bind-Value="newChallenge.Username"/>
             </div>
             @if (showError)
             {
-                <div id="challengeUserWarning" style="color:red;">User doesnt exist</div>
+                <p style="color:red;margin: 0 10px;">@_errorMessage</p>
             }
         </div>
         <p class="actions">
@@ -39,6 +39,8 @@
 
 @code {
     private string Username { get; set; }
+
+    private string _errorMessage;
     
     private readonly IDictionary<int, string> turnLengths = new Dictionary<int, string>
     {
@@ -53,15 +55,23 @@
     {
         // load username from currently logged in user
         // Username = loggedInUser.Username
-        Username = "User3";
+        Username = "User1";
     }
     
     private async Task HandleValidSubmit()
     {
         showError = false;
-        newChallenge.Challenger = "User1";
+        newChallenge.Challenger = Username;
         
         // check if user is challenging him self
+        if (newChallenge.Challenger.Equals(newChallenge.Username))
+        {
+            showError = true;
+            //change error message 
+            // Can't challenge your self
+            _errorMessage = "Can't challenge your self";
+            return;
+        }
 
         Console.WriteLine(newChallenge);
 
@@ -70,7 +80,8 @@
         if (!result.Equals("Success"))
         {
             showError = true;
-            // set error to error message
+            _errorMessage = "User doesn't exist, or you have already challenged that user";
+    // set error to error message
         }
     }
     
