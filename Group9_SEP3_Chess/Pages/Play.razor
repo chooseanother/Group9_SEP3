@@ -1,0 +1,81 @@
+@page "/play"
+@using Group9_SEP3_Chess.Models
+@using Group9_SEP3_Chess.Data
+
+@inject IPlayMatch _playMatch
+
+<h3>Challenge User</h3>
+<div>
+    <EditForm Model="@newChallenge" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+        <div class="form-group">
+            Select turn length:<br/>
+            <InputSelect @bind-Value="newChallenge.TurnLength">
+                <option></option>
+                @foreach (var (key, value) in turnLengths)
+                {
+                    <option value="@key">@value</option>
+                }
+            </InputSelect>
+        </div>
+        <div style="display: flex;">
+            <div class="form-group">
+                User to challenge:<br/>
+                <InputText @bind-Value="newChallenge.Username"/>
+            </div>
+            @if (showError)
+            {
+                <div id="challengeUserWarning" style="color:red;">User doesnt exist</div>
+            }
+        </div>
+        <p class="actions">
+            <button class="btn btn-dark" type="submit">Challenge</button>
+        </p>
+    </EditForm>
+</div>
+<Challenges></Challenges>
+<Challenges Username="@Username"></Challenges>
+
+@code {
+    private string Username { get; set; }
+    
+    private readonly IDictionary<int, string> turnLengths = new Dictionary<int, string>
+    {
+        {120,"2 Minutes"}, {1800,"30 Minutes"}, {3600,"1 Hour"}, {7200,"2 Hours"}, {36000,"10 Hours"}, {86400,"1 Day"}, {259200,"3 Days"}, {604800,"7 Days"}
+    };
+    
+    private Challenge newChallenge = new();
+    
+    private bool showError = false;
+
+    protected override void OnInitialized()
+    {
+        // load username from currently logged in user
+        // Username = loggedInUser.Username
+        Username = "User3";
+    }
+    
+    private async Task HandleValidSubmit()
+    {
+        showError = false;
+        newChallenge.Challenger = "User1";
+        
+        // check if user is challenging him self
+
+        Console.WriteLine(newChallenge);
+
+        var result = await _playMatch.ChallengeUser(newChallenge);
+
+        if (!result.Equals("Success"))
+        {
+            showError = true;
+            // set error to error message
+        }
+    }
+    
+    private void HandleInvalidSubmit()
+    {
+        
+    }
+}
