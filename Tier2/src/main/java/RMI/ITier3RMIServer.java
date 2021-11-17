@@ -20,6 +20,7 @@ public interface ITier3RMIServer
 	ArrayList<Challenge> loadChallenges(String username) throws RemoteException;
 	boolean acceptChallenge(Challenge challenge) throws RemoteException;
 	boolean rejectChallenge(Challenge challenge) throws RemoteException;
+	User validateLogin(String username, String password) throws RemoteException;
 //	void createMatch(String challenger, String challenged, int turnTime) throws RemoteException;
 
 	public static final String T3_SERVICE_NAME = "rmi://localhost/T3";

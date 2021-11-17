@@ -27,7 +27,7 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     public boolean registerUser(String username, String password, String email) throws RemoteException {
 
             try{
-                return tier3.registerUser(new User(username, password, email));
+                return tier3.registerUser(new User(username, password, email, 0, 0, 0, 0, 0));
             }catch (IllegalArgumentException e){
                 return false;
                 // actions to counter illegal data
@@ -87,7 +87,17 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         }
     }
 
-//    @Override
+    @Override public User validateLogin(String username, String password)
+        throws RemoteException
+    {
+        try{
+            return tier3.validateLogin(username, password);
+        }catch (IllegalArgumentException e){
+            return null;
+        }
+    }
+
+    //    @Override
 //    public void createMatch(String challenger, String challenged, int turnTime) throws RemoteException {
 //        try {
 //            tier3.createMatch(challenger, challenged, turnTime);

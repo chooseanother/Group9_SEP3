@@ -53,4 +53,10 @@ public class PersistenceDB implements Persistence{
     public int createMatchParticipation(String player, String color, int matchId) throws SQLException {
         return matchParticipationDB.createMatchParticipation(player, color, matchId);
     }
+
+    @Override public User validateLogin(String username, String password)
+        throws SQLException
+    {
+        return userDB.validateLogin(username, password);
+    }
 }
