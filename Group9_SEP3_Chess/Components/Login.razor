@@ -1,10 +1,11 @@
 @page "/Login"
 @using Group9_SEP3_Chess.Data
-@namespace Group9_SEP3_Chess.LoginComponent
+@namespace Group9_SEP3_Chess.Components
 @inject NavigationManager nvgManager;
-@inject IUserService UserService;
+@inject IUserService userService;
+@inject AuthenticationStateProvider authenticationStateProvider;
 
-<link href="Login.css" rel="stylesheet">
+
 <AuthorizeView>
     <NotAuthorized>
         <div class="login">
@@ -25,6 +26,7 @@
 
 
 
+
 @code {
     private string userName;
     private string password;
@@ -35,8 +37,7 @@
         errorMessage = "";
         try
         {
-            ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateLogin(userName, password);
-            UserService.ValidateLogin(userName, password);
+            await ((CustomAuthenticationStateProvider) authenticationStateProvider).ValidateLogin(userName, password);
             nvgManager.NavigateTo("/");
         }
         catch (Exception e)
@@ -52,7 +53,7 @@
         password = "";
         try
         {
-            ((CustomAuthenticationStateProvider) AuthenticationStateProvider).Logout();
+            ((CustomAuthenticationStateProvider) authenticationStateProvider).Logout();
             nvgManager.NavigateTo("/");
         }
         catch (Exception e)

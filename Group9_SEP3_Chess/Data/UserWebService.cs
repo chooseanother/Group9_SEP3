@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Threading.Tasks;
 using Group9_SEP3_Chess.Models;
 
@@ -24,7 +25,7 @@ namespace Group9_SEP3_Chess.Data
             return response.Action;
         }
 
-        public async Task<string> ValidateLogin(string userName, string password)
+        public async Task<User> ValidateLogin(string userName, string password)
         {
             var response = await _rabbitMq.SendRequestAsync(new Message
             {
@@ -32,7 +33,11 @@ namespace Group9_SEP3_Chess.Data
                 Username = userName,
                 Password = password
             });
-            return response.Action;
+            return JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
+            {
+
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
         }
     }
 }

@@ -1,4 +1,6 @@
+@using Group9_SEP3_Chess.Components
 @inherits LayoutComponentBase
+@inject NavigationManager nvgMngr;
 
 <div class="page">
     <div class="sidebar">
@@ -7,7 +9,7 @@
 
     <div class="main">
         <div class="top-row px-4">
-            <Login/>
+        <Login/>    
         </div>
 
         <div class="content px-4">
@@ -15,3 +17,7 @@
         </div>
     </div>
 </div>
+
+@code{
+
+}

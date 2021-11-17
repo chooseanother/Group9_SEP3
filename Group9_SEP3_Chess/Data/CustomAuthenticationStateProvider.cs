@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Group9_SEP3_Chess.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using Models;
+
 
 namespace Group9_SEP3_Chess.Data
 {
@@ -26,7 +27,7 @@ namespace Group9_SEP3_Chess.Data
             string userAsJson = await jsRuntime.InvokeAsync<string>("sessionStorage.getItem", "currentUser");
             if (!string.IsNullOrEmpty(userAsJson)) {
                 User tmp = JsonSerializer.Deserialize<User>(userAsJson);
-                ValidateLogin(tmp.UserName, tmp.Password);
+                ValidateLogin(tmp.Username, tmp.Password);
             }
         } else {
             identity = SetupClaimsForUser(cachedUser);
@@ -36,14 +37,14 @@ namespace Group9_SEP3_Chess.Data
         return await Task.FromResult(new AuthenticationState(cachedClaimsPrincipal));
     }
 
-    public void ValidateLogin(string username, string password) {
+    public async Task ValidateLogin(string username, string password) {
         Console.WriteLine("Validating log in");
         if (string.IsNullOrEmpty(username)) throw new Exception("Enter username");
         if (string.IsNullOrEmpty(password)) throw new Exception("Enter password");
 
         ClaimsIdentity identity = new ClaimsIdentity();
         try {
-            User user = userService.ValidateLogin(username, password);
+            User user = await userService.ValidateLogin(username, password);
             identity = SetupClaimsForUser(user);
             string serialisedData = JsonSerializer.Serialize(user);
             jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", serialisedData);
@@ -66,8 +67,8 @@ namespace Group9_SEP3_Chess.Data
         private ClaimsIdentity SetupClaimsForUser(User user)
         {
             List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-           // claims.Add(new Claim("Password", user.Password));
+            claims.Add(new Claim(ClaimTypes.Name, user.Username));
+            claims.Add(new Claim("Password", user.Password));
 
 
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
