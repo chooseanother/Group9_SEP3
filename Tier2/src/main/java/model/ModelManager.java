@@ -72,6 +72,7 @@ public class ModelManager implements Model{
 //            return iTier2RMIClient.acceptChallenge(challenge);
             if (iTier2RMIClient.acceptChallenge(challenge)){
 //                iTier2RMIClient.createMatch(challenge.getChallenger(), challenge.getChallenged(), challenge.getTurnTime());
+                return true;
             }
         }catch (RemoteException e){
             e.printStackTrace();
