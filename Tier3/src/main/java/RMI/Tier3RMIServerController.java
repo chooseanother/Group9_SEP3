@@ -104,7 +104,8 @@ public class Tier3RMIServerController
     public boolean acceptChallenge(Challenge challenge) throws RemoteException {
         try {
             int matchId = persistence.createMatch(challenge.getTurnTime(), "Friendly");
-//            persistence.createMatchParticipation(challenge.)
+            persistence.createMatchParticipation(challenge.getChallenger(),"White",matchId);
+            persistence.createMatchParticipation(challenge.getChallenged(),"Black",matchId);
             return persistence.deleteChallenge(challenge);
         } catch (SQLException e){
             e.printStackTrace();
