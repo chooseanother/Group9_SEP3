@@ -7,14 +7,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Tier2" />
-        <module name="Group9_SEP3" />
         <module name="Tier3" />
+        <module name="Group9_SEP3" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Group9_SEP3" target="15" />
-      <module name="Tier2" target="15" />
-      <module name="Tier3" target="15" />
+      <module name="Group9_SEP3" target="14" />
+      <module name="Tier2" target="14" />
+      <module name="Tier3" target="14" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class PersistenceDB implements Persistence{
     UserPersistence userDB;
+
     ChallengePersistence challengeDB;
     MatchPersistence matchDB;
     MatchParticipationPersistence matchParticipationDB;
@@ -17,6 +18,7 @@ public class PersistenceDB implements Persistence{
         challengeDB = new ChallengeDB();
         matchDB = new MatchDB();
         matchParticipationDB = new MatchParticipationDB();
+
     }
 
     @Override
@@ -25,6 +27,16 @@ public class PersistenceDB implements Persistence{
     }
 
     @Override
+
+    public void MovePiece( int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
+        matchDB.MovePiece( matchId, piece, color, startPosition, endPosition);
+    }
+
+    @Override
+    public void UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException{
+        matchDB.UpgradePiece(matchId,piece, color,startPosition, endPosition);
+    }
+
     public void createChallenge(Challenge challenge) throws SQLException {
         challengeDB.createChallenge(challenge);
     }
@@ -52,5 +64,11 @@ public class PersistenceDB implements Persistence{
     @Override
     public int createMatchParticipation(String player, String color, int matchId) throws SQLException {
         return matchParticipationDB.createMatchParticipation(player, color, matchId);
+    }
+
+    @Override public User validateLogin(String username, String password)
+        throws SQLException
+    {
+        return userDB.validateLogin(username, password);
     }
 }
