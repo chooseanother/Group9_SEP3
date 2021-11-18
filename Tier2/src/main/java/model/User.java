@@ -18,6 +18,12 @@ public class User
 	private int draws;
 	private int gamesPlayed;
 
+	public User(String userName, String password, String email)
+	{
+		this.userName = userName;
+		this.password = password;
+		this.email = email;
+	}
 
 	public User(String userName, String password, String email, int scorePoints, int wins, int losses, int draws, int gamesPlayed)
 	{
