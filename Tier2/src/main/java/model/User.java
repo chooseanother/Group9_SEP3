@@ -3,6 +3,8 @@ package model;/*
  */
 
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 
 
@@ -109,5 +111,10 @@ public class User
 	public void setGamesPlayed(int gamesPlayed)
 	{
 		this.gamesPlayed = gamesPlayed;
+	}
+
+	@Override
+	public String toString() {
+		return new Gson().toJson(this);
 	}
 }

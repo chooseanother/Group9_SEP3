@@ -150,9 +150,10 @@ public class Tier3RMIServerController
     {
         try{
             User user = persistence.validateLogin(username, password);
-            System.out.println(username + " was validated");
+            System.out.println(user + " was validated");
             return user;
-        }catch(SQLException e){
+        }
+        catch(SQLException e){
             e.printStackTrace();
             return null;
         }

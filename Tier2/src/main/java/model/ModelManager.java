@@ -88,18 +88,10 @@ public class ModelManager implements Model{
         try
         {
             User userFromDB = iTier2RMIClient.validateLogin(userName, password);
-            if (!userName.equals(userFromDB.getUserName()))
-            {
-                throw new IllegalArgumentException("The username is wrong");
+            if (userFromDB == null){
+                throw new IllegalArgumentException("Wrong username or password");
             }
-            else if (!password.equals(userFromDB.getUserName()))
-            {
-                throw new IllegalArgumentException("The password is wrong");
-            }
-            else if(userName.equals(userFromDB.getUserName()) && password.equals(userFromDB.getPassword()))
-            {
-                return userFromDB;
-            }
+            return userFromDB;
         }
         catch (RemoteException e)
         {

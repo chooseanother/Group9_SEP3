@@ -46,10 +46,5 @@ public class UserDB implements UserPersistence {
                 throw new IllegalArgumentException("User doesn't exist");
             }
         }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

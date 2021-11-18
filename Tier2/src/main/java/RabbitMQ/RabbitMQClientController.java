@@ -131,7 +131,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                               response = gson.toJson(new Message("LoggedIn", userToJson));
                             }
                             catch(Exception e){
-                              response = gson.toJson(new Message("NotLoggedIn"));
+                              response = gson.toJson(new Message(e.getMessage()));
                             }
                             break;
                         default:
