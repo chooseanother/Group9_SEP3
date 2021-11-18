@@ -92,14 +92,16 @@ public class RabbitMQClientController implements RabbitMQClient{
 
                             break;
                         case "Login":
-                            String userName = gson.fromJson(message.getUsername(),String.class);
-                            String password = gson.fromJson(message.getPassword(),String.class);
-                            User user = model.validateLogin(userName, password);
-                            String userToJson = gson.toJson(user);
-                            if(user.getUserName().equals(userName)){
-                               response = gson.toJson(new Message("LoggedIn", userToJson));
-                            }else{
-                                response = gson.toJson(new Message("NotLoggedIn"));
+                            User user = gson.fromJson(message.getData(), User.class);
+                            String userName = user.getUserName();
+                            String password = user.getPassword();
+                            try{
+                              User validatedUser = model.validateLogin(userName, password);
+                              String userToJson = gson.toJson(validatedUser);
+                              response = gson.toJson(new Message("LoggedIn", userToJson));
+                            }
+                            catch(Exception e){
+                              response = gson.toJson(new Message("NotLoggedIn"));
                             }
                             break;
                         default:
