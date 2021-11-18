@@ -23,5 +23,9 @@ public interface ITier3RMIServer
 //	void createMatch(String challenger, String challenged, int turnTime) throws RemoteException;
 
 
+	public boolean MovePiece( int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
+
+	public boolean UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
+
 	public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }

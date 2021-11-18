@@ -1,5 +1,6 @@
 package RMI;
 
+import model.ChessPiece;
 import model.Challenge;
 import model.User;
 
@@ -9,6 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClient {
     private ITier3RMIServer tier3;
@@ -27,12 +29,22 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     public boolean registerUser(String username, String password, String email) throws RemoteException {
 
             try{
-                return tier3.registerUser(new User(username, password, email, 0, 0, 0, 0, 0));
+                return tier3.registerUser(new User(username, password, email));
             }catch (IllegalArgumentException e){
                 return false;
                 // actions to counter illegal data
             }
 
+    }
+
+    @Override public boolean MovePiece(ChessPiece piece, int matchId) throws RemoteException {
+        try {
+           return tier3.MovePiece( matchId, piece.getType(), piece.getColor(), piece.getOldPosition().getVerticalAxis()+":"+piece.getOldPosition().getHorizontalAxis()
+                   , piece.getNewPosition().getVerticalAxis()+":"+piece.getNewPosition().getHorizontalAxis());
+        } catch (Exception e) {
+          e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -73,6 +85,17 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
             return tier3.acceptChallenge(challenge);
         } catch (IllegalArgumentException e){
             e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    @Override public boolean UpgradePiece(ChessPiece chessPiece, int matchID){
+        try {
+            return tier3.UpgradePiece(matchID, chessPiece.getType(), chessPiece.getColor(), chessPiece.getOldPosition().getVerticalAxis()+":"+chessPiece.getOldPosition().getHorizontalAxis()
+                    , chessPiece.getNewPosition().getVerticalAxis()+":"+chessPiece.getNewPosition().getHorizontalAxis());
+        } catch (Exception e){
+          e.printStackTrace();
             return false;
         }
     }
