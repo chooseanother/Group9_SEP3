@@ -83,6 +83,23 @@ public class ModelManager implements Model{
         return "Failed registration";
     }
 
+    @Override public User validateLogin(String userName, String password)
+    {
+        try
+        {
+            User userFromDB = iTier2RMIClient.validateLogin(userName, password);
+            if (userFromDB == null){
+                throw new IllegalArgumentException("Wrong username or password");
+            }
+            return userFromDB;
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     public ArrayList<Challenge> loadChallenges() {
         try {

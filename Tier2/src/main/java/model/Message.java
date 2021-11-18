@@ -1,5 +1,7 @@
 package model;
 
+import com.google.gson.Gson;
+
 public class Message {
     private String action;
     private String username;
@@ -113,12 +115,6 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message{" +
-                "action='" + action + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", data='" + data + '\'' +
-                '}';
+        return new Gson().toJson(this);
     }
 }

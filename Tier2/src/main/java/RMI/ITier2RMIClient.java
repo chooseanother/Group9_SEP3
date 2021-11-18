@@ -2,6 +2,7 @@ package RMI;
 
 import model.ChessPiece;
 import model.Challenge;
+import model.User;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -20,5 +21,6 @@ public interface ITier2RMIClient extends Remote {
     ArrayList<Challenge> loadChallenges(String username) throws RemoteException;
     boolean acceptChallenge(Challenge challenge) throws RemoteException;
     boolean rejectChallenge(Challenge challenge) throws RemoteException;
+    User validateLogin(String username, String password) throws RemoteException;
 //    void createMatch(String challenger, String challenged, int turnTime) throws RemoteException;
 }

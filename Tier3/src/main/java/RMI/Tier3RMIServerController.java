@@ -145,7 +145,21 @@ public class Tier3RMIServerController
         }
     }
 
-//    @Override
+    @Override public User validateLogin(String username, String password)
+        throws RemoteException
+    {
+        try{
+            User user = persistence.validateLogin(username, password);
+            System.out.println(user + " was validated");
+            return user;
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //    @Override
 //    public void createMatch(String challenger, String challenged, int turnTime) throws RemoteException {
 //
 //    }

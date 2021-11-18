@@ -8,6 +8,7 @@ import model.ChessPiece;
 import model.Challenge;
 import model.Message;
 import model.Model;
+import model.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -119,6 +120,19 @@ public class RabbitMQClientController implements RabbitMQClient {
                                 response = gson.toJson(new Message("Fail"));
                             }
 
+                            break;
+                        case "Login":
+                            User user = gson.fromJson(message.getData(), User.class);
+                            String userName = user.getUserName();
+                            String password = user.getPassword();
+                            try{
+                              User validatedUser = model.validateLogin(userName, password);
+                              String userToJson = gson.toJson(validatedUser);
+                              response = gson.toJson(new Message("LoggedIn", userToJson));
+                            }
+                            catch(Exception e){
+                              response = gson.toJson(new Message(e.getMessage()));
+                            }
                             break;
                         default:
                             break;

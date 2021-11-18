@@ -99,7 +99,7 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
             return false;
         }
     }
-          
+
     @Override
     public boolean rejectChallenge(Challenge challenge) throws RemoteException {
         try {
@@ -110,8 +110,17 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         }
     }
 
+    @Override public User validateLogin(String username, String password)
+        throws RemoteException
+    {
+        try{
+            return tier3.validateLogin(username, password);
+        }catch (IllegalArgumentException e){
+            return null;
+        }
+    }
 
-//    @Override
+    //    @Override
 //    public void createMatch(String challenger, String challenged, int turnTime) throws RemoteException {
 //        try {
 //            tier3.createMatch(challenger, challenged, turnTime);
