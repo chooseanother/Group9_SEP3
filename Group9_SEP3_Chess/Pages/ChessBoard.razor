@@ -1,91 +1,83 @@
-﻿
-<div class="board" >
-    @for(int j = 8; j > 0; j--){
-        if(j % 2 == 0){
-            for (int i = 0; i < 8; i++)
+﻿@using Group9_SEP3_Chess.Models
+@using Group9_SEP3_Chess.Data
+@using System.Text.Json
+@inject IMatchService _matchService
+<div class="board">
+    @for (int i = 0; i < chessPieces.GetLength(0); i++)
+    {
+        if (i % 2 == 0)
+        {
+            for (int j = 0; j < chessPieces.GetLength(1); j++)
             {
-                String StartPice = "";
-                String loaction = j + letters[i];
-                
-                switch (loaction)
+                int verticalaxis = i;
+                int horizontalaxis = j;
+                if (chessPieces[i, j] != null)
                 {
-                    case "8a": case "8h":
-                        StartPice = "Images/BRook.png";
-                        break;
-                    case "8b": case "8g":
-                        StartPice = "Images/BHorse.png";
-                        break;
-                    case  "8c": case "8f":
-                        StartPice = "Images/WBishop.png";
-                        break;
-                    case  "8d":
-                        StartPice = "Images/BQueen.png";
-                        break;
-                    case  "8e":
-                        StartPice = "Images/BKing.png";
-                        break;
-                    case "2a": case "2b": case "2c": case "2d": case "2e": case "2f": case "2g": case "2h":
-                        StartPice = "Images/WPawn.png";
-                        break;
-                    default:
-                        StartPice = null;
-                        break;
-                }
-                
-                if (i % 2 == 0)
-                {
-                    <BoardSquareBlack Image="@StartPice" ClickHandler="@(() => HandleClick(loaction, StartPice))"></BoardSquareBlack>
+                    if (j % 2 == 0)
+                    {
+                        <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                    }
+                    else
+                    {
+                        <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                    }
                 }
                 else
                 {
-                    <BoardSquareWhite Image="@StartPice" ClickHandler="@(() => HandleClick(loaction, StartPice))"></BoardSquareWhite>
+                    if (j % 2 == 0)
+                    {
+                        <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                    }
+                    else
+                    {
+                        <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                    }
                 }
             }
         }
-        else{
-            for (int i = 0; i < 8; i++)
+        else
+        {
+            for (int j = 0; j < chessPieces.GetLength(1); j++)
             {
-                String StartPice = "";
-                String loaction = j + letters[i];
-                
-                switch (loaction)
+                int verticalaxis = i;
+                int horizontalaxis = j;
+                if (chessPieces[i, j] != null)
                 {
-                    case "1a": case "1h":
-                        StartPice = "Images/WRook.png";
-                        break;
-                    case "1b": case "1g":
-                        StartPice = "Images/WHorse.png";
-                        break;
-                    case "1c": case "1f":
-                        StartPice = "Images/WBishop.png";
-                        break;
-                    case "1d":
-                        StartPice = "Images/WQueen.png";
-                        break;
-                    case "1e":
-                        StartPice = "Images/WKing.png";
-                        break;
-                    case "7a": case "7b": case "7c": case "7d": case "7e": case "7f": case "7g": case "7h":
-                        StartPice = "Images/BPawn.png";
-                        break;
-                    default:
-                        StartPice = null;
-                        break;    
-                        
-                }
-                
-                if (i % 2 == 0)
-                {
-                    <BoardSquareWhite Image="@StartPice" ClickHandler="@(() => HandleClick(loaction, StartPice))"></BoardSquareWhite>
+                    if (j % 2 == 0)
+                    {
+                        <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                    }
+                    else
+                    {
+                        <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                    }
                 }
                 else
                 {
-                    <BoardSquareBlack Image="@StartPice" ClickHandler="@(() => HandleClick(loaction, StartPice))"/>
+                    if (j % 2 == 0)
+                    {
+                        <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                    }
+                    else
+                    {
+                        <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                    }
                 }
             }
-        }}
+        }
+    }
 </div>
+<div class="UpgradePart">
+    <label>Select upgrade: </label>
+    <select @bind="UpgradeSelected">
+        <option>Rook</option>
+        <option>Knight</option>
+        <option>Bishop</option>
+        <option>Queen</option>
+    </select>
 
+    <button class="btn btn-outline-dark" @onclick="UpdateChessPiece">Upgrade</button>
+</div>
 
 <style>
     .board {
@@ -94,18 +86,162 @@
         grid-template-rows: auto auto auto auto auto auto auto auto;
         background-color: #da9d1d;
         padding: 10px;
-        width: 850px;
-        height: 850px;
+        width: 680px;
+        height: 680px;
     }
    
 </style>
 
 @code {
-    private String[] letters = new String[8] {"a", "b", "c", "d", "e", "f", "g", "h"};
+    private ChessPiece[,] chessPieces = new ChessPiece[8, 8];
+    String printoutArray = "";
+    String UpgradeSelected = "";
 
-    private void HandleClick(String loaction, String pice)
+    protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("Location: "+ loaction + " Pice: " + pice);
+        string black = "Black";
+        chessPieces[0, 0] = new ChessPiece()
+        {
+            Type = "rook",
+            Color = black
+        };
+        chessPieces[0, 1] = new ChessPiece()
+        {
+            Type = "Knight",
+            Color = black
+        };
+        chessPieces[0, 2] = new ChessPiece()
+        {
+            Type = "bishop",
+            Color = black
+        };
+        chessPieces[0, 3] = new ChessPiece()
+        {
+            Type = "queen",
+            Color = black
+        };
+        chessPieces[0, 4] = new ChessPiece()
+        {
+            Type = "king",
+            Color = black
+        };
+        chessPieces[0, 5] = new ChessPiece()
+        {
+            Type = "bishop",
+            Color = black
+        };
+        chessPieces[0, 6] = new ChessPiece()
+        {
+            Type = "Knight",
+            Color = black
+        };
+        chessPieces[0, 7] = new ChessPiece()
+        {
+            Type = "rook",
+            Color = black
+        };
+        
+        for (int i = 0; i < chessPieces.GetLength(1); i++)
+        {
+            chessPieces[1, i] = new ChessPiece()
+            {
+                Type = "pawn",
+                Color = black
+            };
+        }
+        string white = "White";
+        chessPieces[7, 0] = new ChessPiece()
+        {
+            Type = "rook",
+            Color = white
+        };
+        chessPieces[7, 1] = new ChessPiece()
+        {
+            Type = "Knight",
+            Color = white
+        };
+        chessPieces[7, 2] = new ChessPiece()
+        {
+            Type = "bishop",
+            Color = white
+        };
+        chessPieces[7, 3] = new ChessPiece()
+        {
+            Type = "queen",
+            Color = white
+        };
+        chessPieces[7, 4] = new ChessPiece()
+        {
+            Type = "king",
+            Color = white
+        };
+        chessPieces[7, 5] = new ChessPiece()
+        {
+            Type = "bishop",
+            Color = white
+        };
+        chessPieces[7, 6] = new ChessPiece()
+        {
+            Type = "Knight",
+            Color = white
+        };
+        chessPieces[7, 7] = new ChessPiece()
+        {
+            Type = "rook",
+            Color = white
+        };
+        for (int i = 0; i < chessPieces.GetLength(1); i++)
+        {
+            chessPieces[6, i] = new ChessPiece()
+            {
+                Type = "pawn",
+                Color = white
+            };
+        }
+        // 2D array of custom object serialization is not supported, need to consult with somebody
+        // await _matchService.LoadChessPieces(new Message(){Action = "Load"});
+    }
+
+    private async Task HandleClick(int FirstLayer, int SecondLayer)
+    {
+        Message message = new Message();
+        message.FirstLayer = FirstLayer;
+        message.SecondLayer = SecondLayer;
+        message.Action = "Move";
+        ChessPiece selected = await _matchService.MoveChessPiece(message);
+        if (selected != null)
+        {
+            chessPieces[FirstLayer, SecondLayer] = selected;
+            Console.WriteLine($"Coordinates old: {selected.OldPosition.ToString()} Coordinates new: {chessPieces[FirstLayer,SecondLayer].NewPosition.ToString()}");
+            if(chessPieces[FirstLayer,SecondLayer].OldPosition.VerticalAxis != chessPieces[FirstLayer,SecondLayer].NewPosition.VerticalAxis
+            || chessPieces[FirstLayer,SecondLayer].OldPosition.HorizontalAxis != chessPieces[FirstLayer,SecondLayer].NewPosition.HorizontalAxis){
+                chessPieces[selected.OldPosition.VerticalAxis, selected.OldPosition.HorizontalAxis] = null;
+            }
+            for (int i = 0; i < chessPieces.GetLength(0); i++)
+            {
+                for (int j = 0; j < chessPieces.GetLength(1); j++)
+                {
+                    if(chessPieces[i,j]!=null){
+                        chessPieces[i, j].Selected = false;
+                    }
+                }
+            }
+        }
+
+
+    }
+
+
+    private async Task UpdateChessPiece()
+    {
+        
+        Message message = new Message();
+        message.Action = "Upgrade";
+        message.UpgradeSelected = UpgradeSelected;
+        Console.WriteLine("method called");
+        ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
+        chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
+
     }
 
 }
