@@ -29,12 +29,12 @@ public class PersistenceDB implements Persistence{
     @Override
 
     public void MovePiece( int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
-        MatchDb.MovePiece( matchId, piece, color, startPosition, endPosition);
+        matchDB.MovePiece( matchId, piece, color, startPosition, endPosition);
     }
 
     @Override
     public void UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException{
-        MatchDb.UpgradePiece(matchId,piece, color,startPosition, endPosition);
+        matchDB.UpgradePiece(matchId,piece, color,startPosition, endPosition);
     }
 
     public void createChallenge(Challenge challenge) throws SQLException {
