@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Group9_SEP3_Chess.Models;
@@ -37,11 +38,17 @@ namespace Group9_SEP3_Chess.Data
                 Action = "Login",
                 Data = JsonSerializer.Serialize(user)
             });
-            return JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
+            if (response.Action.Equals("LoggedIn"))
+            {
+                return JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
                 {
-
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
+            }
+            else
+            {
+                throw new Exception($"{response.Action}");
+            }
         }
     }
 }
