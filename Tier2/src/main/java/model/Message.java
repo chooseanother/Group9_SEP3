@@ -9,6 +9,8 @@ public class Message {
     private int secondLayer;
     private String object;
     private String upgradeSelected;
+    private String data;
+
 
     public Message(){
         this.action="";
@@ -26,6 +28,15 @@ public class Message {
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+
+    public Message(String action) {
+        this.action = action;
+    }
+
+    public Message(String action, String data) {
+        this.action = action;
+        this.data = data;
     }
 
     public String getAction() {
@@ -92,6 +103,14 @@ public class Message {
         this.email = email;
     }
 
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getData() {
+        return data;
+    }
+
     @Override
     public String toString() {
         return "Message{" +
@@ -99,6 +118,7 @@ public class Message {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", data='" + data + '\'' +
                 '}';
     }
 }

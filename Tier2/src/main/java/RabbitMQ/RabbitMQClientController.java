@@ -5,10 +5,12 @@ import com.google.gson.JsonArray;
 import com.rabbitmq.client.*;
 import model.ChessBoard;
 import model.ChessPiece;
+import model.Challenge;
 import model.Message;
 import model.Model;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 public class RabbitMQClientController implements RabbitMQClient {
@@ -47,16 +49,10 @@ public class RabbitMQClientController implements RabbitMQClient {
                 try {
                     String jsonMessage = new String(delivery.getBody(), "UTF-8");
                     Message message = gson.fromJson(jsonMessage, Message.class);
-                    System.out.println("Message received");
+                    System.out.println(" [.] message(" + message + ")");
 
                     switch (message.getAction()) {
-                        case "Register":
-                            System.out.println(" [.] message(" + message + ")");
-                            String result = model.registerUser(message.getUsername(), message.getPassword(), message.getEmail());
-                            response = gson.toJson(new Message(result, message.getUsername(), message.getPassword(), message.getEmail()));
-                            break;
-                        case "Move":
-                            System.out.println("[.] Move");
+                        case "Move":                        
                             Message toSend = new Message();
                             ChessPiece movedChessPiece = model.MoveChessPiece(message.getFirstLayer(), message.getSecondLayer());
                             if (movedChessPiece != null) {
@@ -69,7 +65,6 @@ public class RabbitMQClientController implements RabbitMQClient {
                             response = gson.toJson(toSend);
                             break;
                         case "Upgrade":
-                            System.out.println("[.] Upgrade");
                             Message toSendUpgrade = new Message();
                             toSendUpgrade.setAction("Upgrade Chess Piece");
                             ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getUpgradeSelected());
@@ -78,7 +73,6 @@ public class RabbitMQClientController implements RabbitMQClient {
                             response = gson.toJson(toSendUpgrade);
                             break;
                         case "Load":
-                            System.out.println("[.] Load");
                             Message toLoadChessPieces = new Message();
                             toLoadChessPieces.setAction("Load ChessBoard");
                             ChessPiece[][] chessBoard = model.getChessBoard();
@@ -86,30 +80,51 @@ public class RabbitMQClientController implements RabbitMQClient {
                             System.out.println(toLoadChessPieces.getObject());
                             response = gson.toJson(toLoadChessPieces);
                             break;
+                        case "Register":
+                            String result = model.registerUser(message.getUsername(), message.getPassword(), message.getEmail());
+                            response = gson.toJson(new Message(result, message.getUsername(), message.getPassword(), message.getEmail()));
+                            break;
+                        case "Create challenge":
+                            String challengeJson = message.getData();
+                            Challenge challenge = gson.fromJson(challengeJson,Challenge.class);
+                            result = model.validateChallenge(challenge);
+                            response = gson.toJson(new Message(result));
+                            break;
+                        case "Get challenges":
+                            ArrayList<Challenge> challenges = new ArrayList<>();
+                            if (message.getData() == null){
+                                challenges = model.loadChallenges();
+                            }
+                            else {
+                                challenges = model.loadChallenges(message.getData());
+                            }
+                            String jsonChallenges = gson.toJson(challenges);
+                            response = gson.toJson(new Message("Returning challenges",jsonChallenges));
+                            break;
+                        case "Accept challenge":
+                            challenge = gson.fromJson(message.getData(),Challenge.class);
+                            if (model.acceptChallenge(challenge)){
+                                response = gson.toJson(new Message("Success"));
+                            }
+                            else {
+                                response = gson.toJson(new Message("Fail"));
+                            }
+                            break;
+                        case "Reject challenge":
+                            challenge = gson.fromJson(message.getData(),Challenge.class);
+                            if (model.rejectChallenge(challenge)){
+                                response = gson.toJson(new Message("Success"));
+                            }
+                            else{
+                                response = gson.toJson(new Message("Fail"));
+                            }
 
-
+                            break;
+                        default:
+                            break;
                     }
+                    System.out.println("Response "+response);
 
-
-//                    switch (message.getAction().toLowerCase()){
-//                        case"register": System.out.println(" [x] Received '" + "Action: " + message.getAction() + " Username: " + message.getUsername() + " Password: " + message.getPassword()
-//                                + " Email: " + message.getEmail() + "'");
-//
-//                            if (tier2.registerUser(message.getUsername(), message.getPassword(), message.getEmail())) {
-//                                response = gson.toJson(new Message("Registered successfully", message.getUsername(), message.getPassword(), message.getEmail()));
-//                            } else {
-//                                // THIS IS WRONG, should be handling some kind of exception that describes why the registration went wrong.
-//                                Message message1 = new Message();
-//                                message1.setAction("Failed to register");
-//                                response = gson.toJson(message1);
-//                            }
-//
-//                            break;
-//                        default:
-//                            System.out.println("User selected an invalid action");
-//                    }
-//                    message.setAction(message.getAction().toUpperCase());
-//                    response += gson.toJson(message);
                 } catch (RuntimeException e) {
                     System.out.println(" [.] " + e.toString());
                     e.printStackTrace();

@@ -1,16 +1,24 @@
 package persistence;
 
+import model.Challenge;
 import model.User;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class PersistenceDB implements Persistence{
     UserPersistence userDB;
-    MatchPersistence MatchDb;
+
+    ChallengePersistence challengeDB;
+    MatchPersistence matchDB;
+    MatchParticipationPersistence matchParticipationDB;
 
     public PersistenceDB(){
         userDB = new UserDB();
-        MatchDb = new MatchDb();
+        challengeDB = new ChallengeDB();
+        matchDB = new MatchDB();
+        matchParticipationDB = new MatchParticipationDB();
+
     }
 
     @Override
@@ -19,6 +27,7 @@ public class PersistenceDB implements Persistence{
     }
 
     @Override
+
     public void MovePiece( int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
         MatchDb.MovePiece( matchId, piece, color, startPosition, endPosition);
     }
@@ -26,5 +35,34 @@ public class PersistenceDB implements Persistence{
     @Override
     public void UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException{
         MatchDb.UpgradePiece(matchId,piece, color,startPosition, endPosition);
+    }
+
+    public void createChallenge(Challenge challenge) throws SQLException {
+        challengeDB.createChallenge(challenge);
+    }
+
+    @Override
+    public ArrayList<Challenge> loadChallenges() throws SQLException {
+        return challengeDB.loadChallenges();
+    }
+
+    @Override
+    public ArrayList<Challenge> loadChallenges(String username) throws SQLException {
+        return challengeDB.loadChallenges(username);
+    }
+
+    @Override
+    public boolean deleteChallenge(Challenge challenge) throws SQLException {
+        return challengeDB.deleteChallenge(challenge);
+    }
+
+    @Override
+    public int createMatch(int turnTime, String type) throws SQLException {
+        return matchDB.createMatch(turnTime, type);
+    }
+
+    @Override
+    public int createMatchParticipation(String player, String color, int matchId) throws SQLException {
+        return matchParticipationDB.createMatchParticipation(player, color, matchId);
     }
 }

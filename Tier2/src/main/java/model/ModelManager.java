@@ -7,6 +7,8 @@ import RMI.Tier2RMIClient;
 
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModelManager implements Model{
     private ITier2RMIClient iTier2RMIClient;
@@ -68,5 +70,60 @@ public class ModelManager implements Model{
     @Override
     public ChessPiece[][] getChessBoard() {
         return chessBoard.getChessBoard();
+    }
+
+    @Override
+    public String validateChallenge(Challenge challenge) {
+        try {
+            if (iTier2RMIClient.validateChallenge(challenge))
+                return "Success";
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+        return "Failed registration";
+    }
+
+    @Override
+    public ArrayList<Challenge> loadChallenges() {
+        try {
+            return iTier2RMIClient.loadChallenges();
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<Challenge> loadChallenges(String username) {
+        try {
+            return iTier2RMIClient.loadChallenges(username);
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean acceptChallenge(Challenge challenge) {
+        try{
+//            return iTier2RMIClient.acceptChallenge(challenge);
+            if (iTier2RMIClient.acceptChallenge(challenge)){
+//                iTier2RMIClient.createMatch(challenge.getChallenger(), challenge.getChallenged(), challenge.getTurnTime());
+                return true;
+            }
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean rejectChallenge(Challenge challenge) {
+        try{
+            return iTier2RMIClient.rejectChallenge(challenge);
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+        return false;
     }
 }
