@@ -12,9 +12,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Group9_SEP3" target="11" />
-      <module name="Tier2" target="11" />
-      <module name="Tier3" target="11" />
+      <module name="Group9_SEP3" target="14" />
+      <module name="Tier2" target="14" />
+      <module name="Tier3" target="14" />
     </bytecodeTargetLevel>
   </component>
 </project>
