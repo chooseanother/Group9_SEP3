@@ -71,8 +71,11 @@ else
 
     private async Task AcceptChallenge(Challenge challenge)
     {
-        await _playMatch.AcceptChallenge(challenge);
-        _challenges.Remove(challenge);
+        var result = await _playMatch.AcceptChallenge(challenge);
+        if (result)
+        {
+            _challenges.Remove(challenge);
+        }
         
     // await OnInitializedAsync();
     // go to match created from accepting the challenge
@@ -80,8 +83,11 @@ else
 
     private async Task RejectChallenge(Challenge challenge)
     {
-        await _playMatch.DeclineChallenge(challenge);
-        _challenges.Remove(challenge);
+        var result = await _playMatch.DeclineChallenge(challenge);
+        if (result)
+        {
+            _challenges.Remove(challenge);
+        }
         
             // StateHasChanged.Invoke();
             // await OnInitializedAsync();
