@@ -66,6 +66,17 @@ public class Tier3RMIServerController
         }
     }
 
+
+    @Override public boolean MovePiece( int matchId, String piece, String color, String startPosition, String endPosition){
+        try {
+            persistence.MovePiece( matchId, piece, color, startPosition, endPosition);
+            return true;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     public boolean validateChallenge(Challenge challenge) throws RemoteException {
         try {
@@ -79,6 +90,16 @@ public class Tier3RMIServerController
     }
 
     @Override
+    public boolean UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException {
+        try {
+            persistence.UpgradePiece( matchId,  piece,  color,  startPosition, endPosition);
+            return true;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public ArrayList<Challenge> loadChallenges() throws RemoteException {
         try {
             ArrayList<Challenge> challenges = persistence.loadChallenges();
@@ -113,6 +134,7 @@ public class Tier3RMIServerController
         }
     }
 
+
     @Override
     public boolean rejectChallenge(Challenge challenge) throws RemoteException {
         try {
@@ -127,4 +149,5 @@ public class Tier3RMIServerController
 //    public void createMatch(String challenger, String challenged, int turnTime) throws RemoteException {
 //
 //    }
+
 }

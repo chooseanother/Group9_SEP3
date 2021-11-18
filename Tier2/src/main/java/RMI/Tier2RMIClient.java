@@ -1,5 +1,6 @@
 package RMI;
 
+import model.ChessPiece;
 import model.Challenge;
 import model.User;
 
@@ -9,6 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClient {
     private ITier3RMIServer tier3;
@@ -33,6 +35,16 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
                 // actions to counter illegal data
             }
 
+    }
+
+    @Override public boolean MovePiece(ChessPiece piece, int matchId) throws RemoteException {
+        try {
+           return tier3.MovePiece( matchId, piece.getType(), piece.getColor(), piece.getOldPosition().getVerticalAxis()+":"+piece.getOldPosition().getHorizontalAxis()
+                   , piece.getNewPosition().getVerticalAxis()+":"+piece.getNewPosition().getHorizontalAxis());
+        } catch (Exception e) {
+          e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -77,6 +89,17 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         }
     }
 
+
+    @Override public boolean UpgradePiece(ChessPiece chessPiece, int matchID){
+        try {
+            return tier3.UpgradePiece(matchID, chessPiece.getType(), chessPiece.getColor(), chessPiece.getOldPosition().getVerticalAxis()+":"+chessPiece.getOldPosition().getHorizontalAxis()
+                    , chessPiece.getNewPosition().getVerticalAxis()+":"+chessPiece.getNewPosition().getHorizontalAxis());
+        } catch (Exception e){
+          e.printStackTrace();
+            return false;
+        }
+    }
+          
     @Override
     public boolean rejectChallenge(Challenge challenge) throws RemoteException {
         try {
@@ -86,6 +109,7 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
             return false;
         }
     }
+
 
 //    @Override
 //    public void createMatch(String challenger, String challenged, int turnTime) throws RemoteException {
