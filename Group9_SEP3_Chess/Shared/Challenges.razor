@@ -1,0 +1,95 @@
+@using Group9_SEP3_Chess.Models
+@using Group9_SEP3_Chess.Data
+
+@inject IPlayMatch _playMatch
+
+<h3>Challenges</h3>
+
+@if (_challenges == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else if (!_challenges.Any())
+{
+    <p>
+        <em>No Challenges</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Challenger</th>
+            @* <th>Challenged</th> *@
+            <th>Turn Time</th>
+            <th>Accept</th>
+            <th>Decline</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var c in _challenges)
+        {
+            <tr>
+                <td>@c.Challenger</td>
+                @* <td>@c.Username</td> *@
+                <td>@turnLengths[c.TurnLength]</td>
+                <td>
+                    <button @onclick='() => AcceptChallenge(c)'>
+                        <i class="oi oi-check" style="color:green;"></i>
+                    </button>
+                </td>
+                <td>
+                    <button @onclick='() => RejectChallenge(c)'>
+                        <i class="oi oi-trash" style="color:red;"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string? Username { get; set; }
+    
+    private readonly IDictionary<int, string> turnLengths = new Dictionary<int, string>
+    {
+        {120,"2 Minutes"}, {1800,"30 Minutes"}, {3600,"1 Hour"}, {7200,"2 Hours"}, {36000,"10 Hours"}, {86400,"1 Day"}, {259200,"3 Days"}, {604800,"7 Days"}
+    };
+    
+    private IList<Challenge> _challenges;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _challenges = await _playMatch.GetChallenges(Username);
+        // await Task.Delay(100);
+    }
+
+    private async Task AcceptChallenge(Challenge challenge)
+    {
+        var result = await _playMatch.AcceptChallenge(challenge);
+        if (result)
+        {
+            _challenges.Remove(challenge);
+        }
+        
+    // await OnInitializedAsync();
+    // go to match created from accepting the challenge
+    }
+
+    private async Task RejectChallenge(Challenge challenge)
+    {
+        var result = await _playMatch.DeclineChallenge(challenge);
+        if (result)
+        {
+            _challenges.Remove(challenge);
+        }
+        
+            // StateHasChanged.Invoke();
+            // await OnInitializedAsync();
+    }
+}

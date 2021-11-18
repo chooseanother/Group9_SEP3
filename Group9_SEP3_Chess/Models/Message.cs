@@ -13,8 +13,8 @@ namespace Group9_SEP3_Chess.Models
 
         public string Email { get; set; }
         [JsonPropertyName("password")]
-
         public string Password { get; set; }
+
         [JsonPropertyName("firstLayer")]
         public int FirstLayer { get; set; }
         [JsonPropertyName("secondLayer")]
@@ -23,9 +23,17 @@ namespace Group9_SEP3_Chess.Models
         public String Object { get; set; }
         [JsonPropertyName("upgradeSelected")]
         public String UpgradeSelected { get; set; }
+
+        [JsonPropertyName("data")]
+        public string Data { get; set; }
+        
         public override string ToString()
         {
-            return $"Action: {Action} Username: {Username} Email: {Email} Password: {Password}";
+            return $"Action: {Action} " +
+                   $"{(Username==null?"":"Username: "+Username)} " +
+                   $"{(Email==null?"":"Email: "+Email)} " +
+                   $"{(Password == null ? "":"Password: "+Password)} " +
+                   $"{(Data == null ? "": "Data: "+Data)}";
         }
     }
 }
