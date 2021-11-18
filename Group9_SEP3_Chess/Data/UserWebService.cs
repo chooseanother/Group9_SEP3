@@ -27,11 +27,15 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<User> ValidateLogin(string userName, string password)
         {
+            User user = new User
+            {
+                Username = userName,
+                Password = password
+            };
             var response = await _rabbitMq.SendRequestAsync(new Message
             {
                 Action = "Login",
-                Username = userName,
-                Password = password
+                Data = JsonSerializer.Serialize(user)
             });
             return JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
                 {
