@@ -38,12 +38,15 @@ public class ModelManager implements Model{
     @Override
     public String validateChallenge(Challenge challenge) {
         try {
+            if (challenge.getChallenger().equals(challenge.getChallenged())){
+                return "Can't challenge your self";
+            }
             if (iTier2RMIClient.validateChallenge(challenge))
                 return "Success";
         }catch (RemoteException e){
             e.printStackTrace();
         }
-        return "Failed registration";
+        return "User doesn't exist or you already challenged that user.";
     }
 
     @Override
