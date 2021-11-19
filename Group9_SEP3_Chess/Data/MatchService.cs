@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Group9_SEP3_Chess.Json2DArrayHelp;
 using Group9_SEP3_Chess.Models;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -108,6 +109,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<ChessPiece[,]> LoadChessPieces(Message message, CancellationToken cancellationToken = default(CancellationToken))
         {
+            
             IBasicProperties props = channel.CreateBasicProperties();
             var correlationId = Guid.NewGuid().ToString();
             props.CorrelationId = correlationId;
@@ -128,7 +130,10 @@ namespace Group9_SEP3_Chess.Data
             if (response.Action.Equals("Load ChessBoard"))
             {
                 Console.WriteLine(response.Object);
-               ChessPiece[,] chessPieces = JsonSerializer.Deserialize<ChessPiece[,]>(response.Object);
+               ChessPiece[,] chessPieces = JsonSerializer.Deserialize<ChessPiece[,]>(response.Object, new JsonSerializerOptions
+               {
+                   Converters = { new Array2DConverter() },
+               });
                 
                 return chessPieces;
             }

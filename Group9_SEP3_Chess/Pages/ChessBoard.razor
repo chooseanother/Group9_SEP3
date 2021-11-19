@@ -1,6 +1,7 @@
 ﻿@using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
 @using System.Text.Json
+@using Group9_SEP3_Chess.Json2DArrayHelp
 @inject IMatchService _matchService
 <div class="board">
     @for (int i = 0; i < chessPieces.GetLength(0); i++)
@@ -99,107 +100,17 @@
 
     protected override async Task OnInitializedAsync()
     {
-        string black = "Black";
-        chessPieces[0, 0] = new ChessPiece()
-        {
-            Type = "rook",
-            Color = black
-        };
-        chessPieces[0, 1] = new ChessPiece()
-        {
-            Type = "Knight",
-            Color = black
-        };
-        chessPieces[0, 2] = new ChessPiece()
-        {
-            Type = "bishop",
-            Color = black
-        };
-        chessPieces[0, 3] = new ChessPiece()
-        {
-            Type = "queen",
-            Color = black
-        };
-        chessPieces[0, 4] = new ChessPiece()
-        {
-            Type = "king",
-            Color = black
-        };
-        chessPieces[0, 5] = new ChessPiece()
-        {
-            Type = "bishop",
-            Color = black
-        };
-        chessPieces[0, 6] = new ChessPiece()
-        {
-            Type = "Knight",
-            Color = black
-        };
-        chessPieces[0, 7] = new ChessPiece()
-        {
-            Type = "rook",
-            Color = black
-        };
-        
-        for (int i = 0; i < chessPieces.GetLength(1); i++)
-        {
-            chessPieces[1, i] = new ChessPiece()
-            {
-                Type = "pawn",
-                Color = black
-            };
-        }
-        string white = "White";
-        chessPieces[7, 0] = new ChessPiece()
-        {
-            Type = "rook",
-            Color = white
-        };
-        chessPieces[7, 1] = new ChessPiece()
-        {
-            Type = "Knight",
-            Color = white
-        };
-        chessPieces[7, 2] = new ChessPiece()
-        {
-            Type = "bishop",
-            Color = white
-        };
-        chessPieces[7, 3] = new ChessPiece()
-        {
-            Type = "queen",
-            Color = white
-        };
-        chessPieces[7, 4] = new ChessPiece()
-        {
-            Type = "king",
-            Color = white
-        };
-        chessPieces[7, 5] = new ChessPiece()
-        {
-            Type = "bishop",
-            Color = white
-        };
-        chessPieces[7, 6] = new ChessPiece()
-        {
-            Type = "Knight",
-            Color = white
-        };
-        chessPieces[7, 7] = new ChessPiece()
-        {
-            Type = "rook",
-            Color = white
-        };
-        for (int i = 0; i < chessPieces.GetLength(1); i++)
-        {
-            chessPieces[6, i] = new ChessPiece()
-            {
-                Type = "pawn",
-                Color = white
-            };
-        }
+        // get match info from tier2, a new match should place pieces in default location in tier 2 not tier 1 like it is now
+        // chessPieces = await InitializeNewGamePieces();
+        //
+        // Console.WriteLine(JsonSerializer.Serialize(chessPieces, new JsonSerializerOptions
+        // {
+        //     Converters = {new Array2DConverter()},
+        // }));
+
         // 2D array of custom object serialization is not supported, need to consult with somebody
-        // await _matchService.LoadChessPieces(new Message(){Action = "Load"});
+        // fixed - kim
+        chessPieces = await _matchService.LoadChessPieces(new Message{Action = "Load"});
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
@@ -244,4 +155,111 @@
 
     }
 
+
+    private async Task<ChessPiece[,]> InitializeNewGamePieces()
+    {
+        ChessPiece[,] piecesLocation = new ChessPiece[8, 8];
+        
+        string black = "Black";
+        piecesLocation[0, 0] = new ChessPiece()
+        {
+            Type = "rook",
+            Color = black
+        };
+        piecesLocation[0, 1] = new ChessPiece()
+        {
+            Type = "Knight",
+            Color = black
+        };
+        piecesLocation[0, 2] = new ChessPiece()
+        {
+            Type = "bishop",
+            Color = black
+        };
+        piecesLocation[0, 3] = new ChessPiece()
+        {
+            Type = "queen",
+            Color = black
+        };
+        piecesLocation[0, 4] = new ChessPiece()
+        {
+            Type = "king",
+            Color = black
+        };
+        piecesLocation[0, 5] = new ChessPiece()
+        {
+            Type = "bishop",
+            Color = black
+        };
+        piecesLocation[0, 6] = new ChessPiece()
+        {
+            Type = "Knight",
+            Color = black
+        };
+        piecesLocation[0, 7] = new ChessPiece()
+        {
+            Type = "rook",
+            Color = black
+        };
+        
+        for (int i = 0; i < piecesLocation.GetLength(1); i++)
+        {
+            piecesLocation[1, i] = new ChessPiece()
+            {
+                Type = "pawn",
+                Color = black
+            };
+        }
+        string white = "White";
+        piecesLocation[7, 0] = new ChessPiece()
+        {
+            Type = "rook",
+            Color = white
+        };
+        piecesLocation[7, 1] = new ChessPiece()
+        {
+            Type = "Knight",
+            Color = white
+        };
+        piecesLocation[7, 2] = new ChessPiece()
+        {
+            Type = "bishop",
+            Color = white
+        };
+        piecesLocation[7, 3] = new ChessPiece()
+        {
+            Type = "queen",
+            Color = white
+        };
+        piecesLocation[7, 4] = new ChessPiece()
+        {
+            Type = "king",
+            Color = white
+        };
+        piecesLocation[7, 5] = new ChessPiece()
+        {
+            Type = "bishop",
+            Color = white
+        };
+        piecesLocation[7, 6] = new ChessPiece()
+        {
+            Type = "Knight",
+            Color = white
+        };
+        piecesLocation[7, 7] = new ChessPiece()
+        {
+            Type = "rook",
+            Color = white
+        };
+        for (int i = 0; i < piecesLocation.GetLength(1); i++)
+        {
+            piecesLocation[6, i] = new ChessPiece()
+            {
+                Type = "pawn",
+                Color = white
+            };
+        }
+
+        return piecesLocation;
+    }
 }
