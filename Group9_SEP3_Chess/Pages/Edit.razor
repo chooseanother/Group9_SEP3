@@ -1,0 +1,45 @@
+﻿@page "/Edit"
+@using Microsoft.AspNetCore.Components
+@using Group9_SEP3_Chess.Models
+@using Group9_SEP3_Chess.Data
+@inject AuthenticationStateProvider authenticationStateProvider;
+@inject IUserService userService;
+@if (UserToEdit == null)
+{
+    <em>@errorMessage</em>
+}
+else
+{
+    <EditForm Model="@UserToEdit" OnValidSubmit="@Save">
+        <DataAnnotationsValidator/> <ValidationSummary/>
+        <div> Username: <br/> @UserToEdit.Username</div>
+        <div class="form-group"> Password:<br/> <InputText class="input"@bind-Value="UserToEdit.Password"></InputText></div>
+        <button class="btn btn-outline-dark" type="button">Edit </button>
+        <div class="form-group"> Email:<br/> <InputText class="input" @bind-Value="UserToEdit.Email"></InputText></div>
+        <button class="btn btn-outline-dark" type="button">Edit </button>
+        <div> Score points: <br/> @UserToEdit.ScorePoints</div>
+        <div> Wins: <br/> @UserToEdit.Wins</div>
+        <div> Losses: <br/> @UserToEdit.Losses</div>
+        <div> Draws: <br/> @UserToEdit.Draws</div>
+        <div> Games played: <br/> @UserToEdit.GamesPlayed</div>
+        <p class="actions">
+            <button class="btn btn-outline-dark" type="submit">Save</button>
+        </p>
+    </EditForm>
+}
+
+@code {
+    private User UserToEdit;
+
+    private string errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserToEdit = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
+    }
+    
+    private async Task Save()
+    {
+        await userService.UpdateUser(UserToEdit);
+    }
+}
