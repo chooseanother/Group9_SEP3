@@ -42,7 +42,7 @@
         </div>
     </div>
 </EditForm>
-<p id="result">@result</p>
+<p id="result" style="color:red">@result</p>
 
 @code {
     private User newUserItem = new ();
@@ -54,15 +54,11 @@
         try
         {
             result = await _userService.RegisterUserAsync(newUserItem);
-            // result = await _userService.CallAsync($"{new Random().Next(40)}");
+            // navigate to front page
         }
         catch (Exception e)
         {
             result = e.Message;
-        }
-        finally
-        {
-            
         }
     }
     
