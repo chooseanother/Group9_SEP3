@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Group9_SEP3_Chess.Models;
 
+
 namespace Group9_SEP3_Chess.Data
 {
     public class UserWebService : IUserService
@@ -16,12 +17,11 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<string> RegisterUserAsync(User user)
         {
+            var userJson = JsonSerializer.Serialize(user);
             var response = await _rabbitMq.SendRequestAsync(new Message
             {
                 Action = "Register",
-                Email = user.Email,
-                Username = user.Username,
-                Password = user.Password
+                Data = userJson
             });
             return response.Action;
         }
