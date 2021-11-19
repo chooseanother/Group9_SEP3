@@ -2,11 +2,7 @@ package RabbitMQ;
 
 import com.google.gson.Gson;
 import com.rabbitmq.client.*;
-import model.ChessPiece;
-import model.Challenge;
-import model.Message;
-import model.Model;
-import model.User;
+import model.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,9 +49,10 @@ public class RabbitMQClientController implements RabbitMQClient {
                     switch (message.getAction()) {
                         case "Move":                        
                             Message toSend = new Message();
-                            ChessPiece movedChessPiece = model.MoveChessPiece(message.getFirstLayer(), message.getSecondLayer());
+                            Position toMove = gson.fromJson(message.getData(),Position.class);
+                            ChessPiece movedChessPiece = model.MoveChessPiece(toMove.getVerticalAxis(), toMove.getHorizontalAxis());
                             if (movedChessPiece != null) {
-                                toSend.setObject(gson.toJson(movedChessPiece));
+                                toSend.setData(gson.toJson(movedChessPiece));
                                 toSend.setAction("Sending A chess Piece");
                             } else {
                                 toSend.setAction("No chess Piece");
@@ -66,8 +63,8 @@ public class RabbitMQClientController implements RabbitMQClient {
                         case "Upgrade":
                             Message toSendUpgrade = new Message();
                             toSendUpgrade.setAction("Upgrade Chess Piece");
-                            ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getUpgradeSelected());
-                            toSendUpgrade.setObject(gson.toJson(upgradedChessPiece));
+                            ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getData());
+                            toSendUpgrade.setData(gson.toJson(upgradedChessPiece));
                             System.out.println(toSendUpgrade.getObject());
                             response = gson.toJson(toSendUpgrade);
                             break;
@@ -75,7 +72,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                             Message toLoadChessPieces = new Message();
                             toLoadChessPieces.setAction("Load ChessBoard");
                             ChessPiece[][] chessBoard = model.getChessBoard();
-                            toLoadChessPieces.setObject(gson.toJson(chessBoard));
+                            toLoadChessPieces.setData(gson.toJson(chessBoard));
                             System.out.println(toLoadChessPieces.getObject());
                             response = gson.toJson(toLoadChessPieces);
                             break;
