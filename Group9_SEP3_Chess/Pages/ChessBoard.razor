@@ -115,10 +115,15 @@
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
     {
-        Message message = new Message();
-        message.FirstLayer = FirstLayer;
-        message.SecondLayer = SecondLayer;
-        message.Action = "Move";
+        Message message = new Message()
+        {
+            Data = JsonSerializer.Serialize(new Position()
+            {
+                HorizontalAxis = SecondLayer,
+                VerticalAxis = FirstLayer
+            }),
+            Action = "Move"
+        };
         ChessPiece selected = await _matchService.MoveChessPiece(message);
         if (selected != null)
         {
@@ -145,10 +150,12 @@
 
     private async Task UpdateChessPiece()
     {
-        
-        Message message = new Message();
-        message.Action = "Upgrade";
-        message.UpgradeSelected = UpgradeSelected;
+
+        Message message = new Message()
+        {
+            Action = "Upgrade",
+            Data = UpgradeSelected
+        };
         Console.WriteLine("method called");
         ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
         chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;

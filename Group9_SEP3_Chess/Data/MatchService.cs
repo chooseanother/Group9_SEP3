@@ -68,8 +68,8 @@ namespace Group9_SEP3_Chess.Data
             Message response = JsonSerializer.Deserialize<Message>(tcs.Task.Result);
             if (response.Action.Equals("Sending A chess Piece"))
             {
-                ChessPiece chessPiece = JsonSerializer.Deserialize<ChessPiece>(response.Object);
-                Console.WriteLine(response.Object);
+                ChessPiece chessPiece = JsonSerializer.Deserialize<ChessPiece>(response.Data);
+                Console.WriteLine(response.Data);
                 Console.WriteLine("Old position"+chessPiece.OldPosition.ToString());
                 Console.WriteLine(chessPiece.Selected);
                 Console.WriteLine(chessPiece.NewPosition.ToString());
@@ -100,8 +100,7 @@ namespace Group9_SEP3_Chess.Data
             Message response = JsonSerializer.Deserialize<Message>(tcs.Task.Result);
             if (response.Action.Equals("Upgrade Chess Piece"))
             {
-                ChessPiece chessPiece = JsonSerializer.Deserialize<ChessPiece>(response.Object);
-                Console.WriteLine(response.Object + chessPiece.Type);
+                ChessPiece chessPiece = JsonSerializer.Deserialize<ChessPiece>(response.Data);
                 return chessPiece;
             }
             return null;
@@ -129,8 +128,8 @@ namespace Group9_SEP3_Chess.Data
             Message response = JsonSerializer.Deserialize<Message>(tcs.Task.Result);
             if (response.Action.Equals("Load ChessBoard"))
             {
-                Console.WriteLine(response.Object);
-               ChessPiece[,] chessPieces = JsonSerializer.Deserialize<ChessPiece[,]>(response.Object, new JsonSerializerOptions
+                Console.WriteLine(response.Data);
+               ChessPiece[,] chessPieces = JsonSerializer.Deserialize<ChessPiece[,]>(response.Data, new JsonSerializerOptions
                {
                    Converters = { new Array2DConverter() },
                });
