@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class User
 		implements Serializable
 {
-	private String userName;
+	private String username;
 	private String password;
 	private String email;
 	private int scorePoints;
@@ -20,16 +20,16 @@ public class User
 	private int draws;
 	private int gamesPlayed;
 
-	public User(String userName, String password, String email)
+	public User(String username, String password, String email)
 	{
-		this.userName = userName;
+		this.username = username;
 		this.password = password;
 		this.email = email;
 	}
 
-	public User(String userName, String password, String email, int scorePoints, int wins, int losses, int draws, int gamesPlayed)
+	public User(String username, String password, String email, int scorePoints, int wins, int losses, int draws, int gamesPlayed)
 	{
-		this.userName= userName;
+		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.scorePoints = scorePoints;
@@ -39,12 +39,12 @@ public class User
 		this.gamesPlayed = gamesPlayed;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {

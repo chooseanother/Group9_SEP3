@@ -1,9 +1,7 @@
 package RabbitMQ;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.rabbitmq.client.*;
-import model.ChessBoard;
 import model.ChessPiece;
 import model.Challenge;
 import model.Message;
@@ -82,8 +80,9 @@ public class RabbitMQClientController implements RabbitMQClient {
                             response = gson.toJson(toLoadChessPieces);
                             break;
                         case "Register":
-                            String result = model.registerUser(message.getUsername(), message.getPassword(), message.getEmail());
-                            response = gson.toJson(new Message(result, message.getUsername(), message.getPassword(), message.getEmail()));
+                            User user = gson.fromJson(message.getData(), User.class);
+                            String result = model.registerUser(user.getUsername(), user.getPassword(), user.getEmail());
+                            response = gson.toJson(new Message(result));
                             break;
                         case "Create challenge":
                             String challengeJson = message.getData();
@@ -92,7 +91,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                             response = gson.toJson(new Message(result));
                             break;
                         case "Get challenges":
-                            ArrayList<Challenge> challenges = new ArrayList<>();
+                            ArrayList<Challenge> challenges;
                             if (message.getData() == null){
                                 challenges = model.loadChallenges();
                             }
@@ -122,11 +121,11 @@ public class RabbitMQClientController implements RabbitMQClient {
 
                             break;
                         case "Login":
-                            User user = gson.fromJson(message.getData(), User.class);
-                            String userName = user.getUserName();
+                            user = gson.fromJson(message.getData(), User.class);
+                            String username = user.getUsername();
                             String password = user.getPassword();
                             try{
-                              User validatedUser = model.validateLogin(userName, password);
+                              User validatedUser = model.validateLogin(username, password);
                               String userToJson = gson.toJson(validatedUser);
                               response = gson.toJson(new Message("LoggedIn", userToJson));
                             }

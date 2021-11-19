@@ -2,10 +2,8 @@ package RMI;/*
  * 12.09.2018 Original version
  */
 
-import RMI.ITier3RMIServer;
 import model.Challenge;
 import model.User;
-import persistence.ChallengePersistence;
 import persistence.Persistence;
 import persistence.PersistenceDB;
 
@@ -18,7 +16,6 @@ import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class Tier3RMIServerController
@@ -58,7 +55,7 @@ public class Tier3RMIServerController
     public boolean registerUser(User user) throws RemoteException {
         try {
             persistence.registerUser(user);
-            System.out.println(user.getUserName() + " was created.");
+            System.out.println(user.getUsername() + " was created.");
             return true;
         } catch (SQLException e){
             e.printStackTrace();
