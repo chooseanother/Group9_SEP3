@@ -18,6 +18,9 @@ namespace Group9_SEP3_Chess.Models
         [JsonPropertyName("data")]
         public string Data { get; set; }
         
+        [JsonPropertyName("data2")]
+        public string Data2 { get; set; }
+        
         public override string ToString()
         {
             return $"Action: {Action} " +

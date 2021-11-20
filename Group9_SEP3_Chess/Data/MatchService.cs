@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -21,8 +22,12 @@ namespace Group9_SEP3_Chess.Data
         private readonly ConcurrentDictionary<string, TaskCompletionSource<string>> callbackMapper =
             new ConcurrentDictionary<string, TaskCompletionSource<string>>();
 
+        private List<ChessPiece> removedChessPieces;
+
         public MatchService()
         {
+            removedChessPieces = new List<ChessPiece>();
+            
             var factory = new ConnectionFactory()
             {
                 HostName = "localhost"
@@ -68,6 +73,10 @@ namespace Group9_SEP3_Chess.Data
             Message response = JsonSerializer.Deserialize<Message>(tcs.Task.Result);
             if (response.Action.Equals("Sending A chess Piece"))
             {
+                removedChessPieces = JsonSerializer.Deserialize<List<ChessPiece>>(response.Data2);
+                Console.WriteLine("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+                Console.WriteLine("RemovedChessPieces: " +  String.Join(",", removedChessPieces));
+                Console.WriteLine("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
                 ChessPiece chessPiece = JsonSerializer.Deserialize<ChessPiece>(response.Data);
                 Console.WriteLine(response.Data);
                 Console.WriteLine("Old position"+chessPiece.OldPosition.ToString());
@@ -127,7 +136,8 @@ namespace Group9_SEP3_Chess.Data
             cancellationToken.Register(() => callbackMapper.TryRemove(correlationId, out var tmp));
             Message response = JsonSerializer.Deserialize<Message>(tcs.Task.Result);
             if (response.Action.Equals("Load ChessBoard"))
-            {
+            { 
+                removedChessPieces = JsonSerializer.Deserialize<List<ChessPiece>>(response.Data2);
                 Console.WriteLine(response.Data);
                ChessPiece[,] chessPieces = JsonSerializer.Deserialize<ChessPiece[,]>(response.Data, new JsonSerializerOptions
                {
@@ -138,5 +148,11 @@ namespace Group9_SEP3_Chess.Data
             }
             return null;
         }
+
+        public IList<ChessPiece> getRemovedChessPieces()
+        {
+            List<ChessPiece> chessPieces = new List<ChessPiece>(removedChessPieces);
+            return chessPieces;
         }
+    }
     }
