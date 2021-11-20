@@ -8,6 +8,7 @@ public class Message {
     private String password;
     private String email;
     private String data;
+    private String data2;
 
 
     public Message(){
@@ -16,6 +17,7 @@ public class Message {
         this.email="";
         this.username="";
         this.data = "";
+        this.data2 = "";
     }
 
     public Message(String action, String username, String password, String email) {
@@ -76,6 +78,14 @@ public class Message {
 
     public String getData() {
         return data;
+    }
+
+    public String getData2() {
+        return data2;
+    }
+
+    public void setData2(String data2) {
+        this.data2 = data2;
     }
 
     @Override

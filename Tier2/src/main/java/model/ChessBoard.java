@@ -4,6 +4,7 @@ package model;
 import RMI.ITier2RMIClient;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  * @author Nick/Rokas
@@ -12,14 +13,14 @@ import java.rmi.RemoteException;
 
 public class ChessBoard {
     private ChessPiece[][] chessPieces;
-//    private ChessPiece selected;
+    private ArrayList<ChessPiece> RemovedChessPieces;
 
     /**
      * Creating a chess board and setting the default chess pieces locations
      */
     public ChessBoard() {
         chessPieces = new ChessPiece[8][8];
-//        selected = null;
+        RemovedChessPieces = new ArrayList<>();
 
         //black
         String black = "Black";
@@ -91,6 +92,11 @@ public class ChessBoard {
             selected.setNewPosition(new Position(firstLayer, secondLayer));
 
                 if (iTier2RMIClient.MovePiece(selected, matchID)) {
+
+                    if(chessPieces[firstLayer][secondLayer] != null){
+                        RemovedChessPieces.add(chessPieces[firstLayer][secondLayer]);
+                    }
+
                     chessPieces[firstLayer][secondLayer] = selected.copy();
                     chessPieces[firstLayer][secondLayer].setNewPosition(new Position(firstLayer, secondLayer));
                     if (selected.getOldPosition().getVerticalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getVerticalAxis()
@@ -154,11 +160,8 @@ public class ChessBoard {
     public ChessPiece[][] getChessBoard() {
         return chessPieces;
     }
-    /**
-     * Returns the selected chess piece
-     * @return piece
-     */
-//    public ChessPiece getSelected(){
-//        return selected;
-//    }
+
+    public ArrayList<ChessPiece> getRemovedChessPieces(){
+        return RemovedChessPieces;
+    }
 }

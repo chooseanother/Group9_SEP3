@@ -146,4 +146,9 @@ public class ModelManager implements Model{
         }
         return false;
     }
+
+    @Override
+    public ArrayList<ChessPiece> getRemovedChessPieces() {
+        return chessBoard.getRemovedChessPieces();
+    }
 }
