@@ -20,6 +20,7 @@ public interface ITier3RMIServer
 	boolean acceptChallenge(Challenge challenge) throws RemoteException;
 	boolean rejectChallenge(Challenge challenge) throws RemoteException;
 	User validateLogin(String username, String password) throws RemoteException;
+	boolean UpdateMatchUserTurn(int matchID,String color) throws RemoteException;
 //	void createMatch(String challenger, String challenged, int turnTime) throws RemoteException;
 
 

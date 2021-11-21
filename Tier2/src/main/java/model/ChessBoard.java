@@ -89,8 +89,13 @@ public class ChessBoard {
         }
         if (selected != null) {
             selected.setNewPosition(new Position(firstLayer, secondLayer));
-
-                if (iTier2RMIClient.MovePiece(selected, matchID)) {
+                String turnColor= "";
+                if(selected.getColor().equals("Black")){
+                    turnColor = "White";
+                }else{
+                    turnColor="Black";
+                }
+                if (iTier2RMIClient.MovePiece(selected, matchID) && iTier2RMIClient.UpdateMatchUserTurn(matchID,turnColor)) {
                     chessPieces[firstLayer][secondLayer] = selected.copy();
                     chessPieces[firstLayer][secondLayer].setNewPosition(new Position(firstLayer, secondLayer));
                     if (selected.getOldPosition().getVerticalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getVerticalAxis()

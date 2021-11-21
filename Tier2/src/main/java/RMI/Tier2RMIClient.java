@@ -120,6 +120,16 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         }
     }
 
+    @Override
+    public boolean UpdateMatchUserTurn(int matchID, String color) throws RemoteException {
+        try{
+            return tier3.UpdateMatchUserTurn(matchID,color);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     //    @Override
 //    public void createMatch(String challenger, String challenged, int turnTime) throws RemoteException {
 //        try {
