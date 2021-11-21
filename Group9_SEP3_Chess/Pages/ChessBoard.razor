@@ -72,7 +72,7 @@
         </div>
     </div>
     <div class="col">
-        <div class="UpgradePart" >
+        <div class="UpgradePart">
             <label>Select upgrade: </label>
             <select @bind="UpgradeSelected">
                 <option>Rook</option>
@@ -84,28 +84,22 @@
             <button class="btn btn-outline-dark" @onclick="UpdateChessPiece">Upgrade</button>
         </div>
         
-        <div class="RemovedPiecesTable">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Color</th>
-                    <th>Type</th>
-                    <th>Last Position</th>
-                </tr>
-                </thead>
-                
-                <tbody>
-                @foreach (ChessPiece i in RemovedChessPieces)
-                {
-                    <tr>
-                        <td>@i.Color</td>
-                        <td>@i.Type</td>
-                        <td>@i.NewPosition</td>
-                    </tr>
-                }
-                </tbody>
-            </table>
+        <div class="MatchScores">
+            <h4>White Score: @WhiteScore</h4>
+            <h4>Black Score: @BlackScore</h4>
         </div>
+        
+         <div class="RemovedPiecesTable">
+             <h4>Removed Chess Pieces: </h4>
+             <div class="row">
+                 @foreach (ChessPiece chessPiece in RemovedChessPieces)
+                 {
+                     <div class="col-md-2">
+                         <img style="width: 50px; height:50px " src="@chessPiece.GetPiece()">
+                     </div>
+                 }
+             </div>
+             </div>
     </div>
 </div>
 
@@ -122,6 +116,10 @@
     .RemovedPiecesTable{
        margin-top: 20px;
     }
+    .MatchScores{
+       margin-top: 20px;
+    }
+   
    
 </style>
 
@@ -130,6 +128,8 @@
     private IList<ChessPiece> RemovedChessPieces;
     String printoutArray = "";
     String UpgradeSelected = "";
+    String WhiteScore = "";
+    String BlackScore = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -145,7 +145,8 @@
     // fixed - kim
         chessPieces = await _matchService.LoadChessPieces(new Message {Action = "Load"});
         RemovedChessPieces = _matchService.getRemovedChessPieces();
-        
+        BlackScore = _matchService.getMatchScores(true);
+        WhiteScore = _matchService.getMatchScores(false);
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
@@ -163,6 +164,8 @@
         if (selected != null)
         {
             RemovedChessPieces = _matchService.getRemovedChessPieces();
+            BlackScore = _matchService.getMatchScores(true);
+            WhiteScore = _matchService.getMatchScores(false);
             chessPieces[FirstLayer, SecondLayer] = selected;
             Console.WriteLine($"Coordinates old: {selected.OldPosition.ToString()} Coordinates new: {chessPieces[FirstLayer, SecondLayer].NewPosition.ToString()}");
             if (chessPieces[FirstLayer, SecondLayer].OldPosition.VerticalAxis != chessPieces[FirstLayer, SecondLayer].NewPosition.VerticalAxis
