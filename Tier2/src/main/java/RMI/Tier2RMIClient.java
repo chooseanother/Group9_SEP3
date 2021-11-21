@@ -7,9 +7,7 @@ import model.User;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClient {
@@ -116,6 +114,27 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         try{
             return tier3.validateLogin(username, password);
         }catch (IllegalArgumentException e){
+            return null;
+        }
+    }
+
+    @Override
+    public boolean updateUser(User user) throws RemoteException {
+        try{
+            return tier3.updateUser(user);
+        }
+        catch(RemoteException e){
+            return false;
+        }
+    }
+
+    @Override
+    public User getUser(String username) throws RemoteException {
+        try{
+            return tier3.getUser(username);
+        }
+        catch (RemoteException e){
+            e.printStackTrace();
             return null;
         }
     }
