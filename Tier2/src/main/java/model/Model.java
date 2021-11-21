@@ -15,4 +15,5 @@ public interface Model {
     boolean acceptChallenge(Challenge challenge);
     boolean rejectChallenge(Challenge challenge);
     ArrayList<ChessPiece> getRemovedChessPieces();
+    int getMatchScores(boolean Black);
 }

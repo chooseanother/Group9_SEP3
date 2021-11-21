@@ -151,4 +151,13 @@ public class ModelManager implements Model{
     public ArrayList<ChessPiece> getRemovedChessPieces() {
         return chessBoard.getRemovedChessPieces();
     }
+
+    @Override
+    public int getMatchScores(boolean Black) {
+        if (Black){
+            return chessBoard.GetBlackScore();
+        } else {
+            return chessBoard.GetWhiteScore();
+        }
+    }
 }

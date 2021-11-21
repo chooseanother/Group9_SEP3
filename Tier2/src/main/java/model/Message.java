@@ -8,7 +8,8 @@ public class Message {
     private String password;
     private String email;
     private String data;
-    private String data2;
+    private String dataSlot2;
+    private String dataSlot3;
 
 
     public Message(){
@@ -17,7 +18,8 @@ public class Message {
         this.email="";
         this.username="";
         this.data = "";
-        this.data2 = "";
+        this.dataSlot2 = "";
+        this.dataSlot3 = "";
     }
 
     public Message(String action, String username, String password, String email) {
@@ -80,12 +82,20 @@ public class Message {
         return data;
     }
 
-    public String getData2() {
-        return data2;
+    public String getDataSlot2() {
+        return dataSlot2;
     }
 
-    public void setData2(String data2) {
-        this.data2 = data2;
+    public void setDataSlot2(String data2) {
+        this.dataSlot2 = data2;
+    }
+
+    public String getDataSlot3() {
+        return dataSlot3;
+    }
+
+    public void setDataSlot3(String dataSlot3) {
+        this.dataSlot3 = dataSlot3;
     }
 
     @Override

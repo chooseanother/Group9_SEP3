@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class ChessBoard {
     private ChessPiece[][] chessPieces;
     private ArrayList<ChessPiece> RemovedChessPieces;
+    private int BlackScore;
+    private int WhiteScore;
 
     /**
      * Creating a chess board and setting the default chess pieces locations
@@ -21,6 +23,8 @@ public class ChessBoard {
     public ChessBoard() {
         chessPieces = new ChessPiece[8][8];
         RemovedChessPieces = new ArrayList<>();
+        BlackScore = 0;
+        WhiteScore = 0;
 
         //black
         String black = "Black";
@@ -157,11 +161,85 @@ public class ChessBoard {
         return null;
     }
 
+    /**
+     * Returns a ChessBoard
+     * @return ChessBoard
+     */
     public ChessPiece[][] getChessBoard() {
         return chessPieces;
     }
 
+    /**
+     * Returns the list of removed chess pieces
+     * @return list of removed chess pieces
+     */
     public ArrayList<ChessPiece> getRemovedChessPieces(){
         return RemovedChessPieces;
+    }
+
+    /**
+     * Calculates and returns the score for white
+     * @return returns the score for white
+     */
+    public int GetWhiteScore(){
+        int result = 0;
+
+        for (int i = 0; i<RemovedChessPieces.size(); i++){
+
+            if (RemovedChessPieces.get(i).getColor().equals("Black")){
+
+                switch (RemovedChessPieces.get(i).getType()) {
+                    case "Pawn":
+                        result += 1;
+                        break;
+                    case "Rook":
+                        result += 5;
+                        break;
+                    case "Knight":
+                        result += 3;
+                        break;
+                    case "Bishop":
+                        result += 3;
+                        break;
+                    case "Queen":
+                        result += 9;
+                        break;
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Calculates and returns the score for Black
+     * @return returns the score for Black
+     */
+    public int GetBlackScore() {
+        int result = 0;
+
+        for (int i = 0; i < RemovedChessPieces.size(); i++) {
+
+            if (RemovedChessPieces.get(i).getColor().equals("White")) {
+
+                switch (RemovedChessPieces.get(i).getType()) {
+                    case "Pawn":
+                        result += 1;
+                        break;
+                    case "Rook":
+                        result += 5;
+                        break;
+                    case "Knight":
+                        result += 3;
+                        break;
+                    case "Bishop":
+                        result += 3;
+                        break;
+                    case "Queen":
+                        result += 9;
+                        break;
+                }
+            }
+        }
+        return result;
     }
 }

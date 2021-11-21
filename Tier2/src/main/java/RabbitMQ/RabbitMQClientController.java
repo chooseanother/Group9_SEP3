@@ -53,7 +53,8 @@ public class RabbitMQClientController implements RabbitMQClient {
                             ChessPiece movedChessPiece = model.MoveChessPiece(toMove.getVerticalAxis(), toMove.getHorizontalAxis());
                             if (movedChessPiece != null) {
                                 toSend.setData(gson.toJson(movedChessPiece));
-                                toSend.setData2(gson.toJson(model.getRemovedChessPieces()));
+                                toSend.setDataSlot2(gson.toJson(model.getRemovedChessPieces()));
+                                toSend.setDataSlot3(model.getMatchScores(true) + " " + model.getMatchScores(false));
                                 toSend.setAction("Sending A chess Piece");
                             } else {
                                 toSend.setAction("No chess Piece");
@@ -74,7 +75,8 @@ public class RabbitMQClientController implements RabbitMQClient {
                             toLoadChessPieces.setAction("Load ChessBoard");
                             ChessPiece[][] chessBoard = model.getChessBoard();
                             toLoadChessPieces.setData(gson.toJson(chessBoard));
-                            toLoadChessPieces.setData2(gson.toJson(model.getRemovedChessPieces()));
+                            toLoadChessPieces.setDataSlot2(gson.toJson(model.getRemovedChessPieces()));
+                            toLoadChessPieces.setDataSlot3(model.getMatchScores(true) + " " +model.getMatchScores(false));
                             System.out.println(toLoadChessPieces.getObject());
                             response = gson.toJson(toLoadChessPieces);
                             break;
