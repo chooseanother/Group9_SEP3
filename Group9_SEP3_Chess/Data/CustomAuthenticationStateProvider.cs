@@ -21,6 +21,11 @@ namespace Group9_SEP3_Chess.Data
         this.userService = userService;
     }
 
+    public User GetCachedUser()
+    {
+        return cachedUser;
+    }
+
     public override async Task<AuthenticationState> GetAuthenticationStateAsync() {
         var identity = new ClaimsIdentity();
         if (cachedUser == null) {
