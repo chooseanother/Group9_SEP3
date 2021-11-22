@@ -77,4 +77,14 @@ public class PersistenceDB implements Persistence{
     {
         return userDB.validateLogin(username, password);
     }
+
+    @Override
+    public void updateUser(User user) throws SQLException {
+        userDB.updateUser(user);
+    }
+
+    @Override
+    public User getUser(String username) throws SQLException {
+        return userDB.getUser(username);
+    }
 }
