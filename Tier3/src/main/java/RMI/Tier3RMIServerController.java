@@ -147,7 +147,6 @@ public class Tier3RMIServerController
     {
         try{
             User user = persistence.validateLogin(username, password);
-            System.out.println(user + " was validated");
             return user;
         }
         catch(SQLException e){
@@ -155,6 +154,40 @@ public class Tier3RMIServerController
             return null;
         }
     }
+
+    @Override
+
+    public boolean UpdateMatchUserTurn(int matchID, String color) throws RemoteException{
+        try{
+            persistence.UpdateMatchUserTurn(matchID,color);
+            return true;
+        }catch (SQLException e){
+            return false;
+        }
+    }
+    
+    @Override
+    public boolean updateUser(User user) throws RemoteException {
+        try{
+            persistence.updateUser(user);
+            return true;
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public User getUser(String username) throws RemoteException {
+        try{
+            User user = persistence.getUser(username);
+            return user;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     //    @Override
 //    public void createMatch(String challenger, String challenged, int turnTime) throws RemoteException {

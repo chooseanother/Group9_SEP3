@@ -46,6 +46,7 @@ public class PersistenceDB implements Persistence{
         return challengeDB.loadChallenges();
     }
 
+
     @Override
     public ArrayList<Challenge> loadChallenges(String username) throws SQLException {
         return challengeDB.loadChallenges(username);
@@ -62,6 +63,11 @@ public class PersistenceDB implements Persistence{
     }
 
     @Override
+    public void UpdateMatchUserTurn(int matchId, String color) throws SQLException {
+        matchDB.UpdateMatchUserTurn(matchId,color);
+    }
+
+    @Override
     public int createMatchParticipation(String player, String color, int matchId) throws SQLException {
         return matchParticipationDB.createMatchParticipation(player, color, matchId);
     }
@@ -70,5 +76,15 @@ public class PersistenceDB implements Persistence{
         throws SQLException
     {
         return userDB.validateLogin(username, password);
+    }
+
+    @Override
+    public void updateUser(User user) throws SQLException {
+        userDB.updateUser(user);
+    }
+
+    @Override
+    public User getUser(String username) throws SQLException {
+        return userDB.getUser(username);
     }
 }
