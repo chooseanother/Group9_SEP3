@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Group9_SEP3_Chess.Models;
 
@@ -11,5 +13,8 @@ namespace Group9_SEP3_Chess.Data
 
         Task<ChessPiece[,]> LoadChessPieces(Message message,
             CancellationToken cancellationToken = default(CancellationToken));
+
+        IList<ChessPiece> getRemovedChessPieces();
+        String getMatchScores(bool Black);
     }
 }
