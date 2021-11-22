@@ -9,6 +9,7 @@ namespace Group9_SEP3_Chess.Data
     public class UserWebService : IUserService
     {
         private IRabbitMQ _rabbitMq;
+        private User returnedUser;
 
         public UserWebService(IRabbitMQ rabbitMq)
         {
@@ -40,10 +41,30 @@ namespace Group9_SEP3_Chess.Data
             });
             if (response.Action.Equals("LoggedIn"))
             {
-                return JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
+                return  returnedUser = JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
+            }
+            else
+            {
+                throw new Exception($"{response.Action}");
+            }
+        }
+
+        public async Task<User> UpdateUser(User user)
+        {
+            var response = await _rabbitMq.SendRequestAsync(new Message
+            {
+                Action = "UpdateUser",
+                Data = JsonSerializer.Serialize(user)
+            });
+            if (response.Action.Equals("UserUpdated"))
+            {
+                return returnedUser =  JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                }); 
             }
             else
             {

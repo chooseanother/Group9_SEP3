@@ -5,7 +5,6 @@
 @inject IUserService userService;
 @inject AuthenticationStateProvider authenticationStateProvider;
 
-
 <AuthorizeView>
     <NotAuthorized>
         <div class="login">
@@ -20,7 +19,9 @@
         <button id="btn1"class="btn btn-outline-dark" type="submit" @onclick="PerformLogin">Login</button>
     </NotAuthorized>
     <Authorized>
-       <button id="btn2" class="btn btn-outline-dark" type="submit" @onclick="PerformLogout">Logout</button>
+        <select id="selecter" class="form-control-plaintext" @oninput="@((args) => FilterBySelected(args))" style="width: 150px">
+        <option hidden="">@userName</option><option >Account</option><option >Logout</option>
+        </select>
     </Authorized>
 </AuthorizeView>
 
@@ -59,6 +60,27 @@
         catch (Exception e)
         {
             
+        }
+    }
+
+    public async Task EnterAccount()
+    {
+        nvgManager.NavigateTo("/Edit");
+    }
+
+    public async Task FilterBySelected(ChangeEventArgs args)
+    {
+        if (args.Value.ToString().Equals("Account"))
+        {
+            EnterAccount();
+        }
+        else if (args.Value.ToString().Equals("Logout"))
+        {
+            PerformLogout();
+        }
+        else
+        {
+            return;
         }
     }
 }
