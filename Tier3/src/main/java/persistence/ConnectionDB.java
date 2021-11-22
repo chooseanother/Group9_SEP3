@@ -14,7 +14,7 @@ public class ConnectionDB {
     private final static String URL = "jdbc:postgresql://localhost:5432/postgres?currentSchema=";
     private final static String SCHEMA_NAME = "sep3_tier3";
     private final static String USERNAME = "postgres";
-    private final static String PASSWORD = "kubino";
+    private final static String PASSWORD = "postgres"; //kubino
 
 
 

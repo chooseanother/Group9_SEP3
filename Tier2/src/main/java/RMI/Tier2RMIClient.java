@@ -2,6 +2,7 @@ package RMI;
 
 import model.ChessPiece;
 import model.Challenge;
+import model.Move;
 import model.User;
 
 import java.rmi.Naming;
@@ -137,6 +138,11 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public ArrayList<Move> getMoves(int matchID) throws RemoteException {
+        return tier3.getMoves(matchID);
     }
 
     //    @Override

@@ -48,8 +48,8 @@ public class ChessBoard {
         chessPieces[7][7] = new ChessPiece("Rook", white, new Position(7, 7));
 
         for (int i = 0; i < 8; i++) {
-            chessPieces[6][i] = chessPieces[0][7] = new ChessPiece("Pawn", white, new Position(6, i));
-            ;
+//            chessPieces[6][i] = chessPieces[0][7] = new ChessPiece("Pawn", white, new Position(6, i));
+            chessPieces[6][i] = new ChessPiece("Pawn", white, new Position(6, i));
         }
 
     }
@@ -60,7 +60,7 @@ public class ChessBoard {
      * @param firstLayer  Vertical layer
      * @param secondLayer Horizontal layer
      */
-    public ChessPiece MoveAttackChessPiece(int firstLayer, int secondLayer, ITier2RMIClient iTier2RMIClient, int matchID)throws RemoteException {
+    public ChessPiece MoveAttackChessPiece(int firstLayer, int secondLayer, ITier2RMIClient iTier2RMIClient, int matchID) throws RemoteException {
         ChessPiece selected = null;
         String buildString = "";
         for (int i = 0; i < chessPieces.length; i++) {
@@ -71,10 +71,10 @@ public class ChessBoard {
                     selected = chessPieces[i][j].copy();
                     if (selected.getNewPosition() == null) {
                         selected.setOldPosition(new Position(i, j));
-                        selected.setNewPosition(new Position(firstLayer,secondLayer));
+                        selected.setNewPosition(new Position(firstLayer, secondLayer));
                     } else {
                         selected.setOldPosition(chessPieces[i][j].getNewPosition());
-                        selected.setNewPosition(new Position(firstLayer,secondLayer));
+                        selected.setNewPosition(new Position(firstLayer, secondLayer));
                     }
 
                 }
@@ -83,32 +83,41 @@ public class ChessBoard {
         if (chessPieces[firstLayer][secondLayer] != null) {
             chessPieces[firstLayer][secondLayer].setSelected(true);
         }
-       if(selected!=null && selected.getOldPosition().getVerticalAxis() == firstLayer && selected.getOldPosition().getHorizontalAxis() == secondLayer){
+        if (selected != null && selected.getOldPosition().getVerticalAxis() == firstLayer && selected.getOldPosition().getHorizontalAxis() == secondLayer) {
             chessPieces[firstLayer][secondLayer].setSelected(false);
-            selected=null;
+            selected = null;
         }
         if (selected != null) {
             selected.setNewPosition(new Position(firstLayer, secondLayer));
 
-                if (iTier2RMIClient.MovePiece(selected, matchID)) {
-                    chessPieces[firstLayer][secondLayer] = selected.copy();
-                    chessPieces[firstLayer][secondLayer].setNewPosition(new Position(firstLayer, secondLayer));
-                    if (selected.getOldPosition().getVerticalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getVerticalAxis()
-                            || selected.getOldPosition().getHorizontalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getHorizontalAxis()) {
-                        chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()] = null;
-                    }
+            // dont want to persist when recreating match from move history
+            boolean testForNullRMI = false;
+            if (iTier2RMIClient == null) {
+                testForNullRMI = true;
+            } else {
+                testForNullRMI = iTier2RMIClient.MovePiece(selected, matchID);
+            }
+            if (testForNullRMI) {
+                chessPieces[firstLayer][secondLayer] = selected.copy();
+                chessPieces[firstLayer][secondLayer].setNewPosition(new Position(firstLayer, secondLayer));
+                if (selected.getOldPosition().getVerticalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getVerticalAxis()
+                        || selected.getOldPosition().getHorizontalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getHorizontalAxis()) {
+                    chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()] = null;
+                }
 
-                    for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < 8; i++) {
 
-                        for (int j = 0; j < 8; j++) {
+                    for (int j = 0; j < 8; j++) {
 
-                            if (chessPieces[i][j] != null) {
-                                chessPieces[i][j].setSelected(false);
-                            }
+                        if (chessPieces[i][j] != null) {
+                            chessPieces[i][j].setSelected(false);
                         }
                     }
-                    return chessPieces[firstLayer][secondLayer];
                 }
+                return chessPieces[firstLayer][secondLayer];
+            }
+
+
         }
         for (int i = 0; i < chessPieces.length; i++) {
             for (int j = 0; j < chessPieces[i].length; j++) {
@@ -129,19 +138,26 @@ public class ChessBoard {
      *
      * @param UpgradeSelected the type of upgrade
      */
-    public ChessPiece UpgradeChessPiece(String UpgradeSelected,ITier2RMIClient iTier2RMIClient,int matchID)throws RemoteException {
+    public ChessPiece UpgradeChessPiece(String UpgradeSelected, ITier2RMIClient iTier2RMIClient, int matchID) throws RemoteException {
 
-            for (int i = 0; i < chessPieces.length; i++) {
+        for (int i = 0; i < chessPieces.length; i++) {
 
-                for (int j = 0; j < chessPieces[i].length; j++) {
+            for (int j = 0; j < chessPieces[i].length; j++) {
 
-                    if (chessPieces[i][j] != null && chessPieces[i][j].getSelected()) {
-                        ChessPiece selected = chessPieces[i][j].copy();
-                        selected.setType(UpgradeSelected);
-                        selected.setSelected(false);
-                        selected.setOldPosition(new Position(i,j));
-                        selected.setNewPosition(new Position(i,j));
-                        if(iTier2RMIClient.UpgradePiece(selected,matchID)) {
+                if (chessPieces[i][j] != null && chessPieces[i][j].getSelected()) {
+                    ChessPiece selected = chessPieces[i][j].copy();
+                    selected.setType(UpgradeSelected);
+                    selected.setSelected(false);
+                    selected.setOldPosition(new Position(i, j));
+                    selected.setNewPosition(new Position(i, j));
+
+                    // dont want to persist when recreating match from move history
+                    if (iTier2RMIClient != null) {
+                        if (iTier2RMIClient.UpgradePiece(selected, matchID)) {
+                            chessPieces[i][j] = selected.copy();
+                            return chessPieces[i][j];
+                        }
+                    } else {
                         chessPieces[i][j] = selected.copy();
                         return chessPieces[i][j];
                     }

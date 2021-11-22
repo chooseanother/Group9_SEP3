@@ -3,6 +3,7 @@ package RMI;/*
  */
 
 import model.Challenge;
+import model.Move;
 import model.User;
 import persistence.Persistence;
 import persistence.PersistenceDB;
@@ -94,6 +95,16 @@ public class Tier3RMIServerController
         } catch (SQLException e){
             e.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public ArrayList<Move> getMoves(int matchID) throws RemoteException {
+        try {
+            return persistence.getMoves(matchID);
+        }catch (SQLException e){
+            e.printStackTrace();
+            return null;
         }
     }
 

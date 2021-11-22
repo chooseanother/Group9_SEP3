@@ -75,6 +75,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                             Message toLoadChessPieces = new Message();
                             toLoadChessPieces.setAction("Load ChessBoard");
                             ChessPiece[][] chessBoard = model.getChessBoard();
+//                            System.out.println(chessBoard);
                             toLoadChessPieces.setObject(gson.toJson(chessBoard));
                             System.out.println(toLoadChessPieces.getObject());
                             response = gson.toJson(toLoadChessPieces);

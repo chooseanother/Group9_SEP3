@@ -1,6 +1,7 @@
 package persistence;
 
 import model.Challenge;
+import model.Move;
 import model.User;
 
 import java.sql.SQLException;
@@ -59,6 +60,11 @@ public class PersistenceDB implements Persistence{
     @Override
     public int createMatch(int turnTime, String type) throws SQLException {
         return matchDB.createMatch(turnTime, type);
+    }
+
+    @Override
+    public ArrayList<Move> getMoves(int matchID) throws SQLException {
+        return matchDB.getMoves(matchID);
     }
 
     @Override
