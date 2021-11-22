@@ -194,9 +194,10 @@
             Action = "Upgrade",
             Data = UpgradeSelected
         };
-        Console.WriteLine("method called");
         ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
-        chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
+        if(toUpdate!=null){
+            chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
+        }
     }
 
 
