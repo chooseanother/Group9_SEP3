@@ -12,5 +12,7 @@ public interface MatchPersistence {
   
     int createMatch(int turnTime, String type) throws SQLException;
 
+   void UpdateMatchUserTurn(int matchId,String color) throws SQLException;
+
     ArrayList<Move> getMoves(int matchID) throws SQLException;
 }

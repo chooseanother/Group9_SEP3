@@ -7,11 +7,9 @@ public class Message {
     private String username;
     private String password;
     private String email;
-    private int firstLayer;
-    private int secondLayer;
-    private String object;
-    private String upgradeSelected;
     private String data;
+    private String dataSlot2;
+    private String dataSlot3;
 
 
     public Message(){
@@ -19,10 +17,9 @@ public class Message {
         this.password="";
         this.email="";
         this.username="";
-        this.firstLayer = 0;
-        this.secondLayer = 0;
-        this.object = "";
-        this.upgradeSelected = "";
+        this.data = "";
+        this.dataSlot2 = "";
+        this.dataSlot3 = "";
     }
 
     public Message(String action, String username, String password, String email) {
@@ -45,36 +42,8 @@ public class Message {
         return action;
     }
 
-    public String getUpgradeSelected() {
-        return upgradeSelected;
-    }
-
-    public void setUpgradeSelected(String upgradeSelected) {
-        this.upgradeSelected = upgradeSelected;
-    }
-
-    public int getFirstLayer() {
-        return firstLayer;
-    }
-
-    public void setFirstLayer(int firstLayer) {
-        this.firstLayer = firstLayer;
-    }
-
-    public int getSecondLayer() {
-        return secondLayer;
-    }
-
-    public void setSecondLayer(int secondLayer) {
-        this.secondLayer = secondLayer;
-    }
-
     public Object getObject() {
-        return object;
-    }
-
-    public void setObject(String object) {
-        this.object = object;
+        return data;
     }
 
     public void setAction(String action) {
@@ -111,6 +80,22 @@ public class Message {
 
     public String getData() {
         return data;
+    }
+
+    public String getDataSlot2() {
+        return dataSlot2;
+    }
+
+    public void setDataSlot2(String data2) {
+        this.dataSlot2 = data2;
+    }
+
+    public String getDataSlot3() {
+        return dataSlot3;
+    }
+
+    public void setDataSlot3(String dataSlot3) {
+        this.dataSlot3 = dataSlot3;
     }
 
     @Override

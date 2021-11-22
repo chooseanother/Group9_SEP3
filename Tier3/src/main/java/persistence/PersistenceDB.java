@@ -63,6 +63,11 @@ public class PersistenceDB implements Persistence{
     }
 
     @Override
+    public void UpdateMatchUserTurn(int matchId, String color) throws SQLException {
+        matchDB.UpdateMatchUserTurn(matchId,color);
+    }
+
+    @Override
     public ArrayList<Move> getMoves(int matchID) throws SQLException {
         return matchDB.getMoves(matchID);
     }

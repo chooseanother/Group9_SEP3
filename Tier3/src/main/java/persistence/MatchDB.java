@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class MatchDB implements MatchPersistence{
     @Override
@@ -55,6 +58,17 @@ public class MatchDB implements MatchPersistence{
             }
         }
         return moves;
+    }
+
+    @Override
+    public void UpdateMatchUserTurn(int matchId, String color) throws SQLException {
+        try(Connection connection = ConnectionDB.getInstance().getConnection()){
+            PreparedStatement statement = connection.prepareStatement("UPDATE MATCH SET USERSTURN = ?, LATESTMOVE = ? WHERE MATCHID = ?");
+            statement.setString(1,color);
+            statement.setTimestamp(2,java.sql.Timestamp.valueOf(LocalDateTime.now()));
+            statement.setInt(3,matchId);
+            statement.executeUpdate();
+        }
     }
 
     @Override

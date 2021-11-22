@@ -167,6 +167,17 @@ public class Tier3RMIServerController
     }
 
     @Override
+
+    public boolean UpdateMatchUserTurn(int matchID, String color) throws RemoteException{
+        try{
+            persistence.UpdateMatchUserTurn(matchID,color);
+            return true;
+        }catch (SQLException e){
+            return false;
+        }
+    }
+    
+    @Override
     public boolean updateUser(User user) throws RemoteException {
         try{
             persistence.updateUser(user);
@@ -187,6 +198,7 @@ public class Tier3RMIServerController
             return null;
         }
     }
+
 
     //    @Override
 //    public void createMatch(String challenger, String challenged, int turnTime) throws RemoteException {

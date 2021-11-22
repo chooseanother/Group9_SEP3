@@ -29,6 +29,8 @@ public interface ITier2RMIClient extends Remote {
 
     User validateLogin(String username, String password) throws RemoteException;
 
+    boolean UpdateMatchUserTurn(int matchID,String color) throws RemoteException;
+
     boolean updateUser(User user) throws RemoteException;
 
     User getUser(String username) throws RemoteException;
