@@ -20,7 +20,7 @@
     </NotAuthorized>
     <Authorized>
         <select id="selecter" class="form-control-plaintext" @oninput="@((args) => FilterBySelected(args))" style="width: 150px">
-        <option hidden="">@userName</option><option >Account</option><option >Logout</option>
+        <option hidden="">@context.User.Identity.Name</option><option >Account</option><option >Logout</option>
         </select>
     </Authorized>
 </AuthorizeView>
