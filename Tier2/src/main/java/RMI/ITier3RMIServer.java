@@ -13,7 +13,11 @@ import java.util.List;
 
 
 public interface ITier3RMIServer
-        extends Remote {
+	extends Remote
+{
+
+	boolean UpdateMatchUserTurn(int matchID,String color) throws RemoteException;
+
     public boolean registerUser(User user) throws RemoteException;
 
     boolean validateChallenge(Challenge challenge) throws RemoteException;

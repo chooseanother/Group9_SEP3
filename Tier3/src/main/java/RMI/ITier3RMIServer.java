@@ -29,6 +29,8 @@ public interface ITier3RMIServer
     boolean updateUser(User user) throws RemoteException;
 
     User getUser(String username) throws RemoteException;
+    
+    boolean UpdateMatchUserTurn(int matchID,String color) throws RemoteException;
 
 //	void createMatch(String challenger, String challenged, int turnTime) throws RemoteException;
 
