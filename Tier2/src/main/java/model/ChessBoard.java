@@ -16,6 +16,7 @@ public class ChessBoard {
     private ArrayList<ChessPiece> RemovedChessPieces;
     private int BlackScore;
     private int WhiteScore;
+    private String turnColor;
 
     /**
      * Creating a chess board and setting the default chess pieces locations
@@ -25,7 +26,7 @@ public class ChessBoard {
         RemovedChessPieces = new ArrayList<>();
         BlackScore = 0;
         WhiteScore = 0;
-
+        turnColor="White";
         //black
         String black = "Black";
         chessPieces[0][0] = new ChessPiece("Rook", black, new Position(0, 0));
@@ -53,7 +54,7 @@ public class ChessBoard {
         chessPieces[7][7] = new ChessPiece("Rook", white, new Position(7, 7));
 
         for (int i = 0; i < 8; i++) {
-            chessPieces[6][i] = chessPieces[0][7] = new ChessPiece("Pawn", white, new Position(6, i));
+            chessPieces[6][i] = new ChessPiece("Pawn", white, new Position(6, i));
             ;
         }
 
@@ -92,10 +93,9 @@ public class ChessBoard {
             chessPieces[firstLayer][secondLayer].setSelected(false);
             selected=null;
         }
-        if (selected != null) {
+        if (selected != null && selected.getColor().equals(turnColor)) {
             selected.setNewPosition(new Position(firstLayer, secondLayer));
 
-                String turnColor= "";
                 if(selected.getColor().equals("Black")){
                     turnColor = "White";
                 }else{
@@ -124,18 +124,17 @@ public class ChessBoard {
                     }
                     return chessPieces[firstLayer][secondLayer];
                 }
-        }
-        for (int i = 0; i < chessPieces.length; i++) {
-            for (int j = 0; j < chessPieces[i].length; j++) {
-                if (chessPieces[i][j] != null) {
-                    buildString += "'" + chessPieces[i][j].getType() + "'";
-                } else {
-                    buildString += "''";
+        }else if(selected!=null){
+            for (int i = 0; i < 8; i++) {
+
+                for (int j = 0; j < 8; j++) {
+
+                    if (chessPieces[i][j] != null) {
+                        chessPieces[i][j].setSelected(false);
+                    }
                 }
             }
-            buildString += "\n";
         }
-        System.out.println(buildString);
         return null;
     }
 
@@ -172,6 +171,22 @@ public class ChessBoard {
      */
     public ChessPiece[][] getChessBoard() {
         return chessPieces;
+    }
+
+    /**
+     * Returns a color, of the chess piece which should be making the next turn
+     * @return turnColor
+     */
+    public String getTurnColor() {
+        return turnColor;
+    }
+
+    /**
+     * Sets a color, of the chess piece which should be making the next turn, for loading.
+     * @param turnColor
+     */
+    public void setTurnColor(String turnColor) {
+        this.turnColor = turnColor;
     }
 
     /**

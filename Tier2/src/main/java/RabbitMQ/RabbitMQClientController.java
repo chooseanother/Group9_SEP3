@@ -59,7 +59,6 @@ public class RabbitMQClientController implements RabbitMQClient {
                             } else {
                                 toSend.setAction("No chess Piece");
                             }
-                            System.out.println(toSend.getObject());
                             response = gson.toJson(toSend);
                             break;
                         case "Upgrade":
@@ -67,7 +66,6 @@ public class RabbitMQClientController implements RabbitMQClient {
                             toSendUpgrade.setAction("Upgrade Chess Piece");
                             ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getData());
                             toSendUpgrade.setData(gson.toJson(upgradedChessPiece));
-                            System.out.println(toSendUpgrade.getObject());
                             response = gson.toJson(toSendUpgrade);
                             break;
                         case "Load":
@@ -77,7 +75,6 @@ public class RabbitMQClientController implements RabbitMQClient {
                             toLoadChessPieces.setData(gson.toJson(chessBoard));
                             toLoadChessPieces.setDataSlot2(gson.toJson(model.getRemovedChessPieces()));
                             toLoadChessPieces.setDataSlot3(model.getMatchScores(true) + " " +model.getMatchScores(false));
-                            System.out.println(toLoadChessPieces.getObject());
                             response = gson.toJson(toLoadChessPieces);
                             break;
                         case "Register":
