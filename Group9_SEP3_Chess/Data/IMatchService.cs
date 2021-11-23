@@ -13,8 +13,8 @@ namespace Group9_SEP3_Chess.Data
 
         Task<ChessPiece[,]> LoadChessPieces(Message message,
             CancellationToken cancellationToken = default(CancellationToken));
-
-        IList<ChessPiece> getRemovedChessPieces();
+        public IList<ChessPiece> getBlackRemovedChessPieces();
+        public IList<ChessPiece> getWhiteRemovedChessPieces();
         String getMatchScores(bool Black);
     }
 }

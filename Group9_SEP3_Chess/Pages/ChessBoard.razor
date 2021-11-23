@@ -5,6 +5,20 @@
 @inject IMatchService _matchService
 <div class="row">
     <div class="col">
+        <div class="RemovedPiecesTable">
+            <h4>Black Score: @BlackScore</h4>
+            <h4>White removed: </h4>
+            <div class="row">
+                @foreach (ChessPiece chessPiece in WhiteRemovedChessPieces)
+                {
+                    <div class="col-md-2">
+                        <img style="width: 50px; height:50px " src="@chessPiece.GetPiece()">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col">
         <div class="board">
             @for (int i = 0; i < chessPieces.GetLength(0); i++)
             {
@@ -72,7 +86,24 @@
         </div>
     </div>
     <div class="col">
-        <div class="UpgradePart">
+        
+        <div class="RemovedPiecesTable">
+            <h4>White Score: @WhiteScore</h4>
+            <h4>Black removed: </h4>
+            <div class="row">
+                @foreach (ChessPiece chessPiece in BlackRemovedChessPieces)
+                {
+                    <div class="col-md-2">
+                        <img style="width: 50px; height:50px " src="@chessPiece.GetPiece()">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="UpgradePart" style="text-align: center">
             <label>Select upgrade: </label>
             <select @bind="UpgradeSelected">
                 <option>Rook</option>
@@ -83,25 +114,6 @@
 
             <button class="btn btn-outline-dark" @onclick="UpdateChessPiece">Upgrade</button>
         </div>
-        
-        <div class="MatchScores">
-            <h4>White Score: @WhiteScore</h4>
-            <h4>Black Score: @BlackScore</h4>
-        </div>
-        
-         <div class="RemovedPiecesTable">
-             <h4>Removed Chess Pieces: </h4>
-             <div class="row">
-                 @foreach (ChessPiece chessPiece in RemovedChessPieces)
-                 {
-                     <div class="col-md-2">
-                         <img style="width: 50px; height:50px " src="@chessPiece.GetPiece()">
-                     </div>
-                 }
-             </div>
-             </div>
-    </div>
-</div>
 
 <style>
     .board {
@@ -116,16 +128,13 @@
     .RemovedPiecesTable{
        margin-top: 20px;
     }
-    .MatchScores{
-       margin-top: 20px;
-    }
-   
    
 </style>
 
 @code {
     private ChessPiece[,] chessPieces = new ChessPiece[8, 8];
-    private IList<ChessPiece> RemovedChessPieces;
+    private IList<ChessPiece> BlackRemovedChessPieces;
+    private IList<ChessPiece> WhiteRemovedChessPieces;
     String printoutArray = "";
     String UpgradeSelected = "";
     String WhiteScore = "";
@@ -144,7 +153,8 @@
     // 2D array of custom object serialization is not supported, need to consult with somebody
     // fixed - kim
         chessPieces = await _matchService.LoadChessPieces(new Message {Action = "Load"});
-        RemovedChessPieces = _matchService.getRemovedChessPieces();
+        WhiteRemovedChessPieces = _matchService.getWhiteRemovedChessPieces();
+        BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
         BlackScore = _matchService.getMatchScores(true);
         WhiteScore = _matchService.getMatchScores(false);
     }
@@ -163,7 +173,8 @@
         ChessPiece selected = await _matchService.MoveChessPiece(message);
         if (selected != null)
         {
-            RemovedChessPieces = _matchService.getRemovedChessPieces();
+            WhiteRemovedChessPieces = _matchService.getWhiteRemovedChessPieces();
+            BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
             BlackScore = _matchService.getMatchScores(true);
             WhiteScore = _matchService.getMatchScores(false);
             chessPieces[FirstLayer, SecondLayer] = selected;

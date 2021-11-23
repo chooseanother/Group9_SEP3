@@ -69,10 +69,34 @@ namespace Group9_SEP3_Chess.Data
             return null;
         }
 
-        public IList<ChessPiece> getRemovedChessPieces()
+        public IList<ChessPiece> getWhiteRemovedChessPieces()
         {
-            List<ChessPiece> chessPieces = new List<ChessPiece>(removedChessPieces);
-            return chessPieces;
+            List<ChessPiece> whiteChessPieces = new List<ChessPiece>();
+
+            foreach (ChessPiece chessPiece in removedChessPieces)
+            {
+                if (chessPiece.Color.Equals("White"))
+                {
+                    whiteChessPieces.Add(chessPiece);
+                }   
+            }
+
+            return whiteChessPieces;
+        }
+        
+        public IList<ChessPiece> getBlackRemovedChessPieces()
+        {
+            List<ChessPiece> blackChessPieces = new List<ChessPiece>();
+
+            foreach (ChessPiece chessPiece in removedChessPieces)
+            {
+                if (chessPiece.Color.Equals("Black"))
+                {
+                    blackChessPieces.Add(chessPiece);
+                }   
+            }
+
+            return blackChessPieces;
         }
 
         public string getMatchScores(bool Black)
