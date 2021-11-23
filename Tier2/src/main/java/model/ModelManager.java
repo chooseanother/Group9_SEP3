@@ -41,9 +41,6 @@ public class ModelManager implements Model {
     public ChessPiece MoveChessPiece(int firstLayer, int secondLayer) {
         try {
             ChessPiece toMove = chessBoard.MoveAttackChessPiece(firstLayer, secondLayer, iTier2RMIClient, 1);
-            if (toMove == null) {
-                System.out.println("Chess Piece was not moved, as it was not saved");
-            }
             return toMove;
 
         } catch (RemoteException e) {
@@ -56,9 +53,6 @@ public class ModelManager implements Model {
     public ChessPiece UpgradeChessPiece(String upgradeSelected) {
         try {
             ChessPiece toUpgrade = chessBoard.UpgradeChessPiece(upgradeSelected, iTier2RMIClient, 1);
-            if (toUpgrade == null) {
-                System.out.println("Chess piece was not upgraded as it was not saved");
-            }
             return toUpgrade;
         } catch (RemoteException e) {
             e.printStackTrace();
