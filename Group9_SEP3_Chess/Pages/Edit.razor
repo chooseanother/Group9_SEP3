@@ -13,11 +13,11 @@ else
     <EditForm Model="@UserToEdit" OnValidSubmit="@Save">
         <DataAnnotationsValidator/> <ValidationSummary/>
         <div> Username: <br/> @UserToEdit.Username</div>
-        <div class="form-group" > Password:<br/> <InputText class="input" disabled="@isDisabled"@bind-Value="UserToEdit.Password"></InputText></div>
-        <div class="form-group" > Confirm Password:<br/> <InputText class="input" disabled="@isDisabled"@bind-Value="UserToEdit.ConfirmPassword"></InputText></div>
-        <div class="form-group" > Email:<br/> <InputText class="input" disabled="@isDisabled"@bind-Value="UserToEdit.Email"></InputText></div>
-        <div class="form-group"> Confirm Email:<br/> <InputText class="input" disabled="@isDisabled"@bind-Value="UserToEdit.ConfirmEmail"></InputText></div>
-<button class="btn btn-outline-dark" type="button" @onclick="@onDisabled">Edit </button>
+        <div class="form-group" > Password:<br/> <InputText class="input" type="password" disabled="@isDisabled" @bind-Value="UserToEdit.Password" @oninput="ConfirmationSetterPassword"></InputText></div>
+        <InputText class="input" hidden="true" @bind-Value="UserToEdit.ConfirmPassword" ></InputText>
+        <div class="form-group" > Email:<br/> <InputText class="input" disabled="@isDisabled" @bind-Value="UserToEdit.Email" @oninput="ConfirmationSetterEmail" ></InputText></div>
+        <InputText class="input" hidden="true" @bind-Value="UserToEdit.ConfirmEmail"></InputText>
+        <button class="btn btn-outline-dark" type="button" @onclick="@onDisabled">Edit </button>
         <div> Score points: <br/> @UserToEdit.ScorePoints</div>
         <div> Wins: <br/> @UserToEdit.Wins</div>
         <div> Losses: <br/> @UserToEdit.Losses</div>
@@ -39,12 +39,26 @@ else
     protected override async Task OnInitializedAsync()
     {
         UserToEdit = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
+        UserToEdit.ConfirmPassword = UserToEdit.Password;
+        UserToEdit.ConfirmEmail = UserToEdit.Email;
         isDisabled = true;
     }
     
     private async Task Save()
     {
         await userService.UpdateUser(UserToEdit);
+    }
+
+    private void ConfirmationSetterPassword(ChangeEventArgs args)
+    {
+        Console.Write("Confirmation happening here");
+        UserToEdit.ConfirmPassword = args.Value.ToString();
+    }
+    
+    private void ConfirmationSetterEmail(ChangeEventArgs args)
+    {
+        Console.Write("Confirmation happening here");
+        UserToEdit.ConfirmEmail = args.Value.ToString();
     }
 
     private async Task onDisabled()
