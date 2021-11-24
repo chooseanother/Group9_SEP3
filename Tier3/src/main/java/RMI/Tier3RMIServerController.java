@@ -3,6 +3,7 @@ package RMI;/*
  */
 
 import model.Challenge;
+import model.Match;
 import model.Move;
 import model.User;
 import persistence.Persistence;
@@ -129,18 +130,18 @@ public class Tier3RMIServerController
         }
     }
 
-    @Override
-    public boolean acceptChallenge(Challenge challenge) throws RemoteException {
-        try {
-            int matchId = persistence.createMatch(challenge.getTurnTime(), "Friendly");
-            persistence.createMatchParticipation(challenge.getChallenger(),"White",matchId);
-            persistence.createMatchParticipation(challenge.getChallenged(),"Black",matchId);
-            return persistence.deleteChallenge(challenge);
-        } catch (SQLException e){
-            e.printStackTrace();
-            return false;
-        }
-    }
+//    @Override
+//    public boolean acceptChallenge(Challenge challenge) throws RemoteException {
+//        try {
+//            int matchId = persistence.createMatch(challenge.getTurnTime(), "Friendly");
+//            persistence.createMatchParticipation(challenge.getChallenger(),"White",matchId);
+//            persistence.createMatchParticipation(challenge.getChallenged(),"Black",matchId);
+//            return persistence.deleteChallenge(challenge);
+//        } catch (SQLException e){
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
 
     @Override
@@ -176,7 +177,33 @@ public class Tier3RMIServerController
             return false;
         }
     }
-    
+
+    @Override
+    public Match createMatch(int turnTime) throws RemoteException {
+        try {
+            return persistence.createMatch(turnTime, "Friendly");
+        }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public boolean createParticipation(String username, String color, int matchId) throws RemoteException {
+        try{
+            persistence.createMatchParticipation(username,color,matchId);
+            return true;
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean removeChallenge(Challenge challenge) throws RemoteException {
+        return rejectChallenge(challenge);
+    }
+
     @Override
     public boolean updateUser(User user) throws RemoteException {
         try{
@@ -198,11 +225,4 @@ public class Tier3RMIServerController
             return null;
         }
     }
-
-
-    //    @Override
-//    public void createMatch(String challenger, String challenged, int turnTime) throws RemoteException {
-//
-//    }
-
 }

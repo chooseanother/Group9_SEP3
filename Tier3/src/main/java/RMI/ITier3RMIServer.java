@@ -3,6 +3,7 @@ package RMI;/*
  */
 
 import model.Challenge;
+import model.Match;
 import model.Move;
 import model.User;
 
@@ -21,8 +22,6 @@ public interface ITier3RMIServer
 
     ArrayList<Challenge> loadChallenges(String username) throws RemoteException;
 
-    boolean acceptChallenge(Challenge challenge) throws RemoteException;
-
     boolean rejectChallenge(Challenge challenge) throws RemoteException;
 
     User validateLogin(String username, String password) throws RemoteException;
@@ -33,8 +32,11 @@ public interface ITier3RMIServer
     
     boolean UpdateMatchUserTurn(int matchID,String color) throws RemoteException;
 
-//	void createMatch(String challenger, String challenged, int turnTime) throws RemoteException;
+    Match createMatch(int turnTime) throws RemoteException;
 
+    boolean createParticipation(String username, String color, int matchId) throws RemoteException;
+
+    boolean removeChallenge(Challenge challenge) throws RemoteException;
 
     public boolean MovePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
 
