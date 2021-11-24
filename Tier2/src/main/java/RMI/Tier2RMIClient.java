@@ -75,17 +75,6 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         }
     }
 
-    @Override
-    public boolean acceptChallenge(Challenge challenge) throws RemoteException {
-        try {
-            return tier3.acceptChallenge(challenge);
-        } catch (IllegalArgumentException e){
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-
     @Override public boolean UpgradePiece(ChessPiece chessPiece, int matchID){
         try {
             return tier3.UpgradePiece(matchID, chessPiece.getType(), chessPiece.getColor(), chessPiece.getOldPosition().getVerticalAxis()+":"+chessPiece.getOldPosition().getHorizontalAxis()
@@ -125,7 +114,7 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
             return false;
         }
     }
-  
+
     @Override
     public boolean updateUser(User user) throws RemoteException {
         try{
@@ -188,13 +177,37 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         return null;
     }
 
+    @Override
+    public ArrayList<Move> getMoves(int matchID) throws RemoteException {
+        return tier3.getMoves(matchID);
+    }
 
-    //    @Override
-//    public void createMatch(String challenger, String challenged, int turnTime) throws RemoteException {
-//        try {
-//            tier3.createMatch(challenger, challenged, turnTime);
-//        } catch (IllegalArgumentException e){
-//            e.printStackTrace();
-//        }
-//    }
+    @Override
+    public Match createMatch(int turnTime) throws RemoteException {
+        try {
+            return tier3.createMatch(turnTime);
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }return null;
+    }
+
+    @Override
+    public boolean createParticipation(String username, String color, int matchId) throws RemoteException {
+        try{
+            return tier3.createParticipation(username,color,matchId);
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean removeChallenge(Challenge challenge) throws RemoteException {
+        try{
+            return tier3.removeChallenge(challenge);
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

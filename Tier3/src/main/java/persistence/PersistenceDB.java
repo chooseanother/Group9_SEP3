@@ -3,6 +3,8 @@ package persistence;
 import model.Challenge;
 import model.Tournament;
 import model.TournamentParticipation;
+import model.Match;
+import model.Move;
 import model.User;
 
 import java.sql.SQLException;
@@ -42,6 +44,16 @@ public class PersistenceDB implements Persistence{
         matchDB.UpgradePiece(matchId,piece, color,startPosition, endPosition);
     }
 
+    @Override
+    public Match createMatch(int turnTime, String type) throws SQLException {
+        return matchDB.createMatch(turnTime,type);
+    }
+
+    @Override
+    public Match createMatch(int turnTime, String type, int tournamentId) throws SQLException {
+        return matchDB.createMatch(turnTime,toString(),tournamentId);
+    }
+
     public void createChallenge(Challenge challenge) throws SQLException {
         challengeDB.createChallenge(challenge);
     }
@@ -50,7 +62,6 @@ public class PersistenceDB implements Persistence{
     public ArrayList<Challenge> loadChallenges() throws SQLException {
         return challengeDB.loadChallenges();
     }
-
 
     @Override
     public ArrayList<Challenge> loadChallenges(String username) throws SQLException {
@@ -62,10 +73,7 @@ public class PersistenceDB implements Persistence{
         return challengeDB.deleteChallenge(challenge);
     }
 
-    @Override
-    public int createMatch(int turnTime, String type) throws SQLException {
-        return matchDB.createMatch(turnTime, type);
-    }
+
 
     @Override
     public void UpdateMatchUserTurn(int matchId, String color) throws SQLException {
@@ -73,8 +81,13 @@ public class PersistenceDB implements Persistence{
     }
 
     @Override
-    public int createMatchParticipation(String player, String color, int matchId) throws SQLException {
-        return matchParticipationDB.createMatchParticipation(player, color, matchId);
+    public ArrayList<Move> getMoves(int matchID) throws SQLException {
+        return matchDB.getMoves(matchID);
+    }
+
+    @Override
+    public void createMatchParticipation(String player, String color, int matchId) throws SQLException {
+        matchParticipationDB.createMatchParticipation(player, color, matchId);
     }
 
     @Override
