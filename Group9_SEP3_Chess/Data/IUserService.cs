@@ -7,7 +7,7 @@ namespace Group9_SEP3_Chess.Data
     public interface IUserService
     {
         Task<string> RegisterUserAsync(User user);
-        Task<User> ValidateLogin(string userName, string password);
+        Task<User> ValidateLogin(string username, string password);
         Task<User> UpdateUser(User user);
 
     }

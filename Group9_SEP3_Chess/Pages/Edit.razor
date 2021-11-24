@@ -13,9 +13,9 @@ else
     <EditForm Model="@UserToEdit" OnValidSubmit="@Save">
         <DataAnnotationsValidator/> <ValidationSummary/>
         <div> Username: <br/> @UserToEdit.Username</div>
-        <div class="form-group" > Password:<br/> <InputText class="input" type="password" disabled="@isDisabled" @bind-Value="UserToEdit.Password" @oninput="ConfirmationSetterPassword"></InputText></div>
-        <InputText class="input" hidden="true" @bind-Value="UserToEdit.ConfirmPassword" ></InputText>
-        <div class="form-group" > Email:<br/> <InputText class="input" disabled="@isDisabled" @bind-Value="UserToEdit.Email" @oninput="ConfirmationSetterEmail" ></InputText></div>
+        <div class="form-group" > New password:<br/> <InputText class="input" type="password" disabled="@isDisabled" @bind-Value="@newPassword" @oninput="ConfirmationSetterPassword"></InputText></div>
+        <InputText class="input" type="password" hidden="true" disabled="@isDisabled" @bind-Value="UserToEdit.ConfirmPassword" ></InputText>
+        <div class="form-group" > New email:<br/> <InputText class="input" disabled="@isDisabled" @bind-Value="UserToEdit.Email" @oninput="ConfirmationSetterEmail" ></InputText></div>
         <InputText class="input" hidden="true" @bind-Value="UserToEdit.ConfirmEmail"></InputText>
         <button class="btn btn-outline-dark" type="button" @onclick="@onDisabled">Edit </button>
         <div> Score points: <br/> @UserToEdit.ScorePoints</div>
@@ -31,6 +31,8 @@ else
 
 @code {
     private User UserToEdit;
+    
+    private string newPassword;
 
     private bool isDisabled { get; set; }
 
@@ -48,16 +50,15 @@ else
     {
         await userService.UpdateUser(UserToEdit);
     }
-
+    
     private void ConfirmationSetterPassword(ChangeEventArgs args)
     {
-        Console.Write("Confirmation happening here");
+        UserToEdit.Password = args.Value.ToString();
         UserToEdit.ConfirmPassword = args.Value.ToString();
     }
     
     private void ConfirmationSetterEmail(ChangeEventArgs args)
     {
-        Console.Write("Confirmation happening here");
         UserToEdit.ConfirmEmail = args.Value.ToString();
     }
 

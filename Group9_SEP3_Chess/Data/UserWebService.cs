@@ -27,11 +27,11 @@ namespace Group9_SEP3_Chess.Data
             return response.Action;
         }
 
-        public async Task<User> ValidateLogin(string userName, string password)
+        public async Task<User> ValidateLogin(string username, string password)
         {
             User user = new User
             {
-                Username = userName,
+                Username = username,
                 Password = password
             };
             var response = await _rabbitMq.SendRequestAsync(new Message
@@ -58,7 +58,7 @@ namespace Group9_SEP3_Chess.Data
             {
                 Action = "UpdateUser",
                 Data = JsonSerializer.Serialize(user)
-            });
+                });
             if (response.Action.Equals("UserUpdated"))
             {
                 return returnedUser =  JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
