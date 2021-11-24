@@ -1,0 +1,76 @@
+@page "/MatchList"
+@using Group9_SEP3_Chess.Data
+@using Group9_SEP3_Chess.Models
+@using System.Text.Json
+@inject IMatchService matchService;
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager _navigationManager
+
+@if (matches == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else if (!matches.Any())
+{
+    <p>
+        <em>No matches in the system. </em>
+    </p>
+}
+else
+{
+    <table>
+        <thead>
+        <th>Match ID</th>
+        <th>Tournament ID</th>
+        <th>Opponent</th>
+        <th>Length of turn</th>
+        </thead>
+        @foreach (var item in matches)
+        {
+            <tr>
+                <td>@item.MatchID</td>
+                @if (item.TournamentID == 0)
+                {
+                    <td></td>
+                }
+                else
+                {
+                    <td>@item.TournamentID</td>
+                }
+                @if (item.WhitePlayer.Username.Equals(loggedInUser.Username))
+                {
+                    <td>@item.BlackPlayer.Username</td>
+                }
+                else
+                {
+                    <td>@item.WhitePlayer.Username</td>
+                }
+                <td>@item.TurnTime</td>
+                <td>
+                    <button class="btn btn-dark" @onclick='() => PlayMatch()'>Play match</button>
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@code {
+    private IList<Match> matches;
+    private User loggedInUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loggedInUser = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
+        matches = await matchService.GetMatches(loggedInUser.Username);
+        Console.WriteLine(JsonSerializer.Serialize(matches));
+    }
+
+    private void PlayMatch()
+    {
+        _navigationManager.NavigateTo($"play");
+    }
+
+}
+
