@@ -88,7 +88,7 @@
         </div>
     </div>
     <div class="col">
-        
+
         <div class="RemovedPiecesTable">
             <h4>White Score: @WhiteScore</h4>
             <h4>Black removed: </h4>
@@ -106,16 +106,16 @@
 
 
 <div class="UpgradePart" style="text-align: center">
-            <label>Select upgrade: </label>
-            <select @bind="UpgradeSelected">
-                <option>Rook</option>
-                <option>Knight</option>
-                <option>Bishop</option>
-                <option>Queen</option>
-            </select>
+    <label>Select upgrade: </label>
+    <select @bind="UpgradeSelected">
+        <option>Rook</option>
+        <option>Knight</option>
+        <option>Bishop</option>
+        <option>Queen</option>
+    </select>
 
-            <button class="btn btn-outline-dark" @onclick="UpdateChessPiece">Upgrade</button>
-        </div>
+    <button class="btn btn-outline-dark" @onclick="UpgradeChessPiece">Upgrade</button>
+</div>
 
 <style>
     .board {
@@ -141,10 +141,12 @@
     String UpgradeSelected = "";
     String WhiteScore = "";
     String BlackScore = "";
+
     [Parameter]
     public int MatchID { get; set; }
 
     private User loggedIn;
+
     protected override async Task OnInitializedAsync()
     {
     // get match info from tier2, a new match should place pieces in default location in tier 2 not tier 1 like it is now
@@ -158,7 +160,7 @@
     // 2D array of custom object serialization is not supported, need to consult with somebody
     // fixed - kim
         loggedIn = ((CustomAuthenticationStateProvider) _authenticationStateProvider).GetCachedUser();
-        chessPieces = await _matchService.LoadChessPieces(new Message {Action = "Load",Data = JsonSerializer.Serialize(loggedIn), DataSlot2 ="" +  MatchID});
+        chessPieces = await _matchService.LoadChessPieces(new Message {Action = "Load", Data = JsonSerializer.Serialize(loggedIn), DataSlot2 = "" + MatchID});
         WhiteRemovedChessPieces = _matchService.getWhiteRemovedChessPieces();
         BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
         BlackScore = _matchService.getMatchScores(true);
@@ -172,9 +174,11 @@
         {
             for (int j = 0; j < chessPieces.GetLength(1); j++)
             {
-                if (chessPieces[i,j] != null && chessPieces[i,j].Selected && selected == null) {
-                    selected = chessPieces[i,j];
-                    if (selected.NewPosition == null) {
+                if (chessPieces[i, j] != null && chessPieces[i, j].Selected && selected == null)
+                {
+                    selected = chessPieces[i, j];
+                    if (selected.NewPosition == null)
+                    {
                         selected.OldPosition = new Position()
                         {
                             VerticalAxis = i,
@@ -185,21 +189,23 @@
                             VerticalAxis = FirstLayer,
                             HorizontalAxis = SecondLayer
                         };
-                    } else {
-                        selected.OldPosition = chessPieces[i,j].NewPosition;
-                        selected.NewPosition = new  Position()
+                    }
+                    else
+                    {
+                        selected.OldPosition = chessPieces[i, j].NewPosition;
+                        selected.NewPosition = new Position()
                         {
                             VerticalAxis = FirstLayer,
                             HorizontalAxis = SecondLayer
                         };
                     }
-
                 }
             }
         }
-        if (chessPieces[FirstLayer,SecondLayer] != null) {
-            chessPieces[FirstLayer,SecondLayer].Selected=true;
-            Console.WriteLine($"Selected {chessPieces[FirstLayer,SecondLayer].Type} {chessPieces[FirstLayer,SecondLayer].Color}");
+        if (chessPieces[FirstLayer, SecondLayer] != null)
+        {
+            chessPieces[FirstLayer, SecondLayer].Selected = true;
+            Console.WriteLine($"Selected {chessPieces[FirstLayer, SecondLayer].Type} {chessPieces[FirstLayer, SecondLayer].Color}");
         }
         if (selected != null && selected.OldPosition.VerticalAxis == FirstLayer && selected.OldPosition.HorizontalAxis == SecondLayer)
         {
@@ -207,14 +213,15 @@
             Console.WriteLine($"Deselected{selected.Type} {selected.Color}");
             selected = null;
         }
-        if(selected!=null){
+        if (selected != null)
+        {
             Message message = new Message()
             {
                 Data = JsonSerializer.Serialize(selected),
                 Action = "Move"
             };
             ChessPiece moved = await _matchService.MoveChessPiece(message);
-            //Console.WriteLine($"moved to{FirstLayer} {SecondLayer}");
+    //Console.WriteLine($"moved to{FirstLayer} {SecondLayer}");
             if (moved != null)
             {
                 Console.WriteLine($"Chess piece moved: {moved.Color} {moved.Type} {moved.OldPosition} {moved.NewPosition}");
@@ -258,125 +265,151 @@
     }
 
 
-    private async Task UpdateChessPiece()
+    private async Task UpgradeChessPiece()
     {
-        Message message = new Message()
+        ChessPiece selected = null;
+        for (int i = 0; i < chessPieces.GetLength(0); i++)
         {
-            Action = "Upgrade",
-            Data = UpgradeSelected
-        };
-        ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
-        if(toUpdate!=null){
-            chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
-        }
-    }
-
-
-    private async Task<ChessPiece[,]> InitializeNewGamePieces()
-    {
-        ChessPiece[,] piecesLocation = new ChessPiece[8, 8];
-
-        string black = "Black";
-        piecesLocation[0, 0] = new ChessPiece()
-        {
-            Type = "rook",
-            Color = black
-        };
-        piecesLocation[0, 1] = new ChessPiece()
-        {
-            Type = "Knight",
-            Color = black
-        };
-        piecesLocation[0, 2] = new ChessPiece()
-        {
-            Type = "bishop",
-            Color = black
-        };
-        piecesLocation[0, 3] = new ChessPiece()
-        {
-            Type = "queen",
-            Color = black
-        };
-        piecesLocation[0, 4] = new ChessPiece()
-        {
-            Type = "king",
-            Color = black
-        };
-        piecesLocation[0, 5] = new ChessPiece()
-        {
-            Type = "bishop",
-            Color = black
-        };
-        piecesLocation[0, 6] = new ChessPiece()
-        {
-            Type = "Knight",
-            Color = black
-        };
-        piecesLocation[0, 7] = new ChessPiece()
-        {
-            Type = "rook",
-            Color = black
-        };
-
-        for (int i = 0; i < piecesLocation.GetLength(1); i++)
-        {
-            piecesLocation[1, i] = new ChessPiece()
+            for (int j = 0; j < chessPieces.GetLength(1); j++)
             {
-                Type = "pawn",
+                if (chessPieces[i, j] != null && chessPieces[i, j].Selected)
+                {
+                    selected = chessPieces[i, j];
+                    selected.Selected = false;
+                    selected.OldPosition = new Position()
+                    {
+                        VerticalAxis = i,
+                        HorizontalAxis = j
+                    };
+                    selected.NewPosition = new Position()
+                    {
+                        VerticalAxis = i,
+                        HorizontalAxis = j
+                    };
+                }
+            }
+            }
+
+            Message message = new Message()
+            {
+                Action = "Upgrade",
+                Data = UpgradeSelected,
+                DataSlot2 = JsonSerializer.Serialize(selected)
+            };
+            ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
+            if (toUpdate != null)
+            {
+                chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
+            }
+        }
+    
+
+
+   private  async Task<ChessPiece[,]> InitializeNewGamePieces()
+        {
+            ChessPiece[,] piecesLocation = new ChessPiece[8, 8];
+
+            string black = "Black";
+            piecesLocation[0, 0] = new ChessPiece()
+            {
+                Type = "rook",
                 Color = black
             };
-        }
-        string white = "White";
-        piecesLocation[7, 0] = new ChessPiece()
-        {
-            Type = "rook",
-            Color = white
-        };
-        piecesLocation[7, 1] = new ChessPiece()
-        {
-            Type = "Knight",
-            Color = white
-        };
-        piecesLocation[7, 2] = new ChessPiece()
-        {
-            Type = "bishop",
-            Color = white
-        };
-        piecesLocation[7, 3] = new ChessPiece()
-        {
-            Type = "queen",
-            Color = white
-        };
-        piecesLocation[7, 4] = new ChessPiece()
-        {
-            Type = "king",
-            Color = white
-        };
-        piecesLocation[7, 5] = new ChessPiece()
-        {
-            Type = "bishop",
-            Color = white
-        };
-        piecesLocation[7, 6] = new ChessPiece()
-        {
-            Type = "Knight",
-            Color = white
-        };
-        piecesLocation[7, 7] = new ChessPiece()
-        {
-            Type = "rook",
-            Color = white
-        };
-        for (int i = 0; i < piecesLocation.GetLength(1); i++)
-        {
-            piecesLocation[6, i] = new ChessPiece()
+            piecesLocation[0, 1] = new ChessPiece()
             {
-                Type = "pawn",
+                Type = "Knight",
+                Color = black
+            };
+            piecesLocation[0, 2] = new ChessPiece()
+            {
+                Type = "bishop",
+                Color = black
+            };
+            piecesLocation[0, 3] = new ChessPiece()
+            {
+                Type = "queen",
+                Color = black
+            };
+            piecesLocation[0, 4] = new ChessPiece()
+            {
+                Type = "king",
+                Color = black
+            };
+            piecesLocation[0, 5] = new ChessPiece()
+            {
+                Type = "bishop",
+                Color = black
+            };
+            piecesLocation[0, 6] = new ChessPiece()
+            {
+                Type = "Knight",
+                Color = black
+            };
+            piecesLocation[0, 7] = new ChessPiece()
+            {
+                Type = "rook",
+                Color = black
+            };
+
+            for (int i = 0; i < piecesLocation.GetLength(1); i++)
+            {
+                piecesLocation[1, i] = new ChessPiece()
+                {
+                    Type = "pawn",
+                    Color = black
+                };
+            }
+            string white = "White";
+            piecesLocation[7, 0] = new ChessPiece()
+            {
+                Type = "rook",
                 Color = white
             };
-        }
+            piecesLocation[7, 1] = new ChessPiece()
+            {
+                Type = "Knight",
+                Color = white
+            };
+            piecesLocation[7, 2] = new ChessPiece()
+            {
+                Type = "bishop",
+                Color = white
+            };
+            piecesLocation[7, 3] = new ChessPiece()
+            {
+                Type = "queen",
+                Color = white
+            };
+            piecesLocation[7, 4] = new ChessPiece()
+            {
+                Type = "king",
+                Color = white
+            };
+            piecesLocation[7, 5] = new ChessPiece()
+            {
+                Type = "bishop",
+                Color = white
+            };
+            piecesLocation[7, 6] = new ChessPiece()
+            {
+                Type = "Knight",
+                Color = white
+            };
+            piecesLocation[7, 7] = new ChessPiece()
+            {
+                Type = "rook",
+                Color = white
+            };
+            for (int i = 0; i < piecesLocation.GetLength(1); i++)
+            {
+                piecesLocation[6, i] = new ChessPiece()
+                {
+                    Type = "pawn",
+                    Color = white
+                };
+            }
 
-        return piecesLocation;
+            return piecesLocation;
+        }
     }
 
-}
