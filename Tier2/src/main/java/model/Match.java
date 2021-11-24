@@ -9,35 +9,34 @@ public class Match {
     private String type;
     private String outcome;
     private String finished;
-    private String UsersTurn;
+    private String usersTurn;
     private Date latestMove;
-    private String whitePlayer;
-    private String blackPlayer;
+    private Participant whitePlayer;
+    private Participant blackPlayer;
     private ChessBoard chessBoard;
 
-    public Match(int matchID, int tournamentID, int turnTime, String type, String outcome, String finished, String usersTurn, Date latestMove, String whitePlayer, String blackPlayer) {
+    public Match(int matchID, int tournamentID, int turnTime, String type, String outcome, String finished, String usersTurn, Date latestMove, Participant whitePlayer, Participant blackPlayer) {
         this.matchID = matchID;
         this.tournamentID = tournamentID;
         this.turnTime = turnTime;
         this.type = type;
         this.outcome = outcome;
         this.finished = finished;
-        UsersTurn = usersTurn;
+        this.usersTurn = usersTurn;
         this.latestMove = latestMove;
         this.whitePlayer = whitePlayer;
         this.blackPlayer = blackPlayer;
     }
 
-    public Match(int matchID, int turnTime, String type, String outcome, String finished, String usersTurn, Date latestMove, String whitePlayer, String blackPlayer) {
+    public Match(int matchID, int tournamentID, int turnTime, String type, String outcome, String finished, String usersTurn, Date latestMove) {
         this.matchID = matchID;
+        this.tournamentID = tournamentID;
         this.turnTime = turnTime;
         this.type = type;
         this.outcome = outcome;
         this.finished = finished;
-        UsersTurn = usersTurn;
+        this.usersTurn = usersTurn;
         this.latestMove = latestMove;
-        this.whitePlayer = whitePlayer;
-        this.blackPlayer = blackPlayer;
     }
 
     public int getMatchID() {
@@ -89,11 +88,11 @@ public class Match {
     }
 
     public String getUsersTurn() {
-        return UsersTurn;
+        return usersTurn;
     }
 
     public void setUsersTurn(String usersTurn) {
-        UsersTurn = usersTurn;
+        this.usersTurn = usersTurn;
     }
 
     public Date getLatestMove() {
@@ -104,19 +103,27 @@ public class Match {
         this.latestMove = latestMove;
     }
 
-    public String getWhitePlayer() {
+    public Participant getWhitePlayer() {
         return whitePlayer;
     }
 
-    public void setWhitePlayer(String whitePlayer) {
+    public void setWhitePlayer(Participant whitePlayer) {
         this.whitePlayer = whitePlayer;
     }
 
-    public String getBlackPlayer() {
+    public Participant getBlackPlayer() {
         return blackPlayer;
     }
 
-    public void setBlackPlayer(String blackPlayer) {
+    public void setBlackPlayer(Participant blackPlayer) {
         this.blackPlayer = blackPlayer;
+    }
+
+    public ChessBoard getChessBoard() {
+        return chessBoard;
+    }
+
+    public void setChessBoard(ChessBoard chessBoard) {
+        this.chessBoard = chessBoard;
     }
 }
