@@ -33,6 +33,7 @@ namespace Group9_SEP3_Chess
             services.AddScoped<IUserService, UserWebService>();
             services.AddScoped<IMatchService, MatchService>();
             services.AddScoped<IPlayMatch, PlayMatchWebService>();
+            services.AddScoped<ITournament, TournamentService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
         }
 
