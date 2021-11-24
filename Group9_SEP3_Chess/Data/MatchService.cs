@@ -58,8 +58,7 @@ namespace Group9_SEP3_Chess.Data
             { 
                 removedChessPieces = JsonSerializer.Deserialize<List<ChessPiece>>(response.DataSlot2);
                 MatchScores = response.DataSlot3;
-                Console.WriteLine(response.Data);
-               ChessPiece[,] chessPieces = JsonSerializer.Deserialize<ChessPiece[,]>(response.Data, new JsonSerializerOptions
+                ChessPiece[,] chessPieces = JsonSerializer.Deserialize<ChessPiece[,]>(response.Data, new JsonSerializerOptions
                {
                    Converters = { new Array2DConverter() },
                });

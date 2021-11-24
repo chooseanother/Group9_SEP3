@@ -1,8 +1,10 @@
-﻿@using Group9_SEP3_Chess.Models
+﻿@page "/ChessBoard/{id:int}"
+@using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
 @using System.Text.Json
 @using Group9_SEP3_Chess.Json2DArrayHelp
 @inject IMatchService _matchService
+@inject AuthenticationStateProvider _authenticationStateProvider
 <div class="row">
     <div class="col">
         <div class="RemovedPiecesTable">
@@ -139,7 +141,10 @@
     String UpgradeSelected = "";
     String WhiteScore = "";
     String BlackScore = "";
+    [Parameter]
+    public int MatchID { get; set; }
 
+    private User loggedIn;
     protected override async Task OnInitializedAsync()
     {
     // get match info from tier2, a new match should place pieces in default location in tier 2 not tier 1 like it is now
@@ -152,7 +157,8 @@
 
     // 2D array of custom object serialization is not supported, need to consult with somebody
     // fixed - kim
-        chessPieces = await _matchService.LoadChessPieces(new Message {Action = "Load"});
+        loggedIn = ((CustomAuthenticationStateProvider) _authenticationStateProvider).GetCachedUser();
+        chessPieces = await _matchService.LoadChessPieces(new Message {Action = "Load",Data = JsonSerializer.Serialize(loggedIn), DataSlot2 ="" +  MatchID});
         WhiteRemovedChessPieces = _matchService.getWhiteRemovedChessPieces();
         BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
         BlackScore = _matchService.getMatchScores(true);
@@ -161,36 +167,90 @@
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
     {
-        Message message = new Message()
+        ChessPiece selected = null;
+        for (int i = 0; i < chessPieces.GetLength(0); i++)
         {
-            Data = JsonSerializer.Serialize(new Position()
+            for (int j = 0; j < chessPieces.GetLength(1); j++)
             {
-                HorizontalAxis = SecondLayer,
-                VerticalAxis = FirstLayer
-            }),
-            Action = "Move"
-        };
-        ChessPiece selected = await _matchService.MoveChessPiece(message);
-        if (selected != null)
-        {
-            WhiteRemovedChessPieces = _matchService.getWhiteRemovedChessPieces();
-            BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
-            BlackScore = _matchService.getMatchScores(true);
-            WhiteScore = _matchService.getMatchScores(false);
-            chessPieces[FirstLayer, SecondLayer] = selected;
-            Console.WriteLine($"Coordinates old: {selected.OldPosition.ToString()} Coordinates new: {chessPieces[FirstLayer, SecondLayer].NewPosition.ToString()}");
-            if (chessPieces[FirstLayer, SecondLayer].OldPosition.VerticalAxis != chessPieces[FirstLayer, SecondLayer].NewPosition.VerticalAxis
-                || chessPieces[FirstLayer, SecondLayer].OldPosition.HorizontalAxis != chessPieces[FirstLayer, SecondLayer].NewPosition.HorizontalAxis)
-            {
-                chessPieces[selected.OldPosition.VerticalAxis, selected.OldPosition.HorizontalAxis] = null;
+                if (chessPieces[i,j] != null && chessPieces[i,j].Selected && selected == null) {
+                    selected = chessPieces[i,j];
+                    if (selected.NewPosition == null) {
+                        selected.OldPosition = new Position()
+                        {
+                            VerticalAxis = i,
+                            HorizontalAxis = j
+                        };
+                        selected.NewPosition = new Position()
+                        {
+                            VerticalAxis = FirstLayer,
+                            HorizontalAxis = SecondLayer
+                        };
+                    } else {
+                        selected.OldPosition = chessPieces[i,j].NewPosition;
+                        selected.NewPosition = new  Position()
+                        {
+                            VerticalAxis = FirstLayer,
+                            HorizontalAxis = SecondLayer
+                        };
+                    }
+
+                }
             }
-            for (int i = 0; i < chessPieces.GetLength(0); i++)
+        }
+        if (chessPieces[FirstLayer,SecondLayer] != null) {
+            chessPieces[FirstLayer,SecondLayer].Selected=true;
+            Console.WriteLine($"Selected {chessPieces[FirstLayer,SecondLayer].Type} {chessPieces[FirstLayer,SecondLayer].Color}");
+        }
+        if (selected != null && selected.OldPosition.VerticalAxis == FirstLayer && selected.OldPosition.HorizontalAxis == SecondLayer)
+        {
+            chessPieces[FirstLayer, SecondLayer].Selected = false;
+            Console.WriteLine($"Deselected{selected.Type} {selected.Color}");
+            selected = null;
+        }
+        if(selected!=null){
+            Message message = new Message()
             {
-                for (int j = 0; j < chessPieces.GetLength(1); j++)
+                Data = JsonSerializer.Serialize(selected),
+                Action = "Move"
+            };
+            ChessPiece moved = await _matchService.MoveChessPiece(message);
+            //Console.WriteLine($"moved to{FirstLayer} {SecondLayer}");
+            if (moved != null)
+            {
+                Console.WriteLine($"Chess piece moved: {moved.Color} {moved.Type} {moved.OldPosition} {moved.NewPosition}");
+                WhiteRemovedChessPieces = _matchService.getWhiteRemovedChessPieces();
+                BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
+                BlackScore = _matchService.getMatchScores(true);
+                WhiteScore = _matchService.getMatchScores(false);
+                chessPieces[FirstLayer, SecondLayer] = moved;
+                if (chessPieces[FirstLayer, SecondLayer].OldPosition.VerticalAxis != chessPieces[FirstLayer, SecondLayer].NewPosition.VerticalAxis
+                    || chessPieces[FirstLayer, SecondLayer].OldPosition.HorizontalAxis != chessPieces[FirstLayer, SecondLayer].NewPosition.HorizontalAxis)
                 {
-                    if (chessPieces[i, j] != null)
+                    chessPieces[moved.OldPosition.VerticalAxis, moved.OldPosition.HorizontalAxis] = null;
+                }
+                for (int i = 0; i < chessPieces.GetLength(0); i++)
+                {
+                    for (int j = 0; j < chessPieces.GetLength(1); j++)
                     {
-                        chessPieces[i, j].Selected = false;
+                        if (chessPieces[i, j] != null)
+                        {
+                            chessPieces[i, j].Selected = false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                chessPieces[selected.OldPosition.VerticalAxis, selected.OldPosition.HorizontalAxis].NewPosition = selected.OldPosition;
+                Console.WriteLine("Deselecting all pieces");
+                for (int i = 0; i < chessPieces.GetLength(0); i++)
+                {
+                    for (int j = 0; j < chessPieces.GetLength(1); j++)
+                    {
+                        if (chessPieces[i, j] != null)
+                        {
+                            chessPieces[i, j].Selected = false;
+                        }
                     }
                 }
             }
