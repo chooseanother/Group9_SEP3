@@ -77,7 +77,6 @@ public class RabbitMQClientController implements RabbitMQClient {
                             toLoadChessPieces.setData(gson.toJson(chessBoard));
                             toLoadChessPieces.setDataSlot2(gson.toJson(model.getRemovedChessPieces()));
                             toLoadChessPieces.setDataSlot3(model.getMatchScores(true) + " " +model.getMatchScores(false));
-//                            System.out.println(toLoadChessPieces.getObject());
                             response = gson.toJson(toLoadChessPieces);
                             break;
                         case "Register":

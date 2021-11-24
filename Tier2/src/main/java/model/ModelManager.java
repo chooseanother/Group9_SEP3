@@ -13,8 +13,7 @@ import java.util.ArrayList;
 public class ModelManager implements Model {
     private ITier2RMIClient iTier2RMIClient;
     private RabbitMQClient rabbitMQClient;
-//    private ChessBoard chessBoard; //Should be match
-
+    private ChessBoard chessBoard; //Should be match
 
     public ModelManager() throws RemoteException {
         iTier2RMIClient = new Tier2RMIClient();

@@ -42,10 +42,6 @@ public class Message {
         return action;
     }
 
-    public Object getObject() {
-        return data;
-    }
-
     public void setAction(String action) {
         this.action = action;
     }
