@@ -176,11 +176,11 @@ public class ModelManager implements Model {
     @Override
     public boolean acceptChallenge(Challenge challenge) {
         try {
-//            return iTier2RMIClient.acceptChallenge(challenge);
-            if (iTier2RMIClient.acceptChallenge(challenge)) {
-//                iTier2RMIClient.createMatch(challenge.getChallenger(), challenge.getChallenged(), challenge.getTurnTime());
-                return true;
-            }
+            Match match = iTier2RMIClient.createMatch(challenge.getTurnTime());
+            iTier2RMIClient.createParticipation(challenge.getChallenger(),"White",match.getMatchID());
+            iTier2RMIClient.createParticipation(challenge.getChallenged(),"Black",match.getMatchID());
+            iTier2RMIClient.removeChallenge(challenge);
+            return true;
         } catch (RemoteException e) {
             e.printStackTrace();
         }

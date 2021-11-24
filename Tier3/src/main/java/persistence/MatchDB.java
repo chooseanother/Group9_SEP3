@@ -1,5 +1,6 @@
 package persistence;
 
+import model.Match;
 import model.Move;
 import model.User;
 
@@ -14,25 +15,37 @@ import java.util.Date;
 
 public class MatchDB implements MatchPersistence{
     @Override
-    public int createMatch(int turnTime, String type) throws SQLException {
+    public Match createMatch(int turnTime, String type) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO MATCH (TURNTIME,TYPE) VALUES(?, ?)",PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setInt(1, turnTime);
             statement.setString(2, type);
             statement.executeUpdate();
             ResultSet keys = statement.getGeneratedKeys();
-            int matchId;
+
             if (keys.next()){
-                matchId = keys.getInt(1);
-                return matchId;
-                // return new Match(Id, and all the other stuff)
+               return new Match(keys.getInt(1),0,turnTime,type,false,"White",null);
             } else {
                 throw new SQLException("No keys generated");
             }
-
-
         }
+    }
 
+    @Override
+    public Match createMatch(int turnTime, String type, int tournamentId) throws SQLException {
+        try (Connection connection = ConnectionDB.getInstance().getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO MATCH (TURNTIME,TYPE,TOURNAMENTID) VALUES(?, ?, ?)",PreparedStatement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, turnTime);
+            statement.setString(2, type);
+            statement.setInt(3,tournamentId);
+            statement.executeUpdate();
+            ResultSet keys = statement.getGeneratedKeys();
+            if (keys.next()){
+                return new Match(keys.getInt(1),tournamentId,turnTime,type,false,"White",null);
+            } else {
+                throw new SQLException("No keys generated");
+            }
+        }
     }
 
     @Override
