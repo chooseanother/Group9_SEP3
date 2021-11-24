@@ -26,7 +26,7 @@ public class ChessBoard {
         RemovedChessPieces = new ArrayList<>();
         BlackScore = 0;
         WhiteScore = 0;
-        turnColor="White";
+        turnColor = "White";
         //black
         String black = "Black";
         chessPieces[0][0] = new ChessPiece("Rook", black, new Position(0, 0));
@@ -66,7 +66,7 @@ public class ChessBoard {
      * @param firstLayer  Vertical layer
      * @param secondLayer Horizontal layer
      */
-    public ChessPiece MoveAttackChessPiece(int firstLayer, int secondLayer, ITier2RMIClient iTier2RMIClient, int matchID)throws RemoteException {
+    public ChessPiece MoveAttackChessPiece(int firstLayer, int secondLayer, ITier2RMIClient iTier2RMIClient, int matchID) throws RemoteException {
         ChessPiece selected = null;
         String buildString = "";
         for (int i = 0; i < chessPieces.length; i++) {
@@ -77,10 +77,10 @@ public class ChessBoard {
                     selected = chessPieces[i][j].copy();
                     if (selected.getNewPosition() == null) {
                         selected.setOldPosition(new Position(i, j));
-                        selected.setNewPosition(new Position(firstLayer,secondLayer));
+                        selected.setNewPosition(new Position(firstLayer, secondLayer));
                     } else {
                         selected.setOldPosition(chessPieces[i][j].getNewPosition());
-                        selected.setNewPosition(new Position(firstLayer,secondLayer));
+                        selected.setNewPosition(new Position(firstLayer, secondLayer));
                     }
 
                 }
@@ -89,42 +89,49 @@ public class ChessBoard {
         if (chessPieces[firstLayer][secondLayer] != null) {
             chessPieces[firstLayer][secondLayer].setSelected(true);
         }
-       if(selected!=null && selected.getOldPosition().getVerticalAxis() == firstLayer && selected.getOldPosition().getHorizontalAxis() == secondLayer){
+        if (selected != null && selected.getOldPosition().getVerticalAxis() == firstLayer && selected.getOldPosition().getHorizontalAxis() == secondLayer) {
             chessPieces[firstLayer][secondLayer].setSelected(false);
-            selected=null;
+            selected = null;
         }
         if (selected != null && selected.getColor().equals(turnColor)) {
             selected.setNewPosition(new Position(firstLayer, secondLayer));
 
-                if(selected.getColor().equals("Black")){
-                    turnColor = "White";
-                }else{
-                    turnColor="Black";
+            if (selected.getColor().equals("Black")) {
+                turnColor = "White";
+            } else {
+                turnColor = "Black";
+            }
+
+            boolean testForNullRMI = false;
+            if (iTier2RMIClient == null) {
+                testForNullRMI = true;
+            } else {
+                testForNullRMI = iTier2RMIClient.MovePiece(selected, matchID) && iTier2RMIClient.UpdateMatchUserTurn(matchID, turnColor);
+            }
+            if (testForNullRMI) {
+
+                if (chessPieces[firstLayer][secondLayer] != null) {
+                    RemovedChessPieces.add(chessPieces[firstLayer][secondLayer]);
                 }
-                if (iTier2RMIClient.MovePiece(selected, matchID) && iTier2RMIClient.UpdateMatchUserTurn(matchID,turnColor)) {
+                chessPieces[firstLayer][secondLayer] = selected.copy();
+                chessPieces[firstLayer][secondLayer].setNewPosition(new Position(firstLayer, secondLayer));
+                if (selected.getOldPosition().getVerticalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getVerticalAxis()
+                        || selected.getOldPosition().getHorizontalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getHorizontalAxis()) {
+                    chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()] = null;
+                }
 
-                    if(chessPieces[firstLayer][secondLayer] != null){
-                        RemovedChessPieces.add(chessPieces[firstLayer][secondLayer]);
-                    }
-                    chessPieces[firstLayer][secondLayer] = selected.copy();
-                    chessPieces[firstLayer][secondLayer].setNewPosition(new Position(firstLayer, secondLayer));
-                    if (selected.getOldPosition().getVerticalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getVerticalAxis()
-                            || selected.getOldPosition().getHorizontalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getHorizontalAxis()) {
-                        chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()] = null;
-                    }
+                for (int i = 0; i < 8; i++) {
 
-                    for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j++) {
 
-                        for (int j = 0; j < 8; j++) {
-
-                            if (chessPieces[i][j] != null) {
-                                chessPieces[i][j].setSelected(false);
-                            }
+                        if (chessPieces[i][j] != null) {
+                            chessPieces[i][j].setSelected(false);
                         }
                     }
-                    return chessPieces[firstLayer][secondLayer];
                 }
-        }else if(selected!=null){
+                return chessPieces[firstLayer][secondLayer];
+            }
+        } else if (selected != null) {
             for (int i = 0; i < 8; i++) {
 
                 for (int j = 0; j < 8; j++) {
@@ -143,21 +150,27 @@ public class ChessBoard {
      *
      * @param UpgradeSelected the type of upgrade
      */
-    public ChessPiece UpgradeChessPiece(String UpgradeSelected,ITier2RMIClient iTier2RMIClient,int matchID)throws RemoteException {
+    public ChessPiece UpgradeChessPiece(String UpgradeSelected, ITier2RMIClient iTier2RMIClient, int matchID) throws RemoteException {
 
-            for (int i = 0; i < chessPieces.length; i++) {
+        for (int i = 0; i < chessPieces.length; i++) {
 
-                for (int j = 0; j < chessPieces[i].length; j++) {
+            for (int j = 0; j < chessPieces[i].length; j++) {
 
-                    if (chessPieces[i][j] != null && chessPieces[i][j].getSelected()) {
-                        ChessPiece selected = chessPieces[i][j].copy();
-                        selected.setType(UpgradeSelected);
-                        selected.setSelected(false);
-                        selected.setOldPosition(new Position(i,j));
-                        selected.setNewPosition(new Position(i,j));
-                        if(iTier2RMIClient.UpgradePiece(selected,matchID)) {
+                if (chessPieces[i][j] != null && chessPieces[i][j].getSelected()) {
+                    ChessPiece selected = chessPieces[i][j].copy();
+                    selected.setType(UpgradeSelected);
+                    selected.setSelected(false);
+                    selected.setOldPosition(new Position(i, j));
+                    selected.setNewPosition(new Position(i, j));
+                    if (iTier2RMIClient == null){
                         chessPieces[i][j] = selected.copy();
                         return chessPieces[i][j];
+                    }
+                    else {
+                        if (iTier2RMIClient.UpgradePiece(selected, matchID)) {
+                            chessPieces[i][j] = selected.copy();
+                            return chessPieces[i][j];
+                        }
                     }
                 }
             }
@@ -167,6 +180,7 @@ public class ChessBoard {
 
     /**
      * Returns a ChessBoard
+     *
      * @return ChessBoard
      */
     public ChessPiece[][] getChessBoard() {
@@ -175,6 +189,7 @@ public class ChessBoard {
 
     /**
      * Returns a color, of the chess piece which should be making the next turn
+     *
      * @return turnColor
      */
     public String getTurnColor() {
@@ -183,6 +198,7 @@ public class ChessBoard {
 
     /**
      * Sets a color, of the chess piece which should be making the next turn, for loading.
+     *
      * @param turnColor
      */
     public void setTurnColor(String turnColor) {
@@ -191,72 +207,30 @@ public class ChessBoard {
 
     /**
      * Returns the list of removed chess pieces
+     *
      * @return list of removed chess pieces
      */
-    public ArrayList<ChessPiece> getRemovedChessPieces(){
+    public ArrayList<ChessPiece> getRemovedChessPieces() {
         return RemovedChessPieces;
     }
 
     /**
      * Calculates and returns the score for white
+     *
      * @return returns the score for white
      */
-    public int GetWhiteScore(){
+    public int GetScore(String color) {
         int result = 0;
 
-        for (int i = 0; i<RemovedChessPieces.size(); i++){
+        for (ChessPiece removedChessPiece : RemovedChessPieces) {
 
-            if (RemovedChessPieces.get(i).getColor().equals("Black")){
+            if (removedChessPiece.getColor().equals(color)) {
 
-                switch (RemovedChessPieces.get(i).getType()) {
-                    case "Pawn":
-                        result += 1;
-                        break;
-                    case "Rook":
-                        result += 5;
-                        break;
-                    case "Knight":
-                        result += 3;
-                        break;
-                    case "Bishop":
-                        result += 3;
-                        break;
-                    case "Queen":
-                        result += 9;
-                        break;
-                }
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Calculates and returns the score for Black
-     * @return returns the score for Black
-     */
-    public int GetBlackScore() {
-        int result = 0;
-
-        for (int i = 0; i < RemovedChessPieces.size(); i++) {
-
-            if (RemovedChessPieces.get(i).getColor().equals("White")) {
-
-                switch (RemovedChessPieces.get(i).getType()) {
-                    case "Pawn":
-                        result += 1;
-                        break;
-                    case "Rook":
-                        result += 5;
-                        break;
-                    case "Knight":
-                        result += 3;
-                        break;
-                    case "Bishop":
-                        result += 3;
-                        break;
-                    case "Queen":
-                        result += 9;
-                        break;
+                switch (removedChessPiece.getType()) {
+                    case "Pawn" -> result += 1;
+                    case "Rook" -> result += 5;
+                    case "Knight", "Bishop" -> result += 3;
+                    case "Queen" -> result += 9;
                 }
             }
         }

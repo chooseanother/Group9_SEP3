@@ -4,6 +4,7 @@ import RabbitMQ.RabbitMQClient;
 import RabbitMQ.RabbitMQClientController;
 import RMI.ITier2RMIClient;
 import RMI.Tier2RMIClient;
+import com.google.gson.Gson;
 
 
 import java.rmi.RemoteException;
@@ -16,8 +17,27 @@ public class ModelManager implements Model {
 
     public ModelManager() throws RemoteException {
         iTier2RMIClient = new Tier2RMIClient();
-        chessBoard = new ChessBoard();
+//        chessBoard = new ChessBoard();
         rabbitMQClient = new RabbitMQClientController(this);
+
+        // for testing only
+//        ArrayList<Move> moves = iTier2RMIClient.getMoves(1);
+
+//        if (moves.size() > 0) {
+//            for (Move m : moves) {
+////            System.out.println(new Gson().toJson(m));
+//                String[] start = m.getStartPosition().split(":");
+//                String[] end = m.getEndPosition().split(":");
+//                if (m.getStartPosition().equals(m.getEndPosition())) {
+//                    chessBoard.MoveAttackChessPiece(Integer.parseInt(start[0]), Integer.parseInt(start[1]), null, 1);
+//                    chessBoard.UpgradeChessPiece(m.getPiece(), null, 1);
+//                } else {
+//                    chessBoard.MoveAttackChessPiece(Integer.parseInt(start[0]), Integer.parseInt(start[1]), null, 1);
+//                    chessBoard.MoveAttackChessPiece(Integer.parseInt(end[0]), Integer.parseInt(end[1]), null, 1);
+//                }
+//            }
+//        }
+
 
         try {
             rabbitMQClient.initRPCQueue();
@@ -40,7 +60,11 @@ public class ModelManager implements Model {
     @Override
     public ChessPiece MoveChessPiece(int firstLayer, int secondLayer) {
         try {
-            ChessPiece toMove = chessBoard.MoveAttackChessPiece(firstLayer, secondLayer, iTier2RMIClient, 1);
+            ChessPiece toMove = getChessBoard().MoveAttackChessPiece(firstLayer, secondLayer, iTier2RMIClient, 1);
+            System.out.println("Test in model manager toMove: "+toMove+" rmiclient: "+iTier2RMIClient);
+            if (toMove == null) {
+                System.out.println("Chess Piece was not moved, as it was not saved");
+            }
             return toMove;
 
         } catch (RemoteException e) {
@@ -52,7 +76,10 @@ public class ModelManager implements Model {
     @Override
     public ChessPiece UpgradeChessPiece(String upgradeSelected) {
         try {
-            ChessPiece toUpgrade = chessBoard.UpgradeChessPiece(upgradeSelected, iTier2RMIClient, 1);
+            ChessPiece toUpgrade = getChessBoard().UpgradeChessPiece(upgradeSelected, iTier2RMIClient, 1);
+            if (toUpgrade == null) {
+                System.out.println("Chess piece was not upgraded as it was not saved");
+            }
             return toUpgrade;
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -61,8 +88,27 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ChessPiece[][] getChessBoard() {
-        return chessBoard.getChessBoard();
+    public ChessBoard getChessBoard() {
+        ChessBoard chessBoard = new ChessBoard();
+        try{
+            ArrayList<Move> moves = iTier2RMIClient.getMoves(1);
+            if (moves.size() > 0) {
+                for (Move m : moves) {
+                    String[] start = m.getStartPosition().split(":");
+                    String[] end = m.getEndPosition().split(":");
+                    if (m.getStartPosition().equals(m.getEndPosition())) {
+                        chessBoard.MoveAttackChessPiece(Integer.parseInt(start[0]), Integer.parseInt(start[1]), null, 1);
+                        chessBoard.UpgradeChessPiece(m.getPiece(), null, 1);
+                    } else {
+                        chessBoard.MoveAttackChessPiece(Integer.parseInt(start[0]), Integer.parseInt(start[1]), null, 1);
+                        chessBoard.MoveAttackChessPiece(Integer.parseInt(end[0]), Integer.parseInt(end[1]), null, 1);
+                    }
+                }
+            }
+        } catch (RemoteException e){
+            e.printStackTrace();
+        }
+        return chessBoard;
     }
 
     @Override
@@ -130,11 +176,11 @@ public class ModelManager implements Model {
     @Override
     public boolean acceptChallenge(Challenge challenge) {
         try {
-//            return iTier2RMIClient.acceptChallenge(challenge);
-            if (iTier2RMIClient.acceptChallenge(challenge)) {
-//                iTier2RMIClient.createMatch(challenge.getChallenger(), challenge.getChallenged(), challenge.getTurnTime());
-                return true;
-            }
+            Match match = iTier2RMIClient.createMatch(challenge.getTurnTime());
+            iTier2RMIClient.createParticipation(challenge.getChallenger(),"White",match.getMatchID());
+            iTier2RMIClient.createParticipation(challenge.getChallenged(),"Black",match.getMatchID());
+            iTier2RMIClient.removeChallenge(challenge);
+            return true;
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -153,15 +199,17 @@ public class ModelManager implements Model {
 
     @Override
     public ArrayList<ChessPiece> getRemovedChessPieces() {
-        return chessBoard.getRemovedChessPieces();
+        return getChessBoard().getRemovedChessPieces();
     }
 
     @Override
     public int getMatchScores(boolean Black) {
+        if (Black){
+            return getChessBoard().GetScore("Black");
         if (Black) {
             return chessBoard.GetBlackScore();
         } else {
-            return chessBoard.GetWhiteScore();
+            return getChessBoard().GetScore("White");
         }
     }
 
