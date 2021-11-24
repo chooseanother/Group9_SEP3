@@ -1,12 +1,16 @@
 package persistence;
 
+import model.Match;
 import model.Move;
+import model.Participant;
 import model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -58,6 +62,42 @@ public class MatchDB implements MatchPersistence{
             }
         }
         return moves;
+    }
+
+    @Override public ArrayList<Match> getMatches(String username)
+        throws SQLException
+    {
+        ArrayList<Match> matches = new ArrayList<>();
+        try (Connection connection = ConnectionDB.getInstance().getConnection())
+        {
+            PreparedStatement statement = connection.prepareStatement(
+                "SELECT * FROM MATCH JOIN MATCH_PARTICIPATION MP on MATCH.MATCHID = MP.MATCHID WHERE USERNAME = ?");
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next())
+            {
+                int matchId = resultSet.getInt("matchid");
+                int tournamentid = resultSet.getInt("tournamentid");
+                int turnTime = resultSet.getInt("turntime");
+                String type = resultSet.getString("type");
+                boolean finished = resultSet.getBoolean("finished");
+                String usersTurn = resultSet.getString("usersturn");
+                String latestMove = resultSet.getString("latestmove");
+                SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+                Date date = null;
+                try
+                {
+                    date = format.parse(latestMove);
+                }
+                catch (ParseException e)
+                {
+                    e.printStackTrace();
+                }
+                Match match = new Match(matchId, tournamentid, turnTime, type, finished ,usersTurn, date);
+                matches.add(match);
+            }
+        }
+        return matches;
     }
 
     @Override

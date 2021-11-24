@@ -2,9 +2,7 @@ package RMI;/*
  * 12.09.2018 Original version
  */
 
-import model.Challenge;
-import model.Move;
-import model.User;
+import model.*;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -41,6 +39,10 @@ public interface ITier3RMIServer
     public boolean UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
 
     ArrayList<Move> getMoves(int matchID) throws RemoteException;
+
+    ArrayList<Match> getMatches(String username) throws RemoteException;
+
+    ArrayList<Participant> getParticipants(int matchId) throws RemoteException;
 
     public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }

@@ -210,4 +210,27 @@ public class ModelManager implements Model {
             return getChessBoard().GetScore("White");
         }
     }
+
+    @Override public ArrayList<Match> getMatches(String username)
+    {
+        try{
+            ArrayList<Match> matches = iTier2RMIClient.getMatches(username);
+            for (Match m : matches){
+                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(m.getMatchID());
+                for(Participant p: participants){
+                    if(p.getColor().equals("Black")){
+                        m.setBlackPlayer(p);
+                    }
+                    else{
+                        m.setWhitePlayer(p);
+                    }
+                }
+            }
+            return matches;
+
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
