@@ -69,13 +69,13 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ChessPiece UpgradeChessPiece(String upgradeSelected) {
+    public ChessPiece UpgradeChessPiece(String upgradeSelected,ChessPiece toUpgrade) {
         try {
-            ChessPiece toUpgrade = getChessBoard().UpgradeChessPiece(upgradeSelected, iTier2RMIClient, 1);
-            if (toUpgrade == null) {
+            ChessPiece upgraded = getChessBoard().UpgradeChessPiece(upgradeSelected, toUpgrade, iTier2RMIClient, 1);
+            if (upgraded == null) {
                 System.out.println("Chess piece was not upgraded as it was not saved");
             }
-            return toUpgrade;
+            return upgraded;
         } catch (RemoteException e) {
             e.printStackTrace();
             return null;
@@ -96,7 +96,7 @@ public class ModelManager implements Model {
                     ChessPiece toMove = new ChessPiece(m.getPiece(), m.getColor(), oldPosition, newPosition);
                     if (m.getStartPosition().equals(m.getEndPosition())) {
                         chessBoard.MoveAttackChessPiece(toMove, null, 1);
-                        chessBoard.UpgradeChessPiece(m.getPiece(), null, 1);
+                        chessBoard.UpgradeChessPiece(m.getPiece(),toMove, null, 1);
 
                     } else {
                         chessBoard.MoveAttackChessPiece(toMove, null, 1);
