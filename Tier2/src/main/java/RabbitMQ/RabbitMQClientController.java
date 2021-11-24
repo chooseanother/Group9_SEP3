@@ -140,6 +140,21 @@ public class RabbitMQClientController implements RabbitMQClient {
                             }catch(Exception e){
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
+                        case "CreateTournament":
+                            String TournamentJson = message.getData();
+                            Tournament tournament = gson.fromJson(TournamentJson, Tournament.class);
+                            int Id = model.CreateTournament(tournament);
+                            Message IdToSend = new Message();
+                            IdToSend.setData(Id+"");
+                            response = gson.toJson(IdToSend);
+                        case "JoinTournament":
+                            if (model.joinATournament(message.getData(), Integer.parseInt(message.getDataSlot2()), Integer.parseInt(message.getDataSlot3())))
+                            {
+                                response = gson.toJson(new Message("Success"));
+                            } else {
+                                response = gson.toJson(new Message("Fail"));
+                            }
+                            break;
                         default:
                             break;
                     }

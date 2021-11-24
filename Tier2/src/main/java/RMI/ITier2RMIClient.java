@@ -2,6 +2,7 @@ package RMI;
 
 import model.ChessPiece;
 import model.Challenge;
+import model.Tournament;
 import model.User;
 
 import java.rmi.Remote;
@@ -30,10 +31,13 @@ public interface ITier2RMIClient extends Remote {
 
     boolean UpdateMatchUserTurn(int matchID,String color) throws RemoteException;
 
-
     boolean updateUser(User user) throws RemoteException;
 
     User getUser(String username) throws RemoteException;
+
+    public int validateTournament(Tournament tournament) throws RemoteException;
+
+    public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException;
 
 //    void createMatch(String challenger, String challenged, int turnTime) throws RemoteException;
 }

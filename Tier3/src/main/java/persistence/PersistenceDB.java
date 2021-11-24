@@ -1,6 +1,7 @@
 package persistence;
 
 import model.Challenge;
+import model.Tournament;
 import model.User;
 
 import java.sql.SQLException;
@@ -12,13 +13,16 @@ public class PersistenceDB implements Persistence{
     ChallengePersistence challengeDB;
     MatchPersistence matchDB;
     MatchParticipationPersistence matchParticipationDB;
+    TournamentPersistence tournamentPersistence;
+    TournamentParticipationPersistence tournamentParticipationPersistence;
 
     public PersistenceDB(){
         userDB = new UserDB();
         challengeDB = new ChallengeDB();
         matchDB = new MatchDB();
         matchParticipationDB = new MatchParticipationDB();
-
+        tournamentPersistence = new TournamentDB();
+        tournamentParticipationPersistence = new TournamentParticipationDb();
     }
 
     @Override
@@ -72,6 +76,11 @@ public class PersistenceDB implements Persistence{
         return matchParticipationDB.createMatchParticipation(player, color, matchId);
     }
 
+    @Override
+    public ArrayList<String> loadUsernamesOfPlayersInATournament(int tournamentId) throws SQLException {
+        return tournamentParticipationPersistence.loadUsernamesOfPlayersInATournament(tournamentId);
+    }
+
     @Override public User validateLogin(String username, String password)
         throws SQLException
     {
@@ -86,5 +95,20 @@ public class PersistenceDB implements Persistence{
     @Override
     public User getUser(String username) throws SQLException {
         return userDB.getUser(username);
+    }
+
+    @Override
+    public int CreateTournamentParticipation(String username, int tournamentID, int placement) throws SQLException {
+        return tournamentParticipationPersistence.CreateTournamentParticipation(username, tournamentID, placement);
+    }
+
+    @Override
+    public int createTournament(String username, int turnTime, int participants) throws SQLException {
+        return tournamentPersistence.createTournament(username, turnTime, participants);
+    }
+
+    @Override
+    public ArrayList<Tournament> loadTournaments() throws SQLException {
+        return tournamentPersistence.loadTournaments();
     }
 }

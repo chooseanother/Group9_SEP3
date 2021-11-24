@@ -2,6 +2,7 @@ package RMI;
 
 import model.ChessPiece;
 import model.Challenge;
+import model.Tournament;
 import model.User;
 
 import java.rmi.Naming;
@@ -146,6 +147,27 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         catch (RemoteException e){
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public int validateTournament(Tournament tournament) throws RemoteException {
+        try {
+            int Id = tier3.validateTournament(tournament);
+            return Id;
+        } catch (Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException {
+        try {
+            return tier3.joinATournament(username, tournamentID, placement);
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
         }
     }
 

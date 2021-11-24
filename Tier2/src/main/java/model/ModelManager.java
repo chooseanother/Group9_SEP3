@@ -164,4 +164,24 @@ public class ModelManager implements Model {
             return chessBoard.GetWhiteScore();
         }
     }
+
+    @Override
+    public int CreateTournament(Tournament tournament) {
+        try {
+            return iTier2RMIClient.validateTournament(tournament);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean joinATournament(String username, int tournamentID, int placement) {
+        try {
+            return iTier2RMIClient.joinATournament(username, tournamentID, placement);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

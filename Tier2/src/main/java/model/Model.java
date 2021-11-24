@@ -17,4 +17,6 @@ public interface Model {
     boolean rejectChallenge(Challenge challenge);
     ArrayList<ChessPiece> getRemovedChessPieces();
     int getMatchScores(boolean Black);
+    int CreateTournament(Tournament tournament);
+    boolean joinATournament(String username, int tournamentID, int placement);
 }
