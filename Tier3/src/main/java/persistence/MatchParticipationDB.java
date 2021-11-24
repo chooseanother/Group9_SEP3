@@ -15,4 +15,15 @@ public class MatchParticipationDB implements MatchParticipationPersistence{
             statement2.executeUpdate();
         }
     }
+
+    @Override
+    public void updateOutcome(String player, String outcome, int matchId) throws SQLException {
+        try (Connection connection = ConnectionDB.getInstance().getConnection()) {
+            PreparedStatement statement2 = connection.prepareStatement("UPDATE MATCH_PARTICIPATION SET(OUTCOME) = ? WHERE USERNAMEN = ? AND MATCHID = ?");
+            statement2.setString(1, outcome);
+            statement2.setString(2, player);
+            statement2.setInt(3, matchId);
+            statement2.executeUpdate();
+        }
+    }
 }

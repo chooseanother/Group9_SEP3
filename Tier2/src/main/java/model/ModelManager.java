@@ -210,4 +210,13 @@ public class ModelManager implements Model {
             return getChessBoard().GetScore("White");
         }
     }
+
+    @Override
+    public void updateOutcome(String player, String outcome, int matchId) {
+        try{
+            iTier2RMIClient.updateOutcome(player, outcome, matchId);
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+    }
 }

@@ -39,5 +39,6 @@ public interface ITier2RMIClient extends Remote {
 
     boolean removeChallenge(Challenge challenge) throws RemoteException;
 
+    void updateOutcome(String player, String outcome, int matchId) throws RemoteException;
 
 }

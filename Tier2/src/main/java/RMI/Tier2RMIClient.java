@@ -169,4 +169,13 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
             return false;
         }
     }
+
+    @Override
+    public void updateOutcome(String player, String outcome, int matchId) throws RemoteException {
+        try{
+            tier3.updateOutcome(player, outcome, matchId);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

@@ -17,4 +17,5 @@ public interface Model {
     boolean rejectChallenge(Challenge challenge);
     ArrayList<ChessPiece> getRemovedChessPieces();
     int getMatchScores(boolean Black);
+    void updateOutcome(String player, String outcome, int matchId);
 }
