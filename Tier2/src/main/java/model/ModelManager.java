@@ -204,10 +204,8 @@ public class ModelManager implements Model {
 
     @Override
     public int getMatchScores(boolean Black) {
-        if (Black){
-            return getChessBoard().GetScore("Black");
         if (Black) {
-            return chessBoard.GetBlackScore();
+            return getChessBoard().GetScore("Black");
         } else {
             return getChessBoard().GetScore("White");
         }
@@ -242,7 +240,7 @@ public class ModelManager implements Model {
                     Challenge challenge4 = new Challenge(tournamentParticipations.get(i).getUsername(),
                             tournamentParticipations.get(i++).getUsername(), tournament.getTurnTime());
                     //Creating the match
-                    iTier2RMIClient.acceptChallenge(challenge4);
+
                 }
             }
 

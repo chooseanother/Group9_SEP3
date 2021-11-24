@@ -61,18 +61,19 @@ public class Tier3RMIServerController
             persistence.registerUser(user);
             System.out.println(user.getUsername() + " was created.");
             return true;
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
 
 
-    @Override public boolean MovePiece( int matchId, String piece, String color, String startPosition, String endPosition){
+    @Override
+    public boolean MovePiece(int matchId, String piece, String color, String startPosition, String endPosition) {
         try {
-            persistence.MovePiece( matchId, piece, color, startPosition, endPosition);
+            persistence.MovePiece(matchId, piece, color, startPosition, endPosition);
             return true;
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -84,7 +85,7 @@ public class Tier3RMIServerController
             persistence.createChallenge(challenge);
             System.out.println(challenge + " was created.");
             return true;
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -93,9 +94,9 @@ public class Tier3RMIServerController
     @Override
     public boolean UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException {
         try {
-            persistence.UpgradePiece( matchId,  piece,  color,  startPosition, endPosition);
+            persistence.UpgradePiece(matchId, piece, color, startPosition, endPosition);
             return true;
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -105,7 +106,7 @@ public class Tier3RMIServerController
     public ArrayList<Move> getMoves(int matchID) throws RemoteException {
         try {
             return persistence.getMoves(matchID);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -115,7 +116,7 @@ public class Tier3RMIServerController
         try {
             ArrayList<Challenge> challenges = persistence.loadChallenges();
             return challenges;
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -126,7 +127,7 @@ public class Tier3RMIServerController
         try {
             ArrayList<Challenge> challenges = persistence.loadChallenges(username);
             return challenges;
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -150,20 +151,19 @@ public class Tier3RMIServerController
     public boolean rejectChallenge(Challenge challenge) throws RemoteException {
         try {
             return persistence.deleteChallenge(challenge);
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    @Override public User validateLogin(String username, String password)
-        throws RemoteException
-    {
-        try{
+    @Override
+    public User validateLogin(String username, String password)
+            throws RemoteException {
+        try {
             User user = persistence.validateLogin(username, password);
             return user;
-        }
-        catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -171,11 +171,11 @@ public class Tier3RMIServerController
 
     @Override
 
-    public boolean UpdateMatchUserTurn(int matchID, String color) throws RemoteException{
-        try{
-            persistence.UpdateMatchUserTurn(matchID,color);
+    public boolean UpdateMatchUserTurn(int matchID, String color) throws RemoteException {
+        try {
+            persistence.UpdateMatchUserTurn(matchID, color);
             return true;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             return false;
         }
     }
@@ -184,7 +184,7 @@ public class Tier3RMIServerController
     public Match createMatch(int turnTime) throws RemoteException {
         try {
             return persistence.createMatch(turnTime, "Friendly");
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -192,10 +192,10 @@ public class Tier3RMIServerController
 
     @Override
     public boolean createParticipation(String username, String color, int matchId) throws RemoteException {
-        try{
-            persistence.createMatchParticipation(username,color,matchId);
+        try {
+            persistence.createMatchParticipation(username, color, matchId);
             return true;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -208,10 +208,10 @@ public class Tier3RMIServerController
 
     @Override
     public boolean updateUser(User user) throws RemoteException {
-        try{
+        try {
             persistence.updateUser(user);
             return true;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
@@ -219,17 +219,17 @@ public class Tier3RMIServerController
 
     @Override
     public User getUser(String username) throws RemoteException {
-        try{
+        try {
             User user = persistence.getUser(username);
             return user;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
     }
 
     @Override
-    public int validateTournament(Tournament tournament) throws RemoteException{
+    public int validateTournament(Tournament tournament) throws RemoteException {
         try {
             int id = persistence.createTournament(tournament.getCreator(), tournament.getTurnTime(), tournament.getNrOfParticipants());
             System.out.println("Tournament was created by " + tournament.getCreator());
@@ -287,33 +287,29 @@ public class Tier3RMIServerController
     }
 
     @Override
-    public Tournament GetTournamentById(int id){
+    public Tournament GetTournamentById(int id) {
         try {
             ArrayList<Tournament> tournaments = persistence.loadTournaments();
             for (Tournament i : tournaments) {
-               if (i.getTournamentId() == id){
-                   return i;
-               }
-           }
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id){
-        try {
-          return persistence.loadTournamentParticipants(id);
+                if (i.getTournamentId() == id) {
+                    return i;
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-
-
-
+    @Override
+    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) {
+        try {
+            return persistence.loadTournamentParticipants(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 }
