@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface Model {
     String registerUser(String username, String password, String email);
-    ChessPiece MoveChessPiece(int firstLayer, int secondLayer);
+    ChessPiece MoveChessPiece(ChessPiece selected);
     ChessPiece UpgradeChessPiece(String upgradeSelected);
     ChessBoard getChessBoard();
     String validateChallenge(Challenge challenge);

@@ -1,11 +1,9 @@
 package model;
 
-import RabbitMQ.RabbitMQClient;
-import RabbitMQ.RabbitMQClientController;
 import RMI.ITier2RMIClient;
 import RMI.Tier2RMIClient;
-import com.google.gson.Gson;
-
+import RabbitMQ.RabbitMQClient;
+import RabbitMQ.RabbitMQClientController;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -59,13 +57,9 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ChessPiece MoveChessPiece(int firstLayer, int secondLayer) {
+    public ChessPiece MoveChessPiece(ChessPiece selected) {
         try {
-            ChessPiece toMove = getChessBoard().MoveAttackChessPiece(firstLayer, secondLayer, iTier2RMIClient, 1);
-            System.out.println("Test in model manager toMove: "+toMove+" rmiclient: "+iTier2RMIClient);
-            if (toMove == null) {
-                System.out.println("Chess Piece was not moved, as it was not saved");
-            }
+            ChessPiece toMove = getChessBoard().MoveAttackChessPiece(selected, iTier2RMIClient, 1);
             return toMove;
 
         } catch (RemoteException e) {
@@ -91,22 +85,25 @@ public class ModelManager implements Model {
     @Override
     public ChessBoard getChessBoard() {
         ChessBoard chessBoard = new ChessBoard();
-        try{
+        try {
             ArrayList<Move> moves = iTier2RMIClient.getMoves(1);
             if (moves.size() > 0) {
                 for (Move m : moves) {
                     String[] start = m.getStartPosition().split(":");
                     String[] end = m.getEndPosition().split(":");
+                    Position oldPosition = new Position(Integer.parseInt(start[0]), Integer.parseInt(start[1]));
+                    Position newPosition = new Position(Integer.parseInt(end[0]), Integer.parseInt(end[1]));
+                    ChessPiece toMove = new ChessPiece(m.getPiece(), m.getColor(), oldPosition, newPosition);
                     if (m.getStartPosition().equals(m.getEndPosition())) {
-                        chessBoard.MoveAttackChessPiece(Integer.parseInt(start[0]), Integer.parseInt(start[1]), null, 1);
+                        chessBoard.MoveAttackChessPiece(toMove, null, 1);
                         chessBoard.UpgradeChessPiece(m.getPiece(), null, 1);
+
                     } else {
-                        chessBoard.MoveAttackChessPiece(Integer.parseInt(start[0]), Integer.parseInt(start[1]), null, 1);
-                        chessBoard.MoveAttackChessPiece(Integer.parseInt(end[0]), Integer.parseInt(end[1]), null, 1);
+                        chessBoard.MoveAttackChessPiece(toMove, null, 1);
                     }
                 }
             }
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
         return chessBoard;
@@ -205,7 +202,7 @@ public class ModelManager implements Model {
 
     @Override
     public int getMatchScores(boolean Black) {
-        if (Black){
+        if (Black) {
             return getChessBoard().GetBlackScore();
         } else {
             return getChessBoard().GetWhiteScore();

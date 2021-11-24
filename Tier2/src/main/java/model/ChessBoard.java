@@ -17,6 +17,7 @@ public class ChessBoard {
     private ArrayList<ChessPiece> RemovedChessPieces;
     private int BlackScore;
     private int WhiteScore;
+    private String turnColor;
 
     /**
      * Creating a chess board and setting the default chess pieces locations
@@ -26,6 +27,7 @@ public class ChessBoard {
         RemovedChessPieces = new ArrayList<>();
         BlackScore = 0;
         WhiteScore = 0;
+        turnColor="White";
 
         //black
         String black = "Black";
@@ -61,43 +63,16 @@ public class ChessBoard {
     }
 
     /**
-     * A method to handle chess piece clicks. It can select, move, attack, deselect a piece
-     *
-     * @param firstLayer  Vertical layer
-     * @param secondLayer Horizontal layer
+     * A method to move a chess piece from t1 to t2 and then save it in t3 database server
+     * @param selected a chess piece which should be moved
+     * @param iTier2RMIClient rmi connection to move a piece in t3
+     * @param matchID match id in which the move is made
+     * @return chesspiece moved
+     * @throws RemoteException
      */
-    public ChessPiece MoveAttackChessPiece(int firstLayer, int secondLayer, ITier2RMIClient iTier2RMIClient, int matchID) throws RemoteException {
-        ChessPiece selected = null;
-        String buildString = "";
-        for (int i = 0; i < chessPieces.length; i++) {
-
-            for (int j = 0; j < chessPieces[i].length; j++) {
-
-                if (chessPieces[i][j] != null && chessPieces[i][j].getSelected() && selected == null) {
-                    selected = chessPieces[i][j].copy();
-                    if (selected.getNewPosition() == null) {
-                        selected.setOldPosition(new Position(i, j));
-                        selected.setNewPosition(new Position(firstLayer, secondLayer));
-                    } else {
-                        selected.setOldPosition(chessPieces[i][j].getNewPosition());
-                        selected.setNewPosition(new Position(firstLayer, secondLayer));
-                    }
-
-                }
-            }
-        }
-        if (chessPieces[firstLayer][secondLayer] != null) {
-            chessPieces[firstLayer][secondLayer].setSelected(true);
-        }
-        if (selected != null && selected.getOldPosition().getVerticalAxis() == firstLayer && selected.getOldPosition().getHorizontalAxis() == secondLayer) {
-            chessPieces[firstLayer][secondLayer].setSelected(false);
-            selected = null;
-        }
-        if (selected != null) {
-            //System.out.println(new Gson().toJson(selected));
-            selected.setNewPosition(new Position(firstLayer, secondLayer));
-
-            String turnColor = "";
+    public ChessPiece MoveAttackChessPiece(ChessPiece selected, ITier2RMIClient iTier2RMIClient, int matchID) throws RemoteException {
+        String buildString="";
+        if (selected != null && selected.getColor().equals(turnColor)) {
             if (selected.getColor().equals("Black")) {
                 turnColor = "White";
             } else {
@@ -107,44 +82,38 @@ public class ChessBoard {
             if (iTier2RMIClient == null) {
                 testForNullRMI = true;
             } else {
-                testForNullRMI = iTier2RMIClient.MovePiece(selected, matchID); // && iTier2RMIClient.UpdateMatchUserTurn(matchID,turnColor);
+                if(iTier2RMIClient.MovePiece(selected, matchID) && iTier2RMIClient.UpdateMatchUserTurn(matchID,turnColor)){
+                   testForNullRMI= true;
+                    System.out.println(turnColor+ " -----------------------------------------------------$$$$$$$$");
+                }
                 System.out.println("=================================>"+testForNullRMI);
             }
             if (testForNullRMI) {
+                    if (chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()] != null) {
+                        RemovedChessPieces.add(chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()]);
+                    }
+                   chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()] = selected.copy();
+                    if (selected.getOldPosition().getVerticalAxis() != chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()].getNewPosition().getVerticalAxis()
+                            || selected.getOldPosition().getHorizontalAxis() != chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()].getNewPosition().getHorizontalAxis()) {
+                        chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()] = null;
+                    }
 
-                if (chessPieces[firstLayer][secondLayer] != null) {
-                    RemovedChessPieces.add(chessPieces[firstLayer][secondLayer]);
-                }
-                chessPieces[firstLayer][secondLayer] = selected.copy();
-                chessPieces[firstLayer][secondLayer].setNewPosition(new Position(firstLayer, secondLayer));
-                if (selected.getOldPosition().getVerticalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getVerticalAxis()
-                        || selected.getOldPosition().getHorizontalAxis() != chessPieces[firstLayer][secondLayer].getNewPosition().getHorizontalAxis()) {
-                    chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()] = null;
-                }
+                    for (int i = 0; i < 8; i++) {
 
-                for (int i = 0; i < 8; i++) {
+                        for (int j = 0; j < 8; j++) {
 
-                    for (int j = 0; j < 8; j++) {
-
-                        if (chessPieces[i][j] != null) {
-                            chessPieces[i][j].setSelected(false);
+                            if (chessPieces[i][j] != null) {
+                                chessPieces[i][j].setSelected(false);
+                            }
                         }
                     }
-                }
-                return chessPieces[firstLayer][secondLayer];
+                    return chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()];
+
             }
 
 
-        }
-        for (int i = 0; i < chessPieces.length; i++) {
-            for (int j = 0; j < chessPieces[i].length; j++) {
-                if (chessPieces[i][j] != null) {
-                    buildString += "'" + chessPieces[i][j].getType() + "'";
-                } else {
-                    buildString += "''";
-                }
-            }
-            buildString += "\n";
+        }else if(!selected.getColor().equals(turnColor)){
+            System.out.println("Turn color is not matching");
         }
 
 //        for (int i = 0; i < chessPieces.length; i++) {
@@ -160,6 +129,14 @@ public class ChessBoard {
         //System.out.println(buildString);
         System.out.println(new Gson().toJson(chessPieces));
         return null;
+    }
+
+    public String getTurnColor() {
+        return turnColor;
+    }
+
+    public void setTurnColor(String turnColor) {
+        this.turnColor = turnColor;
     }
 
     /**

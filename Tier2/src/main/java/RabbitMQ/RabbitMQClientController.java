@@ -49,8 +49,8 @@ public class RabbitMQClientController implements RabbitMQClient {
                     switch (message.getAction()) {
                         case "Move":                        
                             Message toSend = new Message();
-                            Position toMove = gson.fromJson(message.getData(),Position.class);
-                            ChessPiece movedChessPiece = model.MoveChessPiece(toMove.getVerticalAxis(), toMove.getHorizontalAxis());
+                            ChessPiece selected = gson.fromJson(message.getData(),ChessPiece.class);
+                            ChessPiece movedChessPiece = model.MoveChessPiece(selected);
                             if (movedChessPiece != null) {
                                 toSend.setData(gson.toJson(movedChessPiece));
                                 toSend.setDataSlot2(gson.toJson(model.getRemovedChessPieces()));
@@ -59,7 +59,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                             } else {
                                 toSend.setAction("No chess Piece");
                             }
-                            System.out.println(toSend.getObject());
+                            System.out.println(toSend.getData());
                             response = gson.toJson(toSend);
                             break;
                         case "Upgrade":
@@ -67,7 +67,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                             toSendUpgrade.setAction("Upgrade Chess Piece");
                             ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getData());
                             toSendUpgrade.setData(gson.toJson(upgradedChessPiece));
-                            System.out.println(toSendUpgrade.getObject());
+                            System.out.println(toSendUpgrade.getData());
                             response = gson.toJson(toSendUpgrade);
                             break;
                         case "Load":
