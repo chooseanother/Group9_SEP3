@@ -4,6 +4,7 @@ package RMI;/*
 
 import model.Challenge;
 import model.Tournament;
+import model.TournamentParticipation;
 import model.User;
 import persistence.Persistence;
 import persistence.PersistenceDB;
@@ -204,46 +205,75 @@ public class Tier3RMIServerController
     @Override
     public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException {
         try {
-           ArrayList<String> usernames = persistence.loadUsernamesOfPlayersInATournament(tournamentID);
-           ArrayList<Tournament> tournaments = persistence.loadTournaments();
-           Tournament tournament = null;
-
-           for (Tournament i :tournaments){
-               if (i.getTournamentId() == tournamentID){
-                   tournament = i;
-               }
-           }
-
-           switch (tournament.getNrOfParticipants()){
-               case 4:
-                   if(usernames.size() == 4){
-                       //First 2
-                       int matchId = persistence.createMatch(tournament.getTurnTime(), "Friendly");
-                       persistence.createMatchParticipation(usernames.get(0), "White", matchId);
-                       persistence.createMatchParticipation(usernames.get(1), "Black", matchId);
-                       //second 2
-                       int matchId2 = persistence.createMatch(tournament.getTurnTime(), "Friendly");
-                       persistence.createMatchParticipation(usernames.get(2), "White", matchId2);
-                       persistence.createMatchParticipation(usernames.get(3), "Black", matchId2);
-                       // wait for match or something...
-                   } else {
-                       persistence.CreateTournamentParticipation(username,tournamentID,placement);
-                   }
-                   break;
-               case 8:
-                   break;
-               case 16:
-                   break;
-               case 32:
-                   break;
-           }
-           return true;
+            persistence.CreateTournamentParticipation(username, tournamentID, placement);
+            return true;
+//           ArrayList<String> usernames = persistence.loadUsernamesOfPlayersInATournament(tournamentID);
+//           ArrayList<Tournament> tournaments = persistence.loadTournaments();
+//           Tournament tournament = null;
+//
+//           for (Tournament i :tournaments){
+//               if (i.getTournamentId() == tournamentID){
+//                   tournament = i;
+//               }
+//           }
+//
+//           switch (tournament.getNrOfParticipants()){
+//               case 4:
+//                   if(usernames.size() == 4){
+//                       //First 2
+//                       int matchId = persistence.createMatch(tournament.getTurnTime(), "Friendly");
+//                       persistence.createMatchParticipation(usernames.get(0), "White", matchId);
+//                       persistence.createMatchParticipation(usernames.get(1), "Black", matchId);
+//                       //second 2
+//                       int matchId2 = persistence.createMatch(tournament.getTurnTime(), "Friendly");
+//                       persistence.createMatchParticipation(usernames.get(2), "White", matchId2);
+//                       persistence.createMatchParticipation(usernames.get(3), "Black", matchId2);
+//                       // wait for match or something...
+//                   } else {
+//                       persistence.CreateTournamentParticipation(username,tournamentID,placement);
+//                   }
+//                   break;
+//               case 8:
+//                   break;
+//               case 16:
+//                   break;
+//               case 32:
+//                   break;
+//           }
+//           return true;
 
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
+    @Override
+    public Tournament GetTournamentById(int id){
+        try {
+            ArrayList<Tournament> tournaments = persistence.loadTournaments();
+            for (Tournament i : tournaments) {
+               if (i.getTournamentId() == id){
+                   return i;
+               }
+           }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id){
+        try {
+          return persistence.loadTournamentParticipants(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
 
 

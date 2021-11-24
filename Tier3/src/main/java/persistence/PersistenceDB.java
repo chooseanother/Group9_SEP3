@@ -2,6 +2,7 @@ package persistence;
 
 import model.Challenge;
 import model.Tournament;
+import model.TournamentParticipation;
 import model.User;
 
 import java.sql.SQLException;
@@ -77,8 +78,8 @@ public class PersistenceDB implements Persistence{
     }
 
     @Override
-    public ArrayList<String> loadUsernamesOfPlayersInATournament(int tournamentId) throws SQLException {
-        return tournamentParticipationPersistence.loadUsernamesOfPlayersInATournament(tournamentId);
+    public ArrayList<TournamentParticipation> loadTournamentParticipants(int tournamentId) throws SQLException {
+        return tournamentParticipationPersistence.loadTournamentParticipants(tournamentId);
     }
 
     @Override public User validateLogin(String username, String password)

@@ -158,7 +158,7 @@ public class ModelManager implements Model {
 
     @Override
     public int getMatchScores(boolean Black) {
-        if (Black){
+        if (Black) {
             return chessBoard.GetBlackScore();
         } else {
             return chessBoard.GetWhiteScore();
@@ -169,7 +169,7 @@ public class ModelManager implements Model {
     public int CreateTournament(Tournament tournament) {
         try {
             return iTier2RMIClient.validateTournament(tournament);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
@@ -183,5 +183,23 @@ public class ModelManager implements Model {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public void PlayTournament(int id) {
+        try {
+            Tournament tournament = iTier2RMIClient.GetTournamentById(id);
+            ArrayList<TournamentParticipation> tournamentParticipations = iTier2RMIClient.getTournamentParticipationByTournamentID(id);
+            if (tournamentParticipations.size() == tournament.getNrOfParticipants()) {
+                for (int i = 0; i < tournamentParticipations.size() / 2; i++) {
+                    Challenge challenge4 = new Challenge(tournamentParticipations.get(i).getUsername(),
+                            tournamentParticipations.get(i++).getUsername(), tournament.getTurnTime());
+                    //Creating the match
+                    iTier2RMIClient.acceptChallenge(challenge4);
+                }
+            }
+
+        } catch (Exception e) {
+
+        }
     }
 }

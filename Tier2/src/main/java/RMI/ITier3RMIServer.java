@@ -2,10 +2,7 @@ package RMI;/*
  * 12.09.2018 Original version
  */
 
-import model.ChessPiece;
-import model.Challenge;
-import model.Tournament;
-import model.User;
+import model.*;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -46,6 +43,10 @@ public interface ITier3RMIServer
     public int validateTournament(Tournament tournament) throws RemoteException;
 
     public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException;
+
+    public Tournament GetTournamentById(int id) throws RemoteException;
+
+    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException;
 
     public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }

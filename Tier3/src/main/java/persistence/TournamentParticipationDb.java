@@ -2,6 +2,7 @@ package persistence;
 
 import model.Challenge;
 import model.Tournament;
+import model.TournamentParticipation;
 import model.User;
 
 import java.sql.Connection;
@@ -24,18 +25,20 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
     }
 
     @Override
-    public ArrayList<String> loadUsernamesOfPlayersInATournament(int tournamentID) throws SQLException {
+    public ArrayList<TournamentParticipation> loadTournamentParticipants(int tournamentID) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("select USERNAME from TOURNAMENT_PARTICIPATION where TOURNAMENTID = ?");
             statement.setInt(1, tournamentID);
             ResultSet resultSet = statement.executeQuery();
-            ArrayList<String> users = new ArrayList<>();
+            ArrayList<TournamentParticipation> tournamentParticipations = new ArrayList<>();
 
             while (resultSet.next()) {
                 String username = resultSet.getString("USERNAME");
-                users.add(username);
+                int TournamentId = resultSet.getInt("TOURNAMENTID");
+                int placement = resultSet.getInt("PLACEMENT");
+                tournamentParticipations.add(new TournamentParticipation(username, tournamentID, placement));
             }
-            return users;
+            return tournamentParticipations;
         }
     }
 
