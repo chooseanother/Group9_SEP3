@@ -1,6 +1,7 @@
 package persistence;
 
 import model.Challenge;
+import model.Move;
 import model.User;
 
 import java.sql.SQLException;
@@ -46,7 +47,6 @@ public class PersistenceDB implements Persistence{
         return challengeDB.loadChallenges();
     }
 
-
     @Override
     public ArrayList<Challenge> loadChallenges(String username) throws SQLException {
         return challengeDB.loadChallenges(username);
@@ -65,6 +65,11 @@ public class PersistenceDB implements Persistence{
     @Override
     public void UpdateMatchUserTurn(int matchId, String color) throws SQLException {
         matchDB.UpdateMatchUserTurn(matchId,color);
+    }
+
+    @Override
+    public ArrayList<Move> getMoves(int matchID) throws SQLException {
+        return matchDB.getMoves(matchID);
     }
 
     @Override

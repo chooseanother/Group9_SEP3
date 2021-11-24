@@ -1,9 +1,13 @@
 package persistence;
 
+import model.Move;
+import model.User;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -29,6 +33,31 @@ public class MatchDB implements MatchPersistence{
 
         }
 
+    }
+
+    @Override
+    public ArrayList<Move> getMoves(int matchID) throws SQLException {
+        ArrayList<Move> moves = new ArrayList<>();
+        try (Connection connection = ConnectionDB.getInstance().getConnection())
+        {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * from MOVE WHERE MATCHID = ? ORDER BY MOVEID");
+            statement.setInt(1, matchID);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next())
+            {
+                int moveId = resultSet.getInt("moveid");
+                int localMatchId = resultSet.getInt("matchid");
+                String piece = resultSet.getString("piece");
+                String color = resultSet.getString("color");
+                String startPosition = resultSet.getString("startposition");
+                String endPosition = resultSet.getString("endposition");
+
+                Move move = new Move(moveId,localMatchId,piece,color,startPosition,endPosition);
+                moves.add(move);
+            }
+        }
+        return moves;
     }
 
     @Override
