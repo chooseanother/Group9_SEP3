@@ -205,9 +205,9 @@ public class ModelManager implements Model {
     @Override
     public int getMatchScores(boolean Black) {
         if (Black){
-            return getChessBoard().GetBlackScore();
+            return getChessBoard().GetScore("Black");
         } else {
-            return getChessBoard().GetWhiteScore();
+            return getChessBoard().GetScore("White");
         }
     }
 }

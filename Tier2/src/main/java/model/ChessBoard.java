@@ -219,63 +219,18 @@ public class ChessBoard {
      *
      * @return returns the score for white
      */
-    public int GetWhiteScore() {
+    public int GetScore(String color) {
         int result = 0;
 
-        for (int i = 0; i < RemovedChessPieces.size(); i++) {
+        for (ChessPiece removedChessPiece : RemovedChessPieces) {
 
-            if (RemovedChessPieces.get(i).getColor().equals("Black")) {
+            if (removedChessPiece.getColor().equals(color)) {
 
-                switch (RemovedChessPieces.get(i).getType()) {
-                    case "Pawn":
-                        result += 1;
-                        break;
-                    case "Rook":
-                        result += 5;
-                        break;
-                    case "Knight":
-                        result += 3;
-                        break;
-                    case "Bishop":
-                        result += 3;
-                        break;
-                    case "Queen":
-                        result += 9;
-                        break;
-                }
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Calculates and returns the score for Black
-     *
-     * @return returns the score for Black
-     */
-    public int GetBlackScore() {
-        int result = 0;
-
-        for (int i = 0; i < RemovedChessPieces.size(); i++) {
-
-            if (RemovedChessPieces.get(i).getColor().equals("White")) {
-
-                switch (RemovedChessPieces.get(i).getType()) {
-                    case "Pawn":
-                        result += 1;
-                        break;
-                    case "Rook":
-                        result += 5;
-                        break;
-                    case "Knight":
-                        result += 3;
-                        break;
-                    case "Bishop":
-                        result += 3;
-                        break;
-                    case "Queen":
-                        result += 9;
-                        break;
+                switch (removedChessPiece.getType()) {
+                    case "Pawn" -> result += 1;
+                    case "Rook" -> result += 5;
+                    case "Knight", "Bishop" -> result += 3;
+                    case "Queen" -> result += 9;
                 }
             }
         }
