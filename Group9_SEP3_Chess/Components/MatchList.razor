@@ -26,6 +26,7 @@ else
         <th>Tournament ID</th>
         <th>Opponent</th>
         <th>Length of turn</th>
+        <th>Latest move</th>
         </thead>
         @foreach (var item in matches)
         {
@@ -48,6 +49,7 @@ else
                     <td>@item.WhitePlayer.Username</td>
                 }
                 <td>@item.TurnTime</td>
+                <td>@(new DateTime(1970,1,1,1,0,0,0, DateTimeKind.Utc).AddMilliseconds(item.LatestMove))</td>
                 <td>
                     <button class="btn btn-dark" @onclick='() => PlayMatch()'>Play match</button>
                 </td>

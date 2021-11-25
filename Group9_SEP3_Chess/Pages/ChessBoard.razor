@@ -1,4 +1,4 @@
-﻿@page "/ChessBoard/{id:int}"
+﻿@page "/match/{id:int}"
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
 @using System.Text.Json
@@ -152,14 +152,14 @@
     private string Outcome { get; set; }
 
     [Parameter]
-    public int MatchID { get; set; }
+    public int id { get; set; }
 
     private User loggedIn;
 
     protected override async Task OnInitializedAsync()
     {
         loggedIn = ((CustomAuthenticationStateProvider) _authenticationStateProvider).GetCachedUser();
-        chessPieces = await _matchService.LoadChessPieces(new Message {Action = "Load", Data = JsonSerializer.Serialize(loggedIn), DataSlot2 = "" + MatchID});
+        chessPieces = await _matchService.LoadChessPieces(new Message {Action = "Load", Data = JsonSerializer.Serialize(loggedIn), DataSlot2 = "" + id});
         WhiteRemovedChessPieces = _matchService.getWhiteRemovedChessPieces();
         BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
         BlackScore = _matchService.getMatchScores(true);
