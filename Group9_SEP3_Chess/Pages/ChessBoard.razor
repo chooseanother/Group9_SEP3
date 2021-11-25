@@ -2,7 +2,6 @@
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
 @using System.Text.Json
-@using Group9_SEP3_Chess.Json2DArrayHelp
 @inject IMatchService _matchService
 @inject AuthenticationStateProvider _authenticationStateProvider
 <div class="row">
@@ -159,16 +158,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-    // get match info from tier2, a new match should place pieces in default location in tier 2 not tier 1 like it is now
-    // chessPieces = await InitializeNewGamePieces();
-    //
-    // Console.WriteLine(JsonSerializer.Serialize(chessPieces, new JsonSerializerOptions
-    // {
-    //     Converters = {new Array2DConverter()},
-    // }));
-
-    // 2D array of custom object serialization is not supported, need to consult with somebody
-    // fixed - kim
         loggedIn = ((CustomAuthenticationStateProvider) _authenticationStateProvider).GetCachedUser();
         chessPieces = await _matchService.LoadChessPieces(new Message {Action = "Load", Data = JsonSerializer.Serialize(loggedIn), DataSlot2 = "" + MatchID});
         WhiteRemovedChessPieces = _matchService.getWhiteRemovedChessPieces();
@@ -179,8 +168,7 @@
 
     private async Task UpdateOutcome()
     {
-        var user = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
-        await _matchService.UpdateOutcome(user.Username, Outcome, 1);
+        await _matchService.UpdateOutcome(loggedIn.Username, Outcome, 1);
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
@@ -280,7 +268,6 @@
         }
     }
 
-
     private async Task UpgradeChessPiece()
     {
         ChessPiece selected = null;
@@ -304,23 +291,18 @@
                     };
                 }
             }
-            }
-
-            Message message = new Message()
-            {
-                Action = "Upgrade",
-                Data = UpgradeSelected,
-                DataSlot2 = JsonSerializer.Serialize(selected)
-            };
-            ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
-            if (toUpdate != null)
-            {
-                chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
-            }
         }
-    
 
-
-   
+        Message message = new Message()
+        {
+            Action = "Upgrade",
+            Data = UpgradeSelected,
+            DataSlot2 = JsonSerializer.Serialize(selected)
+        };
+        ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
+        if (toUpdate != null)
+        {
+            chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
+        }
     }
-
+}
