@@ -121,14 +121,6 @@ public class ChessBoard {
         return null;
     }
 
-    public String getTurnColor() {
-        return turnColor;
-    }
-
-    public void setTurnColor(String turnColor) {
-        this.turnColor = turnColor;
-    }
-
     /**
      * A method to upgrade a chess piece
      *

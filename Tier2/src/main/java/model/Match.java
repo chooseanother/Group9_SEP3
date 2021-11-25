@@ -81,7 +81,7 @@ public class Match implements Serializable {
     }
 
     public String getUsersTurn() {
-        return UsersTurn;
+        return usersTurn;
     }
 
     public void setUsersTurn(String usersTurn) {
