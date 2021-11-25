@@ -105,16 +105,26 @@
 
 
 <div class="UpgradePart" style="text-align: center">
-            <label>Select upgrade: </label>
-            <select @bind="UpgradeSelected">
-                <option>Rook</option>
-                <option>Knight</option>
-                <option>Bishop</option>
-                <option>Queen</option>
-            </select>
+    <label>Select upgrade: </label>
+    <select @bind="UpgradeSelected">
+        <option>Rook</option>
+        <option>Knight</option>
+        <option>Bishop</option>
+        <option>Queen</option>
+    </select>
+    <button class="btn btn-outline-dark" @onclick="UpgradeChessPiece">Upgrade</button>
+</div>
 
-            <button class="btn btn-outline-dark" @onclick="UpdateChessPiece">Upgrade</button>
-        </div>
+<div class="MarkMatch" style="text-align: center">
+    <label>Select match outcome: </label>
+    <select @bind="Outcome">
+        <option value="">Clear</option>
+        <option>Win</option>
+        <option>Loss</option>
+        <option>Draw</option>
+    </select>
+    <button class="btn btn-outline-dark" @onclick="UpdateOutcome">Submit</button>
+</div>
 
 <style>
     .board {

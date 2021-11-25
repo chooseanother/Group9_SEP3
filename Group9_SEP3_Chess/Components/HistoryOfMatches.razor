@@ -49,7 +49,7 @@ else
                     <td>@item.WhitePlayer.Username</td>
                 }
                 <td>@item.TurnTime</td>
-                <td>@item.LatestMove</td>
+                <td>@(new DateTime(1970,1,1,1,0,0,0, DateTimeKind.Utc).AddMilliseconds(item.LatestMove))</td>
                 <td>
                     <button class="moi btn-outline-dark" @onclick="@(() => ViewMatch(item.MatchID))">View</button>
                 </td>
