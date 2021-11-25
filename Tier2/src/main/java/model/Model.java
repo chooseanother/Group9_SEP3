@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface Model {
     String registerUser(String username, String password, String email);
-    ChessPiece MoveChessPiece(int firstLayer, int secondLayer);
-    ChessPiece UpgradeChessPiece(String upgradeSelected);
+    ChessPiece MoveChessPiece(ChessPiece selected);
+    ChessPiece UpgradeChessPiece(String upgradeSelected,ChessPiece toUpgrade);
     ChessBoard getChessBoard();
     String validateChallenge(Challenge challenge);
     User validateLogin(String userName, String password);
@@ -19,6 +19,8 @@ public interface Model {
     ArrayList<ChessPiece> getRemovedChessPieces();
     int getMatchScores(boolean Black);
     ArrayList<Match> getMatches(String username);
+    void updateOutcome(String player, String outcome, int matchId);
+    String getParticipationColor(String player, int matchId);
     ArrayList<Match> getMatchHistory(String username);
 
 }

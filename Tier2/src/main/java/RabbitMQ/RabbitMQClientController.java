@@ -49,8 +49,8 @@ public class RabbitMQClientController implements RabbitMQClient {
                     switch (message.getAction()) {
                         case "Move":                        
                             Message toSend = new Message();
-                            Position toMove = gson.fromJson(message.getData(),Position.class);
-                            ChessPiece movedChessPiece = model.MoveChessPiece(toMove.getVerticalAxis(), toMove.getHorizontalAxis());
+                            ChessPiece selected = gson.fromJson(message.getData(),ChessPiece.class);
+                            ChessPiece movedChessPiece = model.MoveChessPiece(selected);
                             if (movedChessPiece != null) {
                                 toSend.setData(gson.toJson(movedChessPiece));
                                 toSend.setDataSlot2(gson.toJson(model.getRemovedChessPieces()));
@@ -59,13 +59,20 @@ public class RabbitMQClientController implements RabbitMQClient {
                             } else {
                                 toSend.setAction("No chess Piece");
                             }
+
+                            System.out.println(toSend.getData());
+
                             response = gson.toJson(toSend);
                             break;
                         case "Upgrade":
                             Message toSendUpgrade = new Message();
                             toSendUpgrade.setAction("Upgrade Chess Piece");
-                            ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getData());
+                            ChessPiece toUpgrade = gson.fromJson(message.getDataSlot2(),ChessPiece.class);
+                            ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getData(),toUpgrade);
                             toSendUpgrade.setData(gson.toJson(upgradedChessPiece));
+
+                            System.out.println(toSendUpgrade.getData());
+
                             response = gson.toJson(toSendUpgrade);
                             break;
                         case "Load":
@@ -143,11 +150,14 @@ public class RabbitMQClientController implements RabbitMQClient {
                             break;
                         case "GetMatches":
                             username = gson.fromJson(message.getData(), String.class);
+                            System.out.println(username);
                             try{
                                 ArrayList<Match> matches = model.getMatches(username);
                                 String matchesToJson = gson.toJson(matches);
+                                System.out.println(matchesToJson);
                                 response = gson.toJson(new Message("Matches", matchesToJson));
                             }catch (Exception e){
+                                e.printStackTrace();
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
                             break;
@@ -160,6 +170,13 @@ public class RabbitMQClientController implements RabbitMQClient {
                             }catch (Exception e){
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
+                            break;
+                        case "UpdateOutcome":
+                            username = message.getData();
+                            String outcome = message.getDataSlot2();
+                            int matchId = Integer.parseInt(message.getDataSlot3());
+                            model.updateOutcome(username,outcome,matchId);
+                            response = gson.toJson(new Message(":D"));
                             break;
                         default:
                             break;

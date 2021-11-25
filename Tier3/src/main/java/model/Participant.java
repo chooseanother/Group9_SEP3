@@ -2,8 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public class Participant implements Serializable
-{
+public class Participant implements Serializable {
     private String username;
     private int matchId;
     private String color;
