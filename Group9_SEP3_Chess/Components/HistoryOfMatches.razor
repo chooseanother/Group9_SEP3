@@ -1,4 +1,4 @@
-@page "/MatchList"
+@page "/HistoryOfMatches"
 @using Group9_SEP3_Chess.Data
 @using Group9_SEP3_Chess.Models
 @using System.Text.Json
@@ -26,6 +26,7 @@ else
         <th>Tournament ID</th>
         <th>Opponent</th>
         <th>Length of turn</th>
+        <th>Date</th>
         </thead>
         @foreach (var item in matches)
         {
@@ -48,8 +49,9 @@ else
                     <td>@item.WhitePlayer.Username</td>
                 }
                 <td>@item.TurnTime</td>
+                <td>@item.LatestMove</td>
                 <td>
-                    <button class="moi btn-outline-dark" @onclick="@(() => PlayMatch(item.MatchID))">Play match</button>
+                    <button class="moi btn-outline-dark" @onclick="@(() => ViewMatch(item.MatchID))">View</button>
                 </td>
             </tr>
         }
@@ -63,13 +65,12 @@ else
     protected override async Task OnInitializedAsync()
     {
         loggedInUser = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
-        matches = await matchService.GetMatches(loggedInUser.Username);
+        matches = await matchService.GetFinishedMatches(loggedInUser.Username);
     }
 
-    private void PlayMatch(int MatchID)
+    private void ViewMatch(int MatchID)
     {
-        _navigationManager.NavigateTo($"/ChessBoard/{MatchID}");
+        _navigationManager.NavigateTo($"/MatchHistory/{MatchID}");
     }
 
 }
-

@@ -142,6 +142,27 @@ namespace Group9_SEP3_Chess.Data
                 throw new Exception($"{response.Action}");
             }
         }
+
+        public async Task<IList<Match>> GetFinishedMatches(string loggedInUser)
+        {
+            Message response = await _rabbitMq.SendRequestAsync(new Message
+            {
+                Action = "GetMatchHistory",
+                Data = JsonSerializer.Serialize(loggedInUser)
+            });
+            if (response.Action.Equals("MatchHistory"))
+            {
+                IList<Match> rm = JsonSerializer.Deserialize<IList<Match>>(response.Data, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                });
+                return rm;
+            }
+            else
+            {
+                throw new Exception($"{response.Action}");
+            }
+        }
     }
 }
     
