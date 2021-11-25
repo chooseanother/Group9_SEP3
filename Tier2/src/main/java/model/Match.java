@@ -3,40 +3,40 @@ package model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Match implements Serializable
-{
+
+public class Match implements Serializable {
+
     private int matchID;
     private int tournamentID;
     private int turnTime;
     private String type;
     private boolean finished;
-    private String UsersTurn;
+    private String usersTurn;
     private Date latestMove;
     private Participant whitePlayer;
     private Participant blackPlayer;
 
 
-    public Match(int matchID, int tournamentID, int turnTime, String type,
-        boolean finished, String usersTurn, Date latestMove, Participant whitePlayer, Participant blackPlayer) {
+    public Match(int matchID, int tournamentID, int turnTime, String type, boolean finished, String usersTurn, Date latestMove, Participant whitePlayer, Participant blackPlayer) {
         this.matchID = matchID;
         this.tournamentID = tournamentID;
         this.turnTime = turnTime;
         this.type = type;
         this.finished = finished;
-        UsersTurn = usersTurn;
+        this.usersTurn = usersTurn;
         this.latestMove = latestMove;
         this.whitePlayer = whitePlayer;
         this.blackPlayer = blackPlayer;
     }
 
-    public Match(int matchID, int tournamentID, int turnTime, String type,
-        boolean finished, String usersTurn, Date latestMove) {
+
+    public Match(int matchID, int tournamentID, int turnTime, String type, boolean finished, String usersTurn, Date latestMove) {
         this.matchID = matchID;
         this.tournamentID = tournamentID;
         this.turnTime = turnTime;
         this.type = type;
         this.finished = finished;
-        UsersTurn = usersTurn;
+        this.usersTurn = usersTurn;
         this.latestMove = latestMove;
     }
 
@@ -85,7 +85,7 @@ public class Match implements Serializable
     }
 
     public void setUsersTurn(String usersTurn) {
-        UsersTurn = usersTurn;
+        this.usersTurn = usersTurn;
     }
 
     public Date getLatestMove() {
