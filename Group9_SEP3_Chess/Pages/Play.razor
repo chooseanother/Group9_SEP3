@@ -26,7 +26,7 @@
             </div>
             @if (showError)
             {
-                <p style="color:red;margin: 0 10px;">@_errorMessage</p>
+                <p style="color:@errorColor;margin: 0 10px;">@_errorMessage</p>
             }
         </div>
         <p class="actions">
@@ -41,6 +41,7 @@
     private string Username { get; set; }
 
     private string _errorMessage;
+    private string errorColor;
     
     private readonly IDictionary<int, string> turnLengths = new Dictionary<int, string>
     {
@@ -65,11 +66,9 @@
 
         var result = await _playMatch.ChallengeUser(newChallenge);
 
-        if (!result.Equals("Success"))
-        {
-            showError = true;
-            _errorMessage = result;
-        }
+        errorColor = result.Contains("Failed") ? "red" : "green";
+        showError = true;
+        _errorMessage = result;
     }
     
     private void HandleInvalidSubmit()
