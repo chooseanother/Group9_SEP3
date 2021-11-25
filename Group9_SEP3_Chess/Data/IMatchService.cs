@@ -16,5 +16,7 @@ namespace Group9_SEP3_Chess.Data
         public IList<ChessPiece> getBlackRemovedChessPieces();
         public IList<ChessPiece> getWhiteRemovedChessPieces();
         String getMatchScores(bool Black);
+        
+        Task UpdateOutcome(string username, string outcome, int matchId);
     }
 }

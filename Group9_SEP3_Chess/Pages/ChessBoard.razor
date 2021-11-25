@@ -3,6 +3,8 @@
 @using System.Text.Json
 @using Group9_SEP3_Chess.Json2DArrayHelp
 @inject IMatchService _matchService
+@inject AuthenticationStateProvider authenticationStateProvider;
+
 <div class="row">
     <div class="col">
         <div class="RemovedPiecesTable">
@@ -86,7 +88,7 @@
         </div>
     </div>
     <div class="col">
-        
+
         <div class="RemovedPiecesTable">
             <h4>White Score: @WhiteScore</h4>
             <h4>Black removed: </h4>
@@ -104,16 +106,26 @@
 
 
 <div class="UpgradePart" style="text-align: center">
-            <label>Select upgrade: </label>
-            <select @bind="UpgradeSelected">
-                <option>Rook</option>
-                <option>Knight</option>
-                <option>Bishop</option>
-                <option>Queen</option>
-            </select>
+    <label>Select upgrade: </label>
+    <select @bind="UpgradeSelected">
+        <option>Rook</option>
+        <option>Knight</option>
+        <option>Bishop</option>
+        <option>Queen</option>
+    </select>
+    <button class="btn btn-outline-dark" @onclick="UpdateChessPiece">Upgrade</button>
+</div>
 
-            <button class="btn btn-outline-dark" @onclick="UpdateChessPiece">Upgrade</button>
-        </div>
+<div class="MarkMatch" style="text-align: center">
+    <label>Select match outcome: </label>
+    <select @bind="Outcome">
+        <option value="">Clear</option>
+        <option>Win</option>
+        <option>Loss</option>
+        <option>Draw</option>
+    </select>
+    <button class="btn btn-outline-dark" @onclick="UpdateOutcome">Submit</button>
+</div>
 
 <style>
     .board {
@@ -139,6 +151,7 @@
     String UpgradeSelected = "";
     String WhiteScore = "";
     String BlackScore = "";
+    private string Outcome { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -157,6 +170,12 @@
         BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
         BlackScore = _matchService.getMatchScores(true);
         WhiteScore = _matchService.getMatchScores(false);
+    }
+
+    private async Task UpdateOutcome()
+    {
+        var user = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
+        await _matchService.UpdateOutcome(user.Username, Outcome, 1);
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
@@ -206,7 +225,8 @@
             Data = UpgradeSelected
         };
         ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
-        if(toUpdate!=null){
+        if (toUpdate != null)
+        {
             chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
         }
     }
