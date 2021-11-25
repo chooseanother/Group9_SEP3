@@ -18,4 +18,5 @@ public interface Model {
     ArrayList<ChessPiece> getRemovedChessPieces();
     int getMatchScores(boolean Black);
     void updateOutcome(String player, String outcome, int matchId);
+    String getParticipationColor(String player, int matchId);
 }

@@ -90,6 +90,11 @@ public class PersistenceDB implements Persistence{
         matchParticipationDB.updateOutcome(player, outcome, matchId);
     }
 
+    @Override
+    public String getParticipationColor(String player, int matchId) throws SQLException {
+        return matchParticipationDB.getParticipationColor(player,matchId);
+    }
+
     @Override public User validateLogin(String username, String password)
         throws SQLException
     {

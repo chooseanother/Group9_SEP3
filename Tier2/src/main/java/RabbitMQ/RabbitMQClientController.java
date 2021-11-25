@@ -142,11 +142,11 @@ public class RabbitMQClientController implements RabbitMQClient {
                             }
                             break;
                         case "UpdateOutcome":
-                            user = gson.fromJson(message.getData(), User.class);
+                            username = message.getData();
                             String outcome = message.getDataSlot2();
                             int matchId = Integer.parseInt(message.getDataSlot3());
-                            model.updateOutcome(user.getUsername(),outcome,matchId);
-                            response = ":D";
+                            model.updateOutcome(username,outcome,matchId);
+                            response = gson.toJson(new Message(":D"));
                         default:
                             break;
                     }

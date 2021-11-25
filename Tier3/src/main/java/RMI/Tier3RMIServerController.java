@@ -118,6 +118,16 @@ public class Tier3RMIServerController
         }
     }
 
+    @Override
+    public String getParticipationColor(String player, int matchId) throws RemoteException {
+        try{
+            return persistence.getParticipationColor(player,matchId);
+        }catch (SQLException e){
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     public ArrayList<Challenge> loadChallenges() throws RemoteException {
         try {
             ArrayList<Challenge> challenges = persistence.loadChallenges();

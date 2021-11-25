@@ -178,4 +178,9 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
             e.printStackTrace();
         }
     }
+
+    @Override
+    public String getParticipationColor(String player, int matchId) throws RemoteException {
+        return tier3.getParticipationColor(player, matchId);
+    }
 }
