@@ -230,4 +230,27 @@ public class ModelManager implements Model {
         }
         return null;
     }
+
+    @Override
+    public void updateOutcome(String player, String outcome, int matchId) {
+        try{
+            // String color = iTier2RMIClient.getParticipationColor(player, matchId);
+            iTier2RMIClient.updateOutcome(player, outcome, matchId);
+
+            // Check if both match outcome for both players is market
+            // do stuff based on mark from both players
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getParticipationColor(String player, int matchId) {
+        try{
+            return iTier2RMIClient.getParticipationColor(player, matchId);
+        }catch (RemoteException e){
+            e.printStackTrace();
+            return "";
+        }
+    }
 }
