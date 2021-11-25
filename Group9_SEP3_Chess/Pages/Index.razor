@@ -1,12 +1,11 @@
 @page "/"
-@inject NavigationManager _navigationManager
+@using Group9_SEP3_Chess.Components
 
 <AuthorizeView>
     <Authorized>
-        <button class="btn btn-dark" @onclick='() => PlayMatch()'>Play match</button>
         <h2 style="text-align: center">Chess board</h2>
         <div >
-            <ChessBoard></ChessBoard>
+          <MatchList/>
         </div>
     </Authorized>
     <NotAuthorized>
@@ -17,8 +16,4 @@
 
 @code{
 
-    private void PlayMatch()
-    {
-        _navigationManager.NavigateTo($"play");
-    }
 }
