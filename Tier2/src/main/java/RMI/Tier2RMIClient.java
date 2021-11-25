@@ -141,6 +141,18 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         return tier3.getMoves(matchID);
     }
 
+    @Override public ArrayList<Match> getMatches(String username)
+        throws RemoteException
+    {
+        return tier3.getMatches(username);
+    }
+
+    @Override public ArrayList<Participant> getParticipants(int matchId)
+        throws RemoteException
+    {
+        return tier3.getParticipants(matchId);
+    }
+
     @Override
     public Match createMatch(int turnTime) throws RemoteException {
         try {

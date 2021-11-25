@@ -1,5 +1,6 @@
 package model;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,4 +18,5 @@ public interface Model {
     boolean rejectChallenge(Challenge challenge);
     ArrayList<ChessPiece> getRemovedChessPieces();
     int getMatchScores(boolean Black);
+    ArrayList<Match> getMatches(String username);
 }

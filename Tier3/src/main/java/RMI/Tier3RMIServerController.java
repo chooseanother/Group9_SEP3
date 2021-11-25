@@ -2,10 +2,8 @@ package RMI;/*
  * 12.09.2018 Original version
  */
 
-import model.Challenge;
-import model.Match;
-import model.Move;
-import model.User;
+
+import model.*;
 import persistence.Persistence;
 import persistence.PersistenceDB;
 
@@ -104,6 +102,34 @@ public class Tier3RMIServerController
         try {
             return persistence.getMoves(matchID);
         }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override public ArrayList<Match> getMatches(String username)
+        throws RemoteException
+    {
+        try
+        {
+            return persistence.getMatches(username);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override public ArrayList<Participant> getParticipants(int matchId)
+        throws RemoteException
+    {
+        try
+        {
+            return persistence.getParticipants(matchId);
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
             return null;
         }
