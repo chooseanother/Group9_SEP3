@@ -141,6 +141,17 @@ namespace Group9_SEP3_Chess.Data
                 throw new Exception($"{response.Action}");
             }
         }
+
+        public async Task UpdateOutcome(string username, string outcome, int matchId)
+        {
+            var response = await _rabbitMq.SendRequestAsync(new Message
+            {
+                Action = "UpdateOutcome",
+                Data = username,
+                DataSlot2 = outcome,
+                DataSlot3 = ""+matchId
+            });
+        }
     }
 }
     
