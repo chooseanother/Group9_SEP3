@@ -51,7 +51,7 @@ else
                 <td>@item.TurnTime</td>
                 <td>@(new DateTime(1970,1,1,1,0,0,0, DateTimeKind.Utc).AddMilliseconds(item.LatestMove))</td>
                 <td>
-                    <button class="btn btn-dark" @onclick='() => PlayMatch()'>Play match</button>
+                    <button class="btn btn-dark" @onclick='() => PlayMatch(item.MatchID)'>Play match</button>
                 </td>
             </tr>
         }
@@ -69,10 +69,9 @@ else
         Console.WriteLine(JsonSerializer.Serialize(matches));
     }
 
-    private void PlayMatch()
+    private void PlayMatch(int matchId)
     {
-        _navigationManager.NavigateTo($"play");
+        _navigationManager.NavigateTo($"/match/{matchId}");
     }
-
 }
 
