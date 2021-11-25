@@ -56,8 +56,8 @@ public class ChessBoard {
         chessPieces[7][7] = new ChessPiece("Rook", white, new Position(7, 7));
 
         for (int i = 0; i < 8; i++) {
-//            chessPieces[6][i] = chessPieces[0][7] = new ChessPiece("Pawn", white, new Position(6, i));
             chessPieces[6][i] = new ChessPiece("Pawn", white, new Position(6, i));
+            ;
         }
 
     }
@@ -111,24 +111,13 @@ public class ChessBoard {
                 return chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()];
 
             }
-
-
+     
+          
         } else if (!selected.getColor().equals(turnColor)) {
             System.out.println("Turn color is not matching");
         }
-
-//        for (int i = 0; i < chessPieces.length; i++) {
-//            for (int j = 0; j < chessPieces[i].length; j++) {
-//                if (chessPieces[i][j] != null) {
-//                    if(chessPieces[i][j].getSelected()){
-//                        System.out.println("Selected piece +"+new Gson().toJson(chessPieces[i][j]));
-//                    }
-//                }
-//            }
-//        }
-
-        //System.out.println(buildString);
-        System.out.println(new Gson().toJson(chessPieces));
+      
+      System.out.println(new Gson().toJson(chessPieces));
         return null;
     }
 
@@ -145,6 +134,7 @@ public class ChessBoard {
      *
      * @param UpgradeSelected the type of upgrade
      */
+
     public ChessPiece UpgradeChessPiece(String UpgradeSelected, ChessPiece toUpgrade, ITier2RMIClient iTier2RMIClient, int matchID) throws RemoteException {
         if(toUpgrade!=null && UpgradeSelected!=null){
             toUpgrade.setType(UpgradeSelected);
@@ -173,6 +163,24 @@ public class ChessBoard {
     }
 
     /**
+     * Returns a color, of the chess piece which should be making the next turn
+     *
+     * @return turnColor
+     */
+    public String getTurnColor() {
+        return turnColor;
+    }
+
+    /**
+     * Sets a color, of the chess piece which should be making the next turn, for loading.
+     *
+     * @param turnColor
+     */
+    public void setTurnColor(String turnColor) {
+        this.turnColor = turnColor;
+    }
+
+    /**
      * Returns the list of removed chess pieces
      *
      * @return list of removed chess pieces
@@ -186,63 +194,18 @@ public class ChessBoard {
      *
      * @return returns the score for white
      */
-    public int GetWhiteScore() {
+    public int GetScore(String color) {
         int result = 0;
 
-        for (int i = 0; i < RemovedChessPieces.size(); i++) {
+        for (ChessPiece removedChessPiece : RemovedChessPieces) {
 
-            if (RemovedChessPieces.get(i).getColor().equals("Black")) {
+            if (removedChessPiece.getColor().equals(color)) {
 
-                switch (RemovedChessPieces.get(i).getType()) {
-                    case "Pawn":
-                        result += 1;
-                        break;
-                    case "Rook":
-                        result += 5;
-                        break;
-                    case "Knight":
-                        result += 3;
-                        break;
-                    case "Bishop":
-                        result += 3;
-                        break;
-                    case "Queen":
-                        result += 9;
-                        break;
-                }
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Calculates and returns the score for Black
-     *
-     * @return returns the score for Black
-     */
-    public int GetBlackScore() {
-        int result = 0;
-
-        for (int i = 0; i < RemovedChessPieces.size(); i++) {
-
-            if (RemovedChessPieces.get(i).getColor().equals("White")) {
-
-                switch (RemovedChessPieces.get(i).getType()) {
-                    case "Pawn":
-                        result += 1;
-                        break;
-                    case "Rook":
-                        result += 5;
-                        break;
-                    case "Knight":
-                        result += 3;
-                        break;
-                    case "Bishop":
-                        result += 3;
-                        break;
-                    case "Queen":
-                        result += 9;
-                        break;
+                switch (removedChessPiece.getType()) {
+                    case "Pawn" -> result += 1;
+                    case "Rook" -> result += 5;
+                    case "Knight", "Bishop" -> result += 3;
+                    case "Queen" -> result += 9;
                 }
             }
         }

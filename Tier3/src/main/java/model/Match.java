@@ -1,8 +1,9 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Date;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Match implements Serializable {
 
@@ -16,7 +17,6 @@ public class Match implements Serializable {
     private Participant whitePlayer;
     private Participant blackPlayer;
 
-
     public Match(int matchID, int tournamentID, int turnTime, String type, boolean finished, String usersTurn, Date latestMove, Participant whitePlayer, Participant blackPlayer) {
         this.matchID = matchID;
         this.tournamentID = tournamentID;
@@ -28,7 +28,6 @@ public class Match implements Serializable {
         this.whitePlayer = whitePlayer;
         this.blackPlayer = blackPlayer;
     }
-
 
     public Match(int matchID, int tournamentID, int turnTime, String type, boolean finished, String usersTurn, Date latestMove) {
         this.matchID = matchID;
@@ -81,7 +80,7 @@ public class Match implements Serializable {
     }
 
     public String getUsersTurn() {
-        return UsersTurn;
+        return usersTurn;
     }
 
     public void setUsersTurn(String usersTurn) {

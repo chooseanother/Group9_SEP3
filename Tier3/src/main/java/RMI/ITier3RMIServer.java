@@ -2,9 +2,7 @@ package RMI;/*
  * 12.09.2018 Original version
  */
 
-import model.Challenge;
-import model.Move;
-import model.User;
+import model.*;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -21,8 +19,6 @@ public interface ITier3RMIServer
 
     ArrayList<Challenge> loadChallenges(String username) throws RemoteException;
 
-    boolean acceptChallenge(Challenge challenge) throws RemoteException;
-
     boolean rejectChallenge(Challenge challenge) throws RemoteException;
 
     User validateLogin(String username, String password) throws RemoteException;
@@ -33,14 +29,21 @@ public interface ITier3RMIServer
     
     boolean UpdateMatchUserTurn(int matchID,String color) throws RemoteException;
 
-//	void createMatch(String challenger, String challenged, int turnTime) throws RemoteException;
+    Match createMatch(int turnTime) throws RemoteException;
 
+    boolean createParticipation(String username, String color, int matchId) throws RemoteException;
+
+    boolean removeChallenge(Challenge challenge) throws RemoteException;
 
     public boolean MovePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
 
     public boolean UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
 
     ArrayList<Move> getMoves(int matchID) throws RemoteException;
+
+    ArrayList<Match> getMatches(String username) throws RemoteException;
+
+    ArrayList<Participant> getParticipants(int matchId) throws RemoteException;
 
     public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }

@@ -59,7 +59,9 @@ public class RabbitMQClientController implements RabbitMQClient {
                             } else {
                                 toSend.setAction("No chess Piece");
                             }
+
                             System.out.println(toSend.getData());
+
                             response = gson.toJson(toSend);
                             break;
                         case "Upgrade":
@@ -68,7 +70,9 @@ public class RabbitMQClientController implements RabbitMQClient {
                             ChessPiece toUpgrade = gson.fromJson(message.getDataSlot2(),ChessPiece.class);
                             ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getData(),toUpgrade);
                             toSendUpgrade.setData(gson.toJson(upgradedChessPiece));
+
                             System.out.println(toSendUpgrade.getData());
+
                             response = gson.toJson(toSendUpgrade);
                             break;
                         case "Load":
@@ -78,7 +82,6 @@ public class RabbitMQClientController implements RabbitMQClient {
                             toLoadChessPieces.setData(gson.toJson(chessBoard));
                             toLoadChessPieces.setDataSlot2(gson.toJson(model.getRemovedChessPieces()));
                             toLoadChessPieces.setDataSlot3(model.getMatchScores(true) + " " +model.getMatchScores(false));
-//                            System.out.println(toLoadChessPieces.getObject());
                             response = gson.toJson(toLoadChessPieces);
                             break;
                         case "Register":
@@ -144,6 +147,17 @@ public class RabbitMQClientController implements RabbitMQClient {
                             }catch(Exception e){
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
+                            break;
+                        case "GetMatches":
+                            username = gson.fromJson(message.getData(), String.class);
+                            try{
+                                ArrayList<Match> matches = model.getMatches(username);
+                                String matchesToJson = gson.toJson(matches);
+                                response = gson.toJson(new Message("Matches", matchesToJson));
+                            }catch (Exception e){
+                                response = gson.toJson(new Message(e.getMessage()));
+                            }
+                            break;
                         default:
                             break;
                     }

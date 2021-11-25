@@ -1,8 +1,6 @@
 package persistence;
 
-import model.Challenge;
-import model.Move;
-import model.User;
+import model.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,6 +36,16 @@ public class PersistenceDB implements Persistence{
         matchDB.UpgradePiece(matchId,piece, color,startPosition, endPosition);
     }
 
+    @Override
+    public Match createMatch(int turnTime, String type) throws SQLException {
+        return matchDB.createMatch(turnTime,type);
+    }
+
+    @Override
+    public Match createMatch(int turnTime, String type, int tournamentId) throws SQLException {
+        return matchDB.createMatch(turnTime,toString(),tournamentId);
+    }
+
     public void createChallenge(Challenge challenge) throws SQLException {
         challengeDB.createChallenge(challenge);
     }
@@ -57,10 +65,7 @@ public class PersistenceDB implements Persistence{
         return challengeDB.deleteChallenge(challenge);
     }
 
-    @Override
-    public int createMatch(int turnTime, String type) throws SQLException {
-        return matchDB.createMatch(turnTime, type);
-    }
+
 
     @Override
     public void UpdateMatchUserTurn(int matchId, String color) throws SQLException {
@@ -72,9 +77,15 @@ public class PersistenceDB implements Persistence{
         return matchDB.getMoves(matchID);
     }
 
+    @Override public ArrayList<Match> getMatches(String username)
+        throws SQLException
+    {
+        return matchDB.getMatches(username);
+    }
+
     @Override
-    public int createMatchParticipation(String player, String color, int matchId) throws SQLException {
-        return matchParticipationDB.createMatchParticipation(player, color, matchId);
+    public void createMatchParticipation(String player, String color, int matchId) throws SQLException {
+        matchParticipationDB.createMatchParticipation(player, color, matchId);
     }
 
     @Override public User validateLogin(String username, String password)
@@ -91,5 +102,11 @@ public class PersistenceDB implements Persistence{
     @Override
     public User getUser(String username) throws SQLException {
         return userDB.getUser(username);
+    }
+
+    @Override public ArrayList<Participant> getParticipants(int matchId)
+        throws SQLException
+    {
+        return matchParticipationDB.getParticipants(matchId);
     }
 }

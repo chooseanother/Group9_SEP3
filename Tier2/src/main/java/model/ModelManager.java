@@ -11,8 +11,7 @@ import java.util.ArrayList;
 public class ModelManager implements Model {
     private ITier2RMIClient iTier2RMIClient;
     private RabbitMQClient rabbitMQClient;
-//    private ChessBoard chessBoard; //Should be match
-
+    private ChessBoard chessBoard; //Should be match
 
     public ModelManager() throws RemoteException {
         iTier2RMIClient = new Tier2RMIClient();
@@ -174,11 +173,11 @@ public class ModelManager implements Model {
     @Override
     public boolean acceptChallenge(Challenge challenge) {
         try {
-//            return iTier2RMIClient.acceptChallenge(challenge);
-            if (iTier2RMIClient.acceptChallenge(challenge)) {
-//                iTier2RMIClient.createMatch(challenge.getChallenger(), challenge.getChallenged(), challenge.getTurnTime());
-                return true;
-            }
+            Match match = iTier2RMIClient.createMatch(challenge.getTurnTime());
+            iTier2RMIClient.createParticipation(challenge.getChallenger(),"White",match.getMatchID());
+            iTier2RMIClient.createParticipation(challenge.getChallenged(),"Black",match.getMatchID());
+            iTier2RMIClient.removeChallenge(challenge);
+            return true;
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -202,10 +201,33 @@ public class ModelManager implements Model {
 
     @Override
     public int getMatchScores(boolean Black) {
-        if (Black) {
-            return getChessBoard().GetBlackScore();
+        if (Black){
+            return getChessBoard().GetScore("Black");
         } else {
-            return getChessBoard().GetWhiteScore();
+            return getChessBoard().GetScore("White");
         }
+    }
+
+    @Override public ArrayList<Match> getMatches(String username)
+    {
+        try{
+            ArrayList<Match> matches = iTier2RMIClient.getMatches(username);
+            for (Match m : matches){
+                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(m.getMatchID());
+                for(Participant p: participants){
+                    if(p.getColor().equals("Black")){
+                        m.setBlackPlayer(p);
+                    }
+                    else{
+                        m.setWhitePlayer(p);
+                    }
+                }
+            }
+            return matches;
+
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
