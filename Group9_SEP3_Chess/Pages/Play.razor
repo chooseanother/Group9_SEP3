@@ -1,6 +1,7 @@
 @page "/play"
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
+@inject AuthenticationStateProvider authenticationStateProvider;
 
 @inject IPlayMatch _playMatch
 
@@ -34,8 +35,7 @@
         </p>
     </EditForm>
 </div>
-<Challenges></Challenges>
-<Challenges Username="@Username"></Challenges>
+
 
 @code {
     private string Username { get; set; }
@@ -56,7 +56,7 @@
     {
         // load username from currently logged in user
         // Username = loggedInUser.Username
-        Username = "User1";
+        Username = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser().Username;
     }
     
     private async Task HandleValidSubmit()

@@ -1,9 +1,8 @@
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
-
+@inject AuthenticationStateProvider authenticationStateProvider;
 @inject IPlayMatch _playMatch
 
-<h3>Challenges</h3>
 
 @if (_challenges == null)
 {
@@ -65,6 +64,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        Username = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser().Username;
         _challenges = await _playMatch.GetChallenges(Username);
         // await Task.Delay(100);
     }

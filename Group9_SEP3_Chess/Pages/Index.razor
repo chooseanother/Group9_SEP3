@@ -1,13 +1,30 @@
 @page "/"
 @using Group9_SEP3_Chess.Components
+@using Group9_SEP3_Chess.Data
+@using Group9_SEP3_Chess.Models
+@inject AuthenticationStateProvider authenticationStateProvider;
 
+<link href="Index.css" rel="stylesheet">
 <AuthorizeView>
     <Authorized>
-        <h2 style="text-align: center">Chess board</h2>
-        <div >
+        <div id="editComponent">
             <Edit></Edit>
-            <MatchList/>
-            <HistoryOfMatches></HistoryOfMatches>
+        </div>
+        <div id="component"><div id="challengeComponent"><Play></Play></div>
+        <div id="hostTournamentComponent"></div>
+        <div id="joinTournamentComponent"></div></div>
+        <div id="listComponent">
+            <TabControl>
+                <TabPage Text="Matches">
+                    <MatchList/>
+                </TabPage>
+                <TabPage Text="History">
+                    <HistoryOfMatches></HistoryOfMatches>
+                </TabPage>
+                <TabPage Text="Challenges">
+                <Challenges></Challenges>
+                </TabPage>
+            </TabControl>
         </div>
     </Authorized>
     <NotAuthorized>
@@ -17,5 +34,6 @@
 </AuthorizeView>
 
 @code{
+
 
 }
