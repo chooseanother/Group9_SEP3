@@ -83,7 +83,7 @@ public class MatchDB implements MatchPersistence{
                 boolean finished = resultSet.getBoolean("finished");
                 String usersTurn = resultSet.getString("usersturn");
                 String latestMove = resultSet.getString("latestmove");
-                SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+                SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                 Date date = null;
                 try
                 {

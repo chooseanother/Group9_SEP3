@@ -19,4 +19,6 @@ public interface Model {
     ArrayList<ChessPiece> getRemovedChessPieces();
     int getMatchScores(boolean Black);
     ArrayList<Match> getMatches(String username);
+    ArrayList<Match> getMatchHistory(String username);
+
 }

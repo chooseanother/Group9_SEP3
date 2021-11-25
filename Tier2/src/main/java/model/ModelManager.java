@@ -216,6 +216,35 @@ public class ModelManager implements Model {
         try{
             ArrayList<Match> matches = iTier2RMIClient.getMatches(username);
             for (Match m : matches){
+                if(!m.getFinished()){
+                    matches.remove(m);
+                }
+                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(m.getMatchID());
+                for(Participant p: participants){
+                    if(p.getColor().equals("Black")){
+                        m.setBlackPlayer(p);
+                    }
+                    else{
+                        m.setWhitePlayer(p);
+                    }
+                }
+            }
+            return matches;
+
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override public ArrayList<Match> getMatchHistory(String username)
+    {
+        try{
+            ArrayList<Match> matches = iTier2RMIClient.getMatches(username);
+            for (Match m : matches){
+                if(m.getFinished()){
+                    matches.remove(m);
+                }
                 ArrayList<Participant> participants = iTier2RMIClient.getParticipants(m.getMatchID());
                 for(Participant p: participants){
                     if(p.getColor().equals("Black")){
