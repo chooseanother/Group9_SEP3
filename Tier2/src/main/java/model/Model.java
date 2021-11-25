@@ -21,4 +21,6 @@ public interface Model {
     ArrayList<Match> getMatches(String username);
     void updateOutcome(String player, String outcome, int matchId);
     String getParticipationColor(String player, int matchId);
+    ArrayList<Match> getMatchHistory(String username);
+
 }
