@@ -38,6 +38,10 @@ public interface ITier3RMIServer
 
     ArrayList<Move> getMoves(int matchID) throws RemoteException;
 
+    ArrayList<Match> getMatches(String username) throws RemoteException;
+
+    ArrayList<Participant> getParticipants(int matchId) throws RemoteException;
+
     Match createMatch(int turnTime) throws RemoteException;
 
     boolean createParticipation(String username, String color, int matchId) throws RemoteException;

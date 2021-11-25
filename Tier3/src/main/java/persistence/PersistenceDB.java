@@ -1,9 +1,6 @@
 package persistence;
 
-import model.Challenge;
-import model.Match;
-import model.Move;
-import model.User;
+import model.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -80,6 +77,12 @@ public class PersistenceDB implements Persistence{
         return matchDB.getMoves(matchID);
     }
 
+    @Override public ArrayList<Match> getMatches(String username)
+        throws SQLException
+    {
+        return matchDB.getMatches(username);
+    }
+
     @Override
     public void createMatchParticipation(String player, String color, int matchId) throws SQLException {
         matchParticipationDB.createMatchParticipation(player, color, matchId);
@@ -109,5 +112,11 @@ public class PersistenceDB implements Persistence{
     @Override
     public User getUser(String username) throws SQLException {
         return userDB.getUser(username);
+    }
+
+    @Override public ArrayList<Participant> getParticipants(int matchId)
+        throws SQLException
+    {
+        return matchParticipationDB.getParticipants(matchId);
     }
 }

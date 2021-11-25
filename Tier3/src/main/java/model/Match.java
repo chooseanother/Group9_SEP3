@@ -1,9 +1,12 @@
 package model;
 
 import java.io.Serializable;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Match implements Serializable {
+
     private int matchID;
     private int tournamentID;
     private int turnTime;
