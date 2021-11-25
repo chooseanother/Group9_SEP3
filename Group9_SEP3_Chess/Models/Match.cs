@@ -16,7 +16,7 @@ namespace Group9_SEP3_Chess.Models
         public  string Type { get; set; }
         [JsonPropertyName("finished")]
         public  bool Finished { get; set; }
-        [JsonPropertyName("UsersTurn")]
+        [JsonPropertyName("usersTurn")]
         public  string UsersTurn { get; set; }
         [JsonPropertyName("latestMove")]
         public  long LatestMove { get; set; }
