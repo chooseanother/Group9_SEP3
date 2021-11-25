@@ -143,6 +143,17 @@ namespace Group9_SEP3_Chess.Data
             }
         }
 
+        public async Task UpdateOutcome(string username, string outcome, int matchId)
+        {
+            var response = await _rabbitMq.SendRequestAsync(new Message
+            {
+                Action = "UpdateOutcome",
+                Data = username,
+                DataSlot2 = outcome,
+                DataSlot3 = ""+matchId
+            });
+        }
+
         public async Task<IList<Match>> GetFinishedMatches(string loggedInUser)
         {
             Message response = await _rabbitMq.SendRequestAsync(new Message

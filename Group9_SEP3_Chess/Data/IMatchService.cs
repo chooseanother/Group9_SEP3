@@ -15,11 +15,12 @@ namespace Group9_SEP3_Chess.Data
 
         Task<ChessPiece[,]> LoadChessPieces(Message message,
             CancellationToken cancellationToken = default(CancellationToken));
-        IList<ChessPiece> getBlackRemovedChessPieces();
-        IList<ChessPiece> getWhiteRemovedChessPieces();
+        public IList<ChessPiece> getBlackRemovedChessPieces();
+        public IList<ChessPiece> getWhiteRemovedChessPieces();
         String getMatchScores(bool Black);
 
         Task<IList<Match>> GetMatches(string loggedInUser);
+        Task UpdateOutcome(string username, string outcome, int matchId);
         
         Task<IList<Match>> GetFinishedMatches(string loggedInUser);
 

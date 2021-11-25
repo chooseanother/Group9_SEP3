@@ -19,7 +19,7 @@ namespace Group9_SEP3_Chess.Models
         [JsonPropertyName("UsersTurn")]
         public  string UsersTurn { get; set; }
         [JsonPropertyName("latestMove")]
-        public DateTime LatestMove { get; set; }
+        public  long LatestMove { get; set; }
         [JsonPropertyName("whitePlayer")]
         public  Participant WhitePlayer { get; set; }
         [JsonPropertyName("blackPlayer")]
