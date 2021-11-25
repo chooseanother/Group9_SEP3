@@ -65,11 +65,12 @@ namespace Group9_SEP3_Chess.Data
             {
                 removedChessPieces = JsonSerializer.Deserialize<List<ChessPiece>>(response.DataSlot2);
                 MatchScores = response.DataSlot3;
-                ChessPiece[,] chessPieces = JsonSerializer.Deserialize<ChessPiece[,]>(response.Data, new JsonSerializerOptions
-               {
-                   Converters = { new Array2DConverter() },
-               });
-               
+                ChessPiece[,] chessPieces = JsonSerializer.Deserialize<ChessPiece[,]>(response.Data,
+                    new JsonSerializerOptions
+                    {
+                        Converters = {new Array2DConverter()},
+                    });
+
                 return chessPieces;
             }
 
@@ -151,6 +152,27 @@ namespace Group9_SEP3_Chess.Data
                 DataSlot2 = outcome,
                 DataSlot3 = ""+matchId
             });
+        }
+
+        public async Task<IList<Match>> GetFinishedMatches(string loggedInUser)
+        {
+            Message response = await _rabbitMq.SendRequestAsync(new Message
+            {
+                Action = "GetMatchHistory",
+                Data = JsonSerializer.Serialize(loggedInUser)
+            });
+            if (response.Action.Equals("MatchHistory"))
+            {
+                IList<Match> rm = JsonSerializer.Deserialize<IList<Match>>(response.Data, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                });
+                return rm;
+            }
+            else
+            {
+                throw new Exception($"{response.Action}");
+            }
         }
     }
 }
