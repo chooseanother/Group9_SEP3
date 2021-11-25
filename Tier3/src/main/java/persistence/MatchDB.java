@@ -5,12 +5,10 @@ import model.Move;
 import model.Participant;
 import model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,15 +17,18 @@ import java.util.Date;
 public class MatchDB implements MatchPersistence{
     @Override
     public Match createMatch(int turnTime, String type) throws SQLException {
+        // should set latest move to current time
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO MATCH (TURNTIME,TYPE) VALUES(?, ?)",PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO MATCH (TURNTIME,TYPE,LATESTMOVE) VALUES(?, ?, ?)",PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setInt(1, turnTime);
             statement.setString(2, type);
+            Timestamp now = java.sql.Timestamp.valueOf(LocalDateTime.now());
+            statement.setTimestamp(3,now);
             statement.executeUpdate();
             ResultSet keys = statement.getGeneratedKeys();
 
             if (keys.next()){
-               return new Match(keys.getInt(1),0,turnTime,type,false,"White",null);
+               return new Match(keys.getInt(1),0,turnTime,type,false,"White",now.getTime());
             } else {
                 throw new SQLException("No keys generated");
             }
@@ -36,15 +37,18 @@ public class MatchDB implements MatchPersistence{
 
     @Override
     public Match createMatch(int turnTime, String type, int tournamentId) throws SQLException {
+        // should set latest move to current time
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO MATCH (TURNTIME,TYPE,TOURNAMENTID) VALUES(?, ?, ?)",PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO MATCH (TURNTIME,TYPE,TOURNAMENTID,LATESTMOVE) VALUES(?, ?, ?, ?)",PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setInt(1, turnTime);
             statement.setString(2, type);
             statement.setInt(3,tournamentId);
+            Timestamp now = java.sql.Timestamp.valueOf(LocalDateTime.now());
+            statement.setTimestamp(4,now);
             statement.executeUpdate();
             ResultSet keys = statement.getGeneratedKeys();
             if (keys.next()){
-                return new Match(keys.getInt(1),tournamentId,turnTime,type,false,"White",null);
+                return new Match(keys.getInt(1),tournamentId,turnTime,type,false,"White",now.getTime());
             } else {
                 throw new SQLException("No keys generated");
             }
@@ -95,7 +99,7 @@ public class MatchDB implements MatchPersistence{
                 boolean finished = resultSet.getBoolean("finished");
                 String usersTurn = resultSet.getString("usersturn");
                 String latestMove = resultSet.getString("latestmove");
-                SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = null;
                 try
                 {
@@ -105,7 +109,7 @@ public class MatchDB implements MatchPersistence{
                 {
                     e.printStackTrace();
                 }
-                Match match = new Match(matchId, tournamentid, turnTime, type, finished ,usersTurn, date);
+                Match match = new Match(matchId, tournamentid, turnTime, type, finished ,usersTurn, date.getTime());
                 matches.add(match);
             }
         }

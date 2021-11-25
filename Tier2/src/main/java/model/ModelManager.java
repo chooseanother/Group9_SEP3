@@ -234,7 +234,6 @@ public class ModelManager implements Model {
     @Override
     public void updateOutcome(String player, String outcome, int matchId) {
         try{
-            // String color = iTier2RMIClient.getParticipationColor(player, matchId);
             iTier2RMIClient.updateOutcome(player, outcome, matchId);
 
             // Check if both match outcome for both players is market
