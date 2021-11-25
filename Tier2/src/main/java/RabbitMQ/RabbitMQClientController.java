@@ -164,7 +164,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                         case "GetMatchHistory":
                             username = gson.fromJson(message.getData(), String.class);
                             try{
-                                ArrayList<Match> matchHistory = model.getMatches(username);
+                                ArrayList<Match> matchHistory = model.getMatchHistory(username);
                                 String matchesToJson = gson.toJson(matchHistory);
                                 response = gson.toJson(new Message("MatchHistory", matchesToJson));
                             }catch (Exception e){

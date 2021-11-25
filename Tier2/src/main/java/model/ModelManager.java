@@ -4,6 +4,7 @@ import RMI.ITier2RMIClient;
 import RMI.Tier2RMIClient;
 import RabbitMQ.RabbitMQClient;
 import RabbitMQ.RabbitMQClientController;
+import com.google.gson.Gson;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -212,10 +213,10 @@ public class ModelManager implements Model {
     {
         try{
             ArrayList<Match> matches = iTier2RMIClient.getMatches(username);
+            System.out.println(new Gson().toJson(matches));
+            matches.removeIf(Match::getFinished);
+            System.out.println(new Gson().toJson(matches));
             for (Match m : matches){
-                if(!m.getFinished()){
-                    matches.remove(m);
-                }
                 ArrayList<Participant> participants = iTier2RMIClient.getParticipants(m.getMatchID());
                 for(Participant p: participants){
                     if(p.getColor().equals("Black")){
@@ -238,10 +239,8 @@ public class ModelManager implements Model {
     {
         try{
             ArrayList<Match> matches = iTier2RMIClient.getMatches(username);
+            matches.removeIf(m -> !m.getFinished());
             for (Match m : matches){
-                if(m.getFinished()){
-                    matches.remove(m);
-                }
                 ArrayList<Participant> participants = iTier2RMIClient.getParticipants(m.getMatchID());
                 for(Participant p: participants){
                     if(p.getColor().equals("Black")){
