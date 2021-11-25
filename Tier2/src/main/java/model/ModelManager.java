@@ -264,6 +264,42 @@ public class ModelManager implements Model {
         try{
             iTier2RMIClient.updateOutcome(player, outcome, matchId);
 
+            ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchId);
+
+            Participant player1 = participants.get(0);
+            Participant player2 = participants.get(1);
+
+            switch (player1.getOutcome()){
+                case "Draw":
+                    if (player2.getOutcome().equals("Draw")){
+                        // set match to finished
+                        iTier2RMIClient.setMatchOutcome(matchId,true);
+                        // add 1 to drawn games for player 1 and player2
+                        // add 1 to total games played for player1 and player2
+                    }
+                    break;
+                case "Win":
+                    if (player2.getOutcome().equals("Loss")){
+                        // set match to finished
+                        iTier2RMIClient.setMatchOutcome(matchId,true);
+                        // award win to player1
+                        // give loss to player2
+                        // update total games played for player1 and player2
+                    }
+                    break;
+                case "Loss":
+                    if (player2.getOutcome().equals("Win")){
+                        // set match to finished
+                        iTier2RMIClient.setMatchOutcome(matchId,true);
+                        // award win to player2
+                        // give loss to player1
+                        // update total games played for player1 and player2
+                    }
+                    break;
+                default:
+
+            }
+
             // Check if both match outcome for both players is market
             // do stuff based on mark from both players
         }catch (RemoteException e){

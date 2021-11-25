@@ -73,6 +73,11 @@ public class PersistenceDB implements Persistence{
     }
 
     @Override
+    public void setMatchOutcome(int matchId, boolean finished) throws SQLException {
+        matchDB.setMatchOutcome(matchId, finished);
+    }
+
+    @Override
     public ArrayList<Move> getMoves(int matchID) throws SQLException {
         return matchDB.getMoves(matchID);
     }

@@ -195,4 +195,9 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     public String getParticipationColor(String player, int matchId) throws RemoteException {
         return tier3.getParticipationColor(player, matchId);
     }
+
+    @Override
+    public boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException {
+        return tier3.setMatchOutcome(matchId, finished);
+    }
 }

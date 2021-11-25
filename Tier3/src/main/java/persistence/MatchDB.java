@@ -128,6 +128,16 @@ public class MatchDB implements MatchPersistence{
     }
 
     @Override
+    public void setMatchOutcome(int matchId, boolean finished) throws SQLException {
+        try(Connection connection = ConnectionDB.getInstance().getConnection()){
+            PreparedStatement statement = connection.prepareStatement("UPDATE MATCH SET FINISHED = ? WHERE MATCHID = ?");
+            statement.setBoolean(1, finished);
+            statement.setInt(2,matchId);
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
     public void MovePiece( int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO MOVE ( MATCHID, PIECE, COLOR, STARTPOSITION, ENDPOSITION) " +
