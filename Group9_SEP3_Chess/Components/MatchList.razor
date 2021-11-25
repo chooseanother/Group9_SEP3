@@ -67,11 +67,10 @@ else
         loggedInUser = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
         matches = await matchService.GetMatches(loggedInUser.Username);
     }
-
+      
     private void PlayMatch(int MatchID)
     {
         _navigationManager.NavigateTo($"/match/{MatchID}");
     }
-
 }
 
