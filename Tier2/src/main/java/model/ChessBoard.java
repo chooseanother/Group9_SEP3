@@ -84,6 +84,15 @@ public class ChessBoard {
                 testForNullRMI = true;
             } else {
                 if (iTier2RMIClient.MovePiece(selected, matchID) && iTier2RMIClient.UpdateMatchUserTurn(matchID, turnColor)) {
+                    //Sending of email after making the turn
+                   ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
+                   for (Participant p: participants){
+                       if(p.getColor().equals(turnColor)){
+                           User user = iTier2RMIClient.getUser(p.getUsername());
+                           Email email = new Email();
+                           email.sendEmail("NotSoBusyChess@gmail.com",user.getEmail(), user.getUsername(), matchID);
+                       }
+                   }
                     testForNullRMI = true;
                     System.out.println(turnColor + " -----------------------------------------------------$$$$$$$$");
                 }

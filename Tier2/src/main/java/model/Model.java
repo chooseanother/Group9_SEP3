@@ -22,5 +22,4 @@ public interface Model {
     void updateOutcome(String player, String outcome, int matchId);
     String getParticipationColor(String player, int matchId);
     ArrayList<Match> getMatchHistory(String username);
-
 }
