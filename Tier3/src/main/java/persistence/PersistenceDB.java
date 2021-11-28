@@ -95,6 +95,11 @@ public class PersistenceDB implements Persistence{
         return tournamentParticipationPersistence.loadTournamentParticipants(tournamentId);
     }
 
+    @Override
+    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws SQLException {
+        tournamentParticipationPersistence.UpdateParticipantsPlacement(username, placement, tournamentId);
+    }
+
     @Override public User validateLogin(String username, String password)
         throws SQLException
     {

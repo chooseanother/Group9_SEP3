@@ -48,16 +48,9 @@ public interface ITier2RMIClient extends Remote {
 
     boolean removeChallenge(Challenge challenge) throws RemoteException;
 
-
-    ArrayList<Move> getMoves(int matchID) throws RemoteException;
-
-    Match createMatch(int turnTime) throws RemoteException;
-
     public Match createMatch(int turnTime, int tournamentID) throws RemoteException;
 
-    boolean createParticipation(String username, String color, int matchId) throws RemoteException;
-
-    boolean removeChallenge(Challenge challenge) throws RemoteException;
+    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException;
 
     public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException;
 

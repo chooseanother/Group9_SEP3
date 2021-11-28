@@ -14,7 +14,7 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     public Tier2RMIClient() throws RemoteException {
         try {
 
-            tier3 =(ITier3RMIServer) Naming.lookup(ITier3RMIServer.T3_SERVICE_NAME);
+            tier3 = (ITier3RMIServer) Naming.lookup(ITier3RMIServer.T3_SERVICE_NAME);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -24,30 +24,31 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     @Override
     public boolean registerUser(String username, String password, String email) throws RemoteException {
 
-            try{
-                return tier3.registerUser(new User(username, password, email));
-            }catch (IllegalArgumentException e){
-                return false;
-                // actions to counter illegal data
-            }
+        try {
+            return tier3.registerUser(new User(username, password, email));
+        } catch (IllegalArgumentException e) {
+            return false;
+            // actions to counter illegal data
+        }
 
     }
 
-    @Override public boolean MovePiece(ChessPiece piece, int matchId) throws RemoteException {
+    @Override
+    public boolean MovePiece(ChessPiece piece, int matchId) throws RemoteException {
         try {
-           return tier3.MovePiece( matchId, piece.getType(), piece.getColor(), piece.getOldPosition().getVerticalAxis()+":"+piece.getOldPosition().getHorizontalAxis()
-                   , piece.getNewPosition().getVerticalAxis()+":"+piece.getNewPosition().getHorizontalAxis());
+            return tier3.MovePiece(matchId, piece.getType(), piece.getColor(), piece.getOldPosition().getVerticalAxis() + ":" + piece.getOldPosition().getHorizontalAxis()
+                    , piece.getNewPosition().getVerticalAxis() + ":" + piece.getNewPosition().getHorizontalAxis());
         } catch (Exception e) {
-          e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
     }
 
     @Override
     public boolean validateChallenge(Challenge challenge) throws RemoteException {
-        try{
+        try {
             return tier3.validateChallenge(challenge);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return false;
             // actions to counter illegal data
         }
@@ -58,7 +59,7 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         try {
             ArrayList<Challenge> challenges = (ArrayList<Challenge>) tier3.loadChallenges();
             return challenges;
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return null;
         }
@@ -69,18 +70,19 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         try {
             ArrayList<Challenge> challenges = (ArrayList<Challenge>) tier3.loadChallenges(username);
             return challenges;
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    @Override public boolean UpgradePiece(ChessPiece chessPiece, int matchID){
+    @Override
+    public boolean UpgradePiece(ChessPiece chessPiece, int matchID) {
         try {
-            return tier3.UpgradePiece(matchID, chessPiece.getType(), chessPiece.getColor(), chessPiece.getOldPosition().getVerticalAxis()+":"+chessPiece.getOldPosition().getHorizontalAxis()
-                    , chessPiece.getNewPosition().getVerticalAxis()+":"+chessPiece.getNewPosition().getHorizontalAxis());
-        } catch (Exception e){
-          e.printStackTrace();
+            return tier3.UpgradePiece(matchID, chessPiece.getType(), chessPiece.getColor(), chessPiece.getOldPosition().getVerticalAxis() + ":" + chessPiece.getOldPosition().getHorizontalAxis()
+                    , chessPiece.getNewPosition().getVerticalAxis() + ":" + chessPiece.getNewPosition().getHorizontalAxis());
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -89,27 +91,27 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     public boolean rejectChallenge(Challenge challenge) throws RemoteException {
         try {
             return tier3.rejectChallenge(challenge);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    @Override public User validateLogin(String username, String password)
-        throws RemoteException
-    {
-        try{
+    @Override
+    public User validateLogin(String username, String password)
+            throws RemoteException {
+        try {
             return tier3.validateLogin(username, password);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return null;
         }
     }
 
     @Override
     public boolean UpdateMatchUserTurn(int matchID, String color) throws RemoteException {
-        try{
-            return tier3.UpdateMatchUserTurn(matchID,color);
-        }catch (Exception e){
+        try {
+            return tier3.UpdateMatchUserTurn(matchID, color);
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -117,20 +119,18 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
 
     @Override
     public boolean updateUser(User user) throws RemoteException {
-        try{
+        try {
             return tier3.updateUser(user);
-        }
-        catch(RemoteException e){
+        } catch (RemoteException e) {
             return false;
         }
     }
 
     @Override
     public User getUser(String username) throws RemoteException {
-        try{
+        try {
             return tier3.getUser(username);
-        }
-        catch (RemoteException e){
+        } catch (RemoteException e) {
             e.printStackTrace();
             return null;
         }
@@ -141,7 +141,7 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         try {
             int Id = tier3.validateTournament(tournament);
             return Id;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return 0;
         }
@@ -151,7 +151,7 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException {
         try {
             return tier3.joinATournament(username, tournamentID, placement);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -186,9 +186,10 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     public Match createMatch(int turnTime) throws RemoteException {
         try {
             return tier3.createMatch(turnTime);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
-        }return null;
+        }
+        return null;
     }
 
     @Override
@@ -202,10 +203,19 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     }
 
     @Override
+    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException {
+        try {
+            tier3.UpdateParticipantsPlacement(username, placement, tournamentId);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public boolean createParticipation(String username, String color, int matchId) throws RemoteException {
-        try{
-            return tier3.createParticipation(username,color,matchId);
-        } catch (IllegalArgumentException e){
+        try {
+            return tier3.createParticipation(username, color, matchId);
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return false;
         }
@@ -213,9 +223,9 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
 
     @Override
     public boolean removeChallenge(Challenge challenge) throws RemoteException {
-        try{
+        try {
             return tier3.removeChallenge(challenge);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return false;
         }

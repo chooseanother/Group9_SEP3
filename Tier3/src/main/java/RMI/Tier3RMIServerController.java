@@ -295,5 +295,14 @@ public class Tier3RMIServerController
         }
     }
 
+    @Override
+    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException {
+        try {
+            persistence.UpdateParticipantsPlacement(username, placement, tournamentId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

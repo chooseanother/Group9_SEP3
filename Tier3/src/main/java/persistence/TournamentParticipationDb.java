@@ -43,4 +43,15 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
         }
     }
 
+    @Override
+    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws SQLException {
+        try (Connection connection = ConnectionDB.getInstance().getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE TOURNAMENT_PARTICIPATION SET PLACEMENT = ? WHERE USERNAME = ? AND TOURNAMENTID = ?");
+            statement.setInt(1, placement);
+            statement.setString(2, username);
+            statement.setInt(3, tournamentId);
+            statement.executeUpdate();
+        }
+    }
+
 }

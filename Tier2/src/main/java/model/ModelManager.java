@@ -226,29 +226,36 @@ public class ModelManager implements Model {
     public boolean joinATournament(String username, int tournamentID, int placement) {
         try {
             if (iTier2RMIClient.joinATournament(username, tournamentID, placement)) {
-                Tournament tournament = iTier2RMIClient.GetTournamentById(tournamentID);
-                ArrayList<TournamentParticipation> tournamentParticipations = iTier2RMIClient.getTournamentParticipationByTournamentID(tournamentID);
-                System.out.println("List: " + tournamentParticipations.toString());
-
-                if (tournamentParticipations.size() == tournament.getNrOfParticipants()) {
-
-                    for (int i = 0; i < tournamentParticipations.size(); i += 2) {
-                        Match match = iTier2RMIClient.createMatch(tournament.getTurnTime(), tournamentID);
-                        iTier2RMIClient.createParticipation(tournamentParticipations.get(i).getUsername(), "White", match.getMatchID());
-                        iTier2RMIClient.createParticipation(tournamentParticipations.get(i + 1).getUsername(), "Black", match.getMatchID());
-                    }
-
-
-                    iTier2RMIClient.UpdateTournamentNrOfParticipants(tournamentID, tournamentParticipations.size() / 2);
-
-
-                }
+                StartTournamentMatches(tournamentID);
                 return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public void StartTournamentMatches(int tournamentID){
+        try {
+            Tournament tournament = iTier2RMIClient.GetTournamentById(tournamentID);
+            ArrayList<TournamentParticipation> tournamentParticipations = iTier2RMIClient.getTournamentParticipationByTournamentID(tournamentID);
+            System.out.println("List: " + tournamentParticipations.toString());
+
+            if (tournamentParticipations.size() == tournament.getNrOfParticipants()) {
+
+                for (int i = 0; i < tournamentParticipations.size(); i += 2) {
+                    Match match = iTier2RMIClient.createMatch(tournament.getTurnTime(), tournamentID);
+                    iTier2RMIClient.createParticipation(tournamentParticipations.get(i).getUsername(), "White", match.getMatchID());
+                    iTier2RMIClient.createParticipation(tournamentParticipations.get(i + 1).getUsername(), "Black", match.getMatchID());
+                }
+
+
+                iTier2RMIClient.UpdateTournamentNrOfParticipants(tournamentID, tournamentParticipations.size() / 2);
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
