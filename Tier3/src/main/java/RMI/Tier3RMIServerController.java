@@ -191,6 +191,16 @@ public class Tier3RMIServerController
     }
 
     @Override
+    public Match createMatch(int turnTime, int tournamentID) throws RemoteException {
+        try {
+            return persistence.createMatch(turnTime, "Friendly", tournamentID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public boolean createParticipation(String username, String color, int matchId) throws RemoteException {
         try{
             persistence.createMatchParticipation(username,color,matchId);
@@ -245,41 +255,6 @@ public class Tier3RMIServerController
         try {
             persistence.CreateTournamentParticipation(username, tournamentID, placement);
             return true;
-//           ArrayList<String> usernames = persistence.loadUsernamesOfPlayersInATournament(tournamentID);
-//           ArrayList<Tournament> tournaments = persistence.loadTournaments();
-//           Tournament tournament = null;
-//
-//           for (Tournament i :tournaments){
-//               if (i.getTournamentId() == tournamentID){
-//                   tournament = i;
-//               }
-//           }
-//
-//           switch (tournament.getNrOfParticipants()){
-//               case 4:
-//                   if(usernames.size() == 4){
-//                       //First 2
-//                       int matchId = persistence.createMatch(tournament.getTurnTime(), "Friendly");
-//                       persistence.createMatchParticipation(usernames.get(0), "White", matchId);
-//                       persistence.createMatchParticipation(usernames.get(1), "Black", matchId);
-//                       //second 2
-//                       int matchId2 = persistence.createMatch(tournament.getTurnTime(), "Friendly");
-//                       persistence.createMatchParticipation(usernames.get(2), "White", matchId2);
-//                       persistence.createMatchParticipation(usernames.get(3), "Black", matchId2);
-//                       // wait for match or something...
-//                   } else {
-//                       persistence.CreateTournamentParticipation(username,tournamentID,placement);
-//                   }
-//                   break;
-//               case 8:
-//                   break;
-//               case 16:
-//                   break;
-//               case 32:
-//                   break;
-//           }
-//           return true;
-
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -302,7 +277,7 @@ public class Tier3RMIServerController
     }
 
     @Override
-    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id){
+    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException{
         try {
           return persistence.loadTournamentParticipants(id);
         } catch (SQLException e) {
@@ -311,9 +286,14 @@ public class Tier3RMIServerController
         return null;
     }
 
-
-
-
+    @Override
+    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException {
+        try {
+            persistence.UpdateTournamentNrOfParticipants(ID, newSize);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

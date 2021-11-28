@@ -11,6 +11,7 @@ import model.User;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 
@@ -36,6 +37,8 @@ public interface ITier3RMIServer
 
     Match createMatch(int turnTime) throws RemoteException;
 
+    public Match createMatch(int turnTime, int tournamentID) throws RemoteException;
+
     boolean createParticipation(String username, String color, int matchId) throws RemoteException;
 
     boolean removeChallenge(Challenge challenge) throws RemoteException;
@@ -48,9 +51,11 @@ public interface ITier3RMIServer
 
     public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException;
 
-    public Tournament GetTournamentById(int id);
+    public Tournament GetTournamentById(int id) throws RemoteException;
 
-    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id);
+    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException;
+
+    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException;
 
     ArrayList<Move> getMoves(int matchID) throws RemoteException;
 

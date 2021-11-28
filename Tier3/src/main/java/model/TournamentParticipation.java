@@ -1,6 +1,8 @@
 package model;
 
-public class TournamentParticipation {
+import java.io.Serializable;
+
+public class TournamentParticipation implements Serializable {
     private String username;
     private int tournamentId;
     private int placement;
@@ -33,5 +35,9 @@ public class TournamentParticipation {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override public String toString (){
+        return username + " " + tournamentId + " " + placement;
     }
 }

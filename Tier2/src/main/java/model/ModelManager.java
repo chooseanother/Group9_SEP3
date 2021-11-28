@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ModelManager implements Model {
     private ITier2RMIClient iTier2RMIClient;
@@ -61,7 +62,7 @@ public class ModelManager implements Model {
     public ChessPiece MoveChessPiece(int firstLayer, int secondLayer) {
         try {
             ChessPiece toMove = getChessBoard().MoveAttackChessPiece(firstLayer, secondLayer, iTier2RMIClient, 1);
-            System.out.println("Test in model manager toMove: "+toMove+" rmiclient: "+iTier2RMIClient);
+            System.out.println("Test in model manager toMove: " + toMove + " rmiclient: " + iTier2RMIClient);
             if (toMove == null) {
                 System.out.println("Chess Piece was not moved, as it was not saved");
             }
@@ -90,7 +91,7 @@ public class ModelManager implements Model {
     @Override
     public ChessBoard getChessBoard() {
         ChessBoard chessBoard = new ChessBoard();
-        try{
+        try {
             ArrayList<Move> moves = iTier2RMIClient.getMoves(1);
             if (moves.size() > 0) {
                 for (Move m : moves) {
@@ -105,7 +106,7 @@ public class ModelManager implements Model {
                     }
                 }
             }
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
         return chessBoard;
@@ -177,8 +178,8 @@ public class ModelManager implements Model {
     public boolean acceptChallenge(Challenge challenge) {
         try {
             Match match = iTier2RMIClient.createMatch(challenge.getTurnTime());
-            iTier2RMIClient.createParticipation(challenge.getChallenger(),"White",match.getMatchID());
-            iTier2RMIClient.createParticipation(challenge.getChallenged(),"Black",match.getMatchID());
+            iTier2RMIClient.createParticipation(challenge.getChallenger(), "White", match.getMatchID());
+            iTier2RMIClient.createParticipation(challenge.getChallenged(), "Black", match.getMatchID());
             iTier2RMIClient.removeChallenge(challenge);
             return true;
         } catch (RemoteException e) {
@@ -204,10 +205,8 @@ public class ModelManager implements Model {
 
     @Override
     public int getMatchScores(boolean Black) {
-        if (Black){
-            return getChessBoard().GetScore("Black");
         if (Black) {
-            return chessBoard.GetBlackScore();
+            return getChessBoard().GetScore("Black");
         } else {
             return getChessBoard().GetScore("White");
         }
@@ -226,28 +225,31 @@ public class ModelManager implements Model {
     @Override
     public boolean joinATournament(String username, int tournamentID, int placement) {
         try {
-            return iTier2RMIClient.joinATournament(username, tournamentID, placement);
+            if (iTier2RMIClient.joinATournament(username, tournamentID, placement)) {
+                Tournament tournament = iTier2RMIClient.GetTournamentById(tournamentID);
+                ArrayList<TournamentParticipation> tournamentParticipations = iTier2RMIClient.getTournamentParticipationByTournamentID(tournamentID);
+                System.out.println("List: " + tournamentParticipations.toString());
+
+                if (tournamentParticipations.size() == tournament.getNrOfParticipants()) {
+
+                    for (int i = 0; i < tournamentParticipations.size(); i += 2) {
+                        Match match = iTier2RMIClient.createMatch(tournament.getTurnTime(), tournamentID);
+                        iTier2RMIClient.createParticipation(tournamentParticipations.get(i).getUsername(), "White", match.getMatchID());
+                        iTier2RMIClient.createParticipation(tournamentParticipations.get(i + 1).getUsername(), "Black", match.getMatchID());
+                    }
+
+
+                    iTier2RMIClient.UpdateTournamentNrOfParticipants(tournamentID, tournamentParticipations.size() / 2);
+
+
+                }
+                return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
-    public void PlayTournament(int id) {
-        try {
-            Tournament tournament = iTier2RMIClient.GetTournamentById(id);
-            ArrayList<TournamentParticipation> tournamentParticipations = iTier2RMIClient.getTournamentParticipationByTournamentID(id);
-            if (tournamentParticipations.size() == tournament.getNrOfParticipants()) {
-                for (int i = 0; i < tournamentParticipations.size() / 2; i++) {
-                    Challenge challenge4 = new Challenge(tournamentParticipations.get(i).getUsername(),
-                            tournamentParticipations.get(i++).getUsername(), tournament.getTurnTime());
-                    //Creating the match
-                    iTier2RMIClient.acceptChallenge(challenge4);
-                }
-            }
 
-        } catch (Exception e) {
-
-        }
-    }
 }

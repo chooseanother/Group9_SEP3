@@ -51,7 +51,7 @@ public class PersistenceDB implements Persistence{
 
     @Override
     public Match createMatch(int turnTime, String type, int tournamentId) throws SQLException {
-        return matchDB.createMatch(turnTime,toString(),tournamentId);
+        return matchDB.createMatch(turnTime, type ,tournamentId);
     }
 
     public void createChallenge(Challenge challenge) throws SQLException {
@@ -124,5 +124,10 @@ public class PersistenceDB implements Persistence{
     @Override
     public ArrayList<Tournament> loadTournaments() throws SQLException {
         return tournamentPersistence.loadTournaments();
+    }
+
+    @Override
+    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws SQLException {
+        tournamentPersistence.UpdateTournamentNrOfParticipants(ID, newSize);
     }
 }

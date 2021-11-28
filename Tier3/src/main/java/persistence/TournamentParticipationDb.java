@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class TournamentParticipationDb implements TournamentParticipationPersistence{
@@ -27,7 +28,7 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
     @Override
     public ArrayList<TournamentParticipation> loadTournamentParticipants(int tournamentID) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("select USERNAME from TOURNAMENT_PARTICIPATION where TOURNAMENTID = ?");
+            PreparedStatement statement = connection.prepareStatement("select * from TOURNAMENT_PARTICIPATION where TOURNAMENTID = ? AND PLACEMENT = 0");
             statement.setInt(1, tournamentID);
             ResultSet resultSet = statement.executeQuery();
             ArrayList<TournamentParticipation> tournamentParticipations = new ArrayList<>();
@@ -36,7 +37,7 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
                 String username = resultSet.getString("USERNAME");
                 int TournamentId = resultSet.getInt("TOURNAMENTID");
                 int placement = resultSet.getInt("PLACEMENT");
-                tournamentParticipations.add(new TournamentParticipation(username, tournamentID, placement));
+                tournamentParticipations.add(new TournamentParticipation(username, TournamentId, placement));
             }
             return tournamentParticipations;
         }

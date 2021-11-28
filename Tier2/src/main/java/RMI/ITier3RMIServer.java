@@ -40,6 +40,10 @@ public interface ITier3RMIServer
 
     Match createMatch(int turnTime) throws RemoteException;
 
+    public Match createMatch(int turnTime, int tournamentID) throws RemoteException;
+
+    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException;
+
     boolean createParticipation(String username, String color, int matchId) throws RemoteException;
 
     boolean removeChallenge(Challenge challenge) throws RemoteException;

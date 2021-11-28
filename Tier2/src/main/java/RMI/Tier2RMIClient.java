@@ -192,6 +192,16 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     }
 
     @Override
+    public Match createMatch(int turnTime, int tournamentID) throws RemoteException {
+        try {
+            return tier3.createMatch(turnTime, tournamentID);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public boolean createParticipation(String username, String color, int matchId) throws RemoteException {
         try{
             return tier3.createParticipation(username,color,matchId);
@@ -208,6 +218,15 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         } catch (IllegalArgumentException e){
             e.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException {
+        try {
+            tier3.UpdateTournamentNrOfParticipants(ID, newSize);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
     }
 }
