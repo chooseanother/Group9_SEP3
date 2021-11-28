@@ -178,8 +178,8 @@ public class ModelManager implements Model {
     public boolean acceptChallenge(Challenge challenge) {
         try {
             Match match = iTier2RMIClient.createMatch(challenge.getTurnTime());
-            iTier2RMIClient.createParticipation(challenge.getChallenger(), "White", match.getMatchID());
-            iTier2RMIClient.createParticipation(challenge.getChallenged(), "Black", match.getMatchID());
+            iTier2RMIClient.createParticipation(challenge.getChallenger(),"White",match.getMatchID());
+            iTier2RMIClient.createParticipation(challenge.getChallenged(),"Black",match.getMatchID());
             iTier2RMIClient.removeChallenge(challenge);
             return true;
         } catch (RemoteException e) {

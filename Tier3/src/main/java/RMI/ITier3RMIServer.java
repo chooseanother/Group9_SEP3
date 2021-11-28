@@ -47,6 +47,8 @@ public interface ITier3RMIServer
 
     public boolean UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
 
+    ArrayList<Move> getMoves(int matchID) throws RemoteException;
+
     public int validateTournament(Tournament tournament) throws RemoteException;
 
     public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException;
@@ -55,6 +57,7 @@ public interface ITier3RMIServer
 
     public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException;
 
+    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id);
     public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException;
 
     ArrayList<Move> getMoves(int matchID) throws RemoteException;
