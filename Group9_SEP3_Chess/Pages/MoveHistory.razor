@@ -1,0 +1,58 @@
+@page "/MatchHistory/{id:int}"
+@using Group9_SEP3_Chess.Models
+@using Group9_SEP3_Chess.Data
+@inject IMatchService matchService;
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager _navigationManager
+
+<h1> Match id @id</h1>
+
+@if (moves == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else if (!moves.Any())
+{
+    <p>
+        <em>No matches in the system. </em>
+    </p>
+}
+else
+{
+    <table>
+        <thead>
+        <th>Move ID</th>
+        <th>Piece</th>
+        <th>Color</th>
+        <th>Start position</th>
+        <th>End position</th>
+        </thead>
+        @foreach (var item in moves)
+        {
+            <tr>
+                <th>@item.MoveID</th>
+                <th>@item.Piece</th>
+                <th>@item.Color</th>
+                <th>@item.StartPosition</th>
+                <th>@item.EndPosition</th>
+            </tr>
+        }
+    </table>
+}
+
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }
+
+    private IList<Move> moves;
+
+    protected override async Task OnInitializedAsync()
+    {
+        moves = await matchService.GetMoves(id);
+    }
+
+}
