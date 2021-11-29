@@ -2,8 +2,12 @@
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
 @using System.Text.Json
+@using System.Timers
 @inject IMatchService _matchService
 @inject AuthenticationStateProvider _authenticationStateProvider
+<div class="row" style="justify-content: center">
+    <p>@Counter.ToString()</p>
+</div>
 <div class="row">
     <div class="col">
         <div class="RemovedPiecesTable">
@@ -138,6 +142,10 @@
     String WhiteScore = "";
     String BlackScore = "";
     private string Outcome { get; set; }
+    private Match Match { get; set; }
+    
+    private CountdownDisplay Counter { get; set; }
+    private static Timer _aTimer;
 
     [Parameter]
     public int id { get; set; }
@@ -152,6 +160,30 @@
         BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
         BlackScore = _matchService.getMatchScores(true);
         WhiteScore = _matchService.getMatchScores(false);
+        
+        Match = await _matchService.GetMatch(id);
+        Counter = new CountdownDisplay(Match);
+        StartTimer();
+    }
+    
+    public void StartTimer()
+    {
+        _aTimer = new Timer(1000);
+        _aTimer.Elapsed += CountDownTimer;
+        _aTimer.Enabled = true;
+    }
+    
+    public void CountDownTimer(Object source, ElapsedEventArgs e)
+    {
+        if (Counter.TimeLeft > 0)
+        {
+            Counter.Decrement();
+        }
+        else
+        {
+            _aTimer.Enabled = false;
+        }
+        InvokeAsync(StateHasChanged);
     }
 
     private async Task UpdateOutcome()
