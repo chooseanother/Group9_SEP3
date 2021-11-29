@@ -38,13 +38,9 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ChessPiece MoveChessPiece(ChessPiece selected) {
+    public ChessPiece MoveChessPiece(ChessPiece selected, int matchID) {
         try {
-            ChessPiece toMove = getChessBoard().MoveAttackChessPiece(selected, iTier2RMIClient, 1);
-            System.out.println("Test in model manager toMove: " + toMove + " rmiclient: " + iTier2RMIClient);
-            if (toMove == null) {
-                System.out.println("Chess Piece was not moved, as it was not saved");
-            }
+            ChessPiece toMove = getChessBoard(matchID).MoveAttackChessPiece(selected, iTier2RMIClient, matchID);
             return toMove;
 
         } catch (RemoteException e) {
@@ -54,9 +50,9 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ChessPiece UpgradeChessPiece(String upgradeSelected, ChessPiece toUpgrade) {
+    public ChessPiece UpgradeChessPiece(String upgradeSelected,ChessPiece toUpgrade, int matchID) {
         try {
-            ChessPiece upgraded = getChessBoard().UpgradeChessPiece(upgradeSelected, toUpgrade, iTier2RMIClient, 1);
+            ChessPiece upgraded = getChessBoard(matchID).UpgradeChessPiece(upgradeSelected, toUpgrade, iTier2RMIClient, matchID);
             if (upgraded == null) {
                 System.out.println("Chess piece was not upgraded as it was not saved");
             }
@@ -68,10 +64,10 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ChessBoard getChessBoard() {
+    public ChessBoard getChessBoard(int matchID) {
         ChessBoard chessBoard = new ChessBoard();
         try {
-            ArrayList<Move> moves = iTier2RMIClient.getMoves(1);
+            ArrayList<Move> moves = iTier2RMIClient.getMoves(matchID);
             if (moves.size() > 0) {
                 for (Move m : moves) {
                     String[] start = m.getStartPosition().split(":");
@@ -80,11 +76,11 @@ public class ModelManager implements Model {
                     Position newPosition = new Position(Integer.parseInt(end[0]), Integer.parseInt(end[1]));
                     ChessPiece toMove = new ChessPiece(m.getPiece(), m.getColor(), oldPosition, newPosition);
                     if (m.getStartPosition().equals(m.getEndPosition())) {
-                        chessBoard.MoveAttackChessPiece(toMove, null, 1);
-                        chessBoard.UpgradeChessPiece(m.getPiece(), toMove, null, 1);
+                        chessBoard.MoveAttackChessPiece(toMove, null, matchID);
+                        chessBoard.UpgradeChessPiece(m.getPiece(),toMove, null, matchID);
 
                     } else {
-                        chessBoard.MoveAttackChessPiece(toMove, null, 1);
+                        chessBoard.MoveAttackChessPiece(toMove, null, matchID);
                     }
                 }
             }
@@ -181,16 +177,16 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ArrayList<ChessPiece> getRemovedChessPieces() {
-        return getChessBoard().getRemovedChessPieces();
+    public ArrayList<ChessPiece> getRemovedChessPieces(int matchID) {
+        return getChessBoard(matchID).getRemovedChessPieces();
     }
 
     @Override
-    public int getMatchScores(boolean Black) {
-        if (Black) {
-            return getChessBoard().GetScore("Black");
+    public int getMatchScores(boolean Black,int matchID) {
+        if (Black){
+            return getChessBoard(matchID).GetScore("Black");
         } else {
-            return getChessBoard().GetScore("White");
+            return getChessBoard(matchID).GetScore("White");
         }
     }
 
@@ -245,32 +241,30 @@ public class ModelManager implements Model {
     public Match checkTurnTime(Match match) {
         Date moveDate = new Date(match.getLatestMove());
         Date currentDate = new Date();
-        int difference = (int) (currentDate.getTime() - moveDate.getTime()) / 1000;
+        int difference = (int)(currentDate.getTime()-moveDate.getTime())/1000;
         int turnTime = match.getTurnTime();
         int matchId = match.getMatchID();
-        if (difference > turnTime) {
+        if (difference > turnTime){
             Participant loser;
             Participant winner;
-            if (match.getUsersTurn().equals("White")) {
+            if (match.getUsersTurn().equals("White")){
                 loser = match.getWhitePlayer();
                 winner = match.getBlackPlayer();
-            } else {
+            }
+            else {
                 loser = match.getBlackPlayer();
                 winner = match.getWhitePlayer();
             }
 
-            try {
-                iTier2RMIClient.updateOutcome(loser.getUsername(), "Loss", matchId);
+            try{
+                iTier2RMIClient.updateOutcome(loser.getUsername(),"Loss", matchId);
                 iTier2RMIClient.updateOutcome(winner.getUsername(), "Win", matchId);
-                iTier2RMIClient.setMatchOutcome(matchId, true);
-                // award win to winner
-                // give loss to loser
+                iTier2RMIClient.setMatchOutcome(matchId,true);
                 // update total games played for winner and loser
                 iTier2RMIClient.incrementWinLossDraw(winner.getUsername(), "wins");// award win to winner
                 iTier2RMIClient.incrementWinLossDraw(loser.getUsername(), "losses");// give loss to loser
             }
             catch (RemoteException e){
-
                 e.printStackTrace();
             }
         }
@@ -282,15 +276,16 @@ public class ModelManager implements Model {
     public Match addParticipantsToMatch(Match match) {
         try {
             ArrayList<Participant> participants = iTier2RMIClient.getParticipants(match.getMatchID());
-            for (Participant p : participants) {
-                if (p.getColor().equals("Black")) {
+            for(Participant p: participants){
+                if(p.getColor().equals("Black")){
                     match.setBlackPlayer(p);
-                } else {
+                }
+                else{
                     match.setWhitePlayer(p);
                 }
             }
             return match;
-        } catch (RemoteException e) {
+        } catch (RemoteException e){
             e.printStackTrace();
             return null;
         }
@@ -298,50 +293,51 @@ public class ModelManager implements Model {
 
     @Override
     public Match getMatch(int matchId) {
-        try {
+        try{
             Match match = iTier2RMIClient.getMatch(matchId);
             match = addParticipantsToMatch(match);
             return match;
-        } catch (RemoteException e) {
+        } catch (RemoteException e){
             e.printStackTrace();
             return null;
         }
     }
 
-    @Override
-    public ArrayList<Match> getMatches(String username) {
-        try {
+    @Override public ArrayList<Match> getMatches(String username)
+    {
+        try{
             ArrayList<Match> matches = iTier2RMIClient.getMatches(username);
             matches.removeIf(Match::getFinished);
-            for (Match m : matches) {
+            for (Match m : matches){
                 addParticipantsToMatch(m);
             }
             return matches;
 
-        } catch (RemoteException e) {
+        }catch (RemoteException e){
             e.printStackTrace();
         }
         return null;
     }
 
-    @Override
-    public ArrayList<Match> getMatchHistory(String username) {
-        try {
+    @Override public ArrayList<Match> getMatchHistory(String username)
+    {
+        try{
             ArrayList<Match> matches = iTier2RMIClient.getMatches(username);
             matches.removeIf(m -> !m.getFinished());
-            for (Match m : matches) {
+            for (Match m : matches){
                 ArrayList<Participant> participants = iTier2RMIClient.getParticipants(m.getMatchID());
-                for (Participant p : participants) {
-                    if (p.getColor().equals("Black")) {
+                for(Participant p: participants){
+                    if(p.getColor().equals("Black")){
                         m.setBlackPlayer(p);
-                    } else {
+                    }
+                    else{
                         m.setWhitePlayer(p);
                     }
                 }
             }
             return matches;
 
-        } catch (RemoteException e) {
+        }catch (RemoteException e){
             e.printStackTrace();
         }
         return null;
@@ -392,7 +388,7 @@ public class ModelManager implements Model {
             } else {
                 iTier2RMIClient.updateOutcome(player, outcome, matchId);
 
-                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchId);
+            ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchId);
 
                 int TournamentID = iTier2RMIClient.getMatch(matchId).getTournamentID();
                 int StartingParticipants = iTier2RMIClient.getNrofOriginalParticipants(TournamentID);
@@ -451,18 +447,30 @@ public class ModelManager implements Model {
                     }
                 }
             }
-        } catch (RemoteException e) {
+        }catch (RemoteException e){
             e.printStackTrace();
         }
     }
 
     @Override
     public String getParticipationColor(String player, int matchId) {
-        try {
+        try{
             return iTier2RMIClient.getParticipationColor(player, matchId);
-        } catch (RemoteException e) {
+        }catch (RemoteException e){
             e.printStackTrace();
             return "";
+        }
+    }
+
+    public ArrayList<Move> getMoves(int matchId){
+        try
+        {
+            return iTier2RMIClient.getMoves(matchId);
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+            return null;
         }
     }
 }

@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface Model {
     String registerUser(String username, String password, String email);
-    ChessPiece MoveChessPiece(ChessPiece selected);
-    ChessPiece UpgradeChessPiece(String upgradeSelected,ChessPiece toUpgrade);
-    ChessBoard getChessBoard();
+    ChessPiece MoveChessPiece(ChessPiece selected, int matchID);
+    ChessPiece UpgradeChessPiece(String upgradeSelected,ChessPiece toUpgrade,int matchID);
+    ChessBoard getChessBoard(int matchID);
     String validateChallenge(Challenge challenge);
     User validateLogin(String userName, String password);
     User updateUser(User user);
@@ -27,4 +27,5 @@ public interface Model {
     Match getMatch(int matchId);
     Match addParticipantsToMatch(Match match);
     Match checkTurnTime(Match match);
+    ArrayList<Move> getMoves(int matchId);
 }
