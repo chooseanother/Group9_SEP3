@@ -169,7 +169,7 @@
 
     private async Task UpdateOutcome()
     {
-        await _matchService.UpdateOutcome(loggedIn.Username, Outcome, 1);
+        await _matchService.UpdateOutcome(loggedIn.Username, Outcome, id);
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
@@ -224,6 +224,7 @@
             {
                 Data = JsonSerializer.Serialize(selected),
                 DataSlot2 = $"{id}",
+                DataSlot3 = loggedIn.Username,
                 Action = "Move"
             };
             ChessPiece moved = await _matchService.MoveChessPiece(message);
@@ -300,7 +301,8 @@
             Action = "Upgrade",
             Data = UpgradeSelected,
             DataSlot2 = $"{id}",
-            DataSlot3 = JsonSerializer.Serialize(selected)
+            DataSlot3 = JsonSerializer.Serialize(selected),
+            DataSlot4 = loggedIn.Username
         };
         ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
         if (toUpdate != null)
