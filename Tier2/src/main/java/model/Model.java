@@ -25,4 +25,5 @@ public interface Model {
     Match getMatch(int matchId);
     Match addParticipantsToMatch(Match match);
     Match checkTurnTime(Match match);
+    ArrayList<Move> getMoves(int matchId);
 }

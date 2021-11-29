@@ -348,4 +348,16 @@ public class ModelManager implements Model {
             return "";
         }
     }
+
+    public ArrayList<Move> getMoves(int matchId){
+        try
+        {
+            return iTier2RMIClient.getMoves(matchId);
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

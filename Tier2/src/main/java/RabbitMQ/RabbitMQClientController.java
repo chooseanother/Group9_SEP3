@@ -178,6 +178,16 @@ public class RabbitMQClientController implements RabbitMQClient {
                             model.updateOutcome(username,outcome,matchId);
                             response = gson.toJson(new Message(":D"));
                             break;
+                        case "MoveHistory":
+                            matchId = gson.fromJson(message.getData(), Integer.class);
+                            try{
+                                ArrayList<Move> moves = model.getMoves(matchId);
+                                String movesToJson = gson.toJson(moves);
+                                response = gson.toJson(new Message("HistoryOfMoves", movesToJson));
+                                System.out.println(response);
+                            }catch (Exception e){
+                                response = gson.toJson(new Message(e.getMessage()));
+                            }
                         default:
                             break;
                     }
