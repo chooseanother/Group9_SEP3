@@ -171,10 +171,17 @@
         BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
         BlackScore = _matchService.getMatchScores(true);
         WhiteScore = _matchService.getMatchScores(false);
-        Match = await _matchService.GetMatch(1);
+        Match = await _matchService.GetMatch(id);
         Time = Match.TurnTime;
         Left = (int)(Match.LatestMove / 1000);
     }
+    
+    // public void StartTimer()
+    // {
+    //     aTimer = new System.Timers.Timer(1000);
+    //     aTimer.Elapsed += CountDownTimer;
+    //     aTimer.Enabled = true;
+    // }
 
     private async Task UpdateOutcome()
     {
