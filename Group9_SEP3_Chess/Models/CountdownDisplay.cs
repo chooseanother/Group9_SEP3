@@ -1,8 +1,17 @@
+using System;
+
 namespace Group9_SEP3_Chess.Models
 {
     public class CountdownDisplay
     {
         public int TimeLeft { get; set; }
+
+        public CountdownDisplay(Match match)
+        {
+            var latestMove = new DateTime(1970, 1, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(match.LatestMove);
+            var difference = (int)(DateTime.Now-latestMove).TotalSeconds;
+            TimeLeft = match.TurnTime - difference;
+        }
 
         public void Decrement()
         {
