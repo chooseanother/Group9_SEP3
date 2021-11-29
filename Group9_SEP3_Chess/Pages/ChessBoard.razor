@@ -169,7 +169,7 @@
 
     private async Task UpdateOutcome()
     {
-        await _matchService.UpdateOutcome(loggedIn.Username, Outcome, 1);
+        await _matchService.UpdateOutcome(loggedIn.Username, Outcome, id);
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
