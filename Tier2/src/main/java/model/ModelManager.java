@@ -212,6 +212,9 @@ public class ModelManager implements Model {
                 iTier2RMIClient.updateOutcome(loser.getUsername(),"Loss", matchId);
                 iTier2RMIClient.updateOutcome(winner.getUsername(), "Win", matchId);
                 iTier2RMIClient.setMatchOutcome(matchId,true);
+                // award win to winner
+                // give loss to loser
+                // update total games played for winner and loser
             }
             catch (RemoteException e){
                 e.printStackTrace();
