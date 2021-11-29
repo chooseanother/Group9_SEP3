@@ -173,4 +173,9 @@ public class PersistenceDB implements Persistence{
     public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws SQLException {
         tournamentPersistence.UpdateTournamentNrOfParticipants(ID, newSize);
     }
+
+    @Override
+    public void incrementWinLossDraw(String username, String type) throws SQLException {
+        userDB.incrementWinLossDraw(username, type);
+    }
 }

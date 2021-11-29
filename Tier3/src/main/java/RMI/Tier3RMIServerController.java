@@ -384,4 +384,13 @@ public class Tier3RMIServerController
     }
 
 
+
+    @Override
+    public void incrementWinLossDraw(String username, String type) throws RemoteException {
+        try {
+            persistence.incrementWinLossDraw(username, type);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }

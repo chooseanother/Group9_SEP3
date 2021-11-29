@@ -66,4 +66,7 @@ public interface ITier2RMIClient extends Remote {
     Match getMatch(int matchId) throws RemoteException;
 
     public int getNrofOriginalParticipants(int tournamentID) throws RemoteException;
+
+    void incrementWinLossDraw(String username, String type) throws RemoteException;
+
 }
