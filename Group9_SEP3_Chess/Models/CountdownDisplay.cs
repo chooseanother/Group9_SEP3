@@ -24,7 +24,7 @@ namespace Group9_SEP3_Chess.Models
             var hours = TimeLeft % (60 * 60 * 24) / (60 * 60);
             var minutes = TimeLeft % (60*60) / 60;
             var seconds = TimeLeft % 60;
-            if (seconds > 0)
+            if (TimeLeft > 0)
             {
                 return $"Time left {(days > 0 ? (days > 1 ? $"{days} days" : $"{days} day") : "")} " +
                        $"{(hours > 0 ? (hours > 1 ? $"{hours} hours" : $"{hours} hour") : "")} " +
