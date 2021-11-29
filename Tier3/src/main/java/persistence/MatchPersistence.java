@@ -18,6 +18,8 @@ public interface MatchPersistence {
 
    void UpdateMatchUserTurn(int matchId,String color) throws SQLException;
 
+    void setMatchOutcome(int matchId, boolean finished) throws SQLException;
+
     ArrayList<Move> getMoves(int matchID) throws SQLException;
 
     ArrayList<Match> getMatches(String username)

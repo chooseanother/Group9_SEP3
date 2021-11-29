@@ -154,6 +154,17 @@ public class Tier3RMIServerController
         }
     }
 
+    @Override
+    public boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException {
+        try {
+            persistence.setMatchOutcome(matchId, finished);
+            return true;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public ArrayList<Challenge> loadChallenges() throws RemoteException {
         try {
             ArrayList<Challenge> challenges = persistence.loadChallenges();

@@ -49,5 +49,7 @@ public interface ITier3RMIServer
 
     String getParticipationColor(String player, int matchId) throws RemoteException;
 
+    boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException;
+
     public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }
