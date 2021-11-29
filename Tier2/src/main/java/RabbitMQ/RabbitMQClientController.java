@@ -161,6 +161,17 @@ public class RabbitMQClientController implements RabbitMQClient {
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
                             break;
+                        case "GetMatch":
+                            int matchId = Integer.parseInt(message.getData());
+                            try{
+                                Match match = model.getMatch(matchId);
+                                String matchJson = gson.toJson(match);
+                                response = gson.toJson(new Message("Match", matchJson));
+                            }catch (Exception e){
+                                e.printStackTrace();
+                                response = gson.toJson(new Message(e.getMessage()));
+                            }
+                            break;
                         case "GetMatchHistory":
                             username = gson.fromJson(message.getData(), String.class);
                             try{
@@ -174,7 +185,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                         case "UpdateOutcome":
                             username = message.getData();
                             String outcome = message.getDataSlot2();
-                            int matchId = Integer.parseInt(message.getDataSlot3());
+                            matchId = Integer.parseInt(message.getDataSlot3());
                             model.updateOutcome(username,outcome,matchId);
                             response = gson.toJson(new Message(":D"));
                             break;
