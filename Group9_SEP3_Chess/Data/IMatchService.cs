@@ -20,6 +20,7 @@ namespace Group9_SEP3_Chess.Data
         String getMatchScores(bool Black);
 
         Task<IList<Match>> GetMatches(string loggedInUser);
+        Task<Match> GetMatch(int matchId);
         Task UpdateOutcome(string username, string outcome, int matchId);
         
         Task<IList<Match>> GetFinishedMatches(string loggedInUser);

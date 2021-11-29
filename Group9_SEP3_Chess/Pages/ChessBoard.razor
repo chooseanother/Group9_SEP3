@@ -4,6 +4,9 @@
 @using System.Text.Json
 @inject IMatchService _matchService
 @inject AuthenticationStateProvider _authenticationStateProvider
+<div>
+    <p>Time: @Time Left: @Left</p>
+</div>
 <div class="row">
     <div class="col">
         <div class="RemovedPiecesTable">
@@ -151,6 +154,9 @@
     String WhiteScore = "";
     String BlackScore = "";
     private string Outcome { get; set; }
+    private Match Match { get; set; }
+    private int Time { get; set; }
+    private int Left { get; set; }
 
     [Parameter]
     public int id { get; set; }
@@ -165,6 +171,9 @@
         BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
         BlackScore = _matchService.getMatchScores(true);
         WhiteScore = _matchService.getMatchScores(false);
+        Match = await _matchService.GetMatch(1);
+        Time = Match.TurnTime;
+        Left = (int)(Match.LatestMove / 1000);
     }
 
     private async Task UpdateOutcome()
