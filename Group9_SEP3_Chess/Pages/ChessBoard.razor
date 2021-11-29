@@ -166,7 +166,7 @@
     protected override async Task OnInitializedAsync()
     {
         loggedIn = ((CustomAuthenticationStateProvider) _authenticationStateProvider).GetCachedUser();
-        chessPieces = await _matchService.LoadChessPieces(new Message {Action = "Load", Data = JsonSerializer.Serialize(loggedIn), DataSlot2 = "" + id});
+        chessPieces = await _matchService.LoadChessPieces(new Message {Action = "Load", DataSlot2 = "" + id});
         WhiteRemovedChessPieces = _matchService.getWhiteRemovedChessPieces();
         BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
         BlackScore = _matchService.getMatchScores(true);
@@ -232,6 +232,7 @@
             Message message = new Message()
             {
                 Data = JsonSerializer.Serialize(selected),
+                DataSlot2 = $"{id}",
                 Action = "Move"
             };
             ChessPiece moved = await _matchService.MoveChessPiece(message);
@@ -307,7 +308,8 @@
         {
             Action = "Upgrade",
             Data = UpgradeSelected,
-            DataSlot2 = JsonSerializer.Serialize(selected)
+            DataSlot2 = $"{id}",
+            DataSlot3 = JsonSerializer.Serialize(selected)
         };
         ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
         if (toUpdate != null)
