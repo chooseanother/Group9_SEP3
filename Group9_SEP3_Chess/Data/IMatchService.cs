@@ -25,5 +25,7 @@ namespace Group9_SEP3_Chess.Data
         
         Task<IList<Match>> GetFinishedMatches(string loggedInUser);
 
+        Task<IList<Move>> GetMoves(int matchId);
+
     }
 }

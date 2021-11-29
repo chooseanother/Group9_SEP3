@@ -188,6 +188,42 @@ namespace Group9_SEP3_Chess.Data
             }
             
         }
+
+        public async Task<IList<Move>> GetMoves(int matchId)
+        {
+            Message response = await _rabbitMq.SendRequestAsync(new Message
+            {
+                Action = "MoveHistory",
+                Data = JsonSerializer.Serialize(matchId)
+            });
+            if (response.Action.Equals("HistoryOfMoves"))
+            {
+                IList<Move> Rm = JsonSerializer.Deserialize<IList<Move>>(response.Data, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                });
+                IList<string> Letters = new List<string>
+                {
+                    "A", "B", "C", "D", "E", "F", "G", "H"
+                };
+                IList<string> Numbers = new List<string>
+                {
+                    "1", "2", "3", "4", "5", "6", "7", "8"
+                };
+                foreach (Move m in Rm)
+                {
+                    string[] Start = m.StartPosition.Split(":");
+                    string[] End = m.EndPosition.Split(":");
+                    m.StartPosition = Letters[int.Parse(Start[0])] + ": " + Numbers[int.Parse(Start[1])];
+                    m.EndPosition = Letters[int.Parse(End[0])] + ": " + Numbers[int.Parse(End[1])];
+                }
+                return Rm;
+            }
+            else
+            {
+                throw new Exception($"{response.Action}");
+            }
+        }
     }
 }
     
