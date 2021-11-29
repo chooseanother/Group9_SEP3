@@ -14,9 +14,6 @@ public class Message {
 
     public Message(){
         this.action="";
-        this.password="";
-        this.email="";
-        this.username="";
         this.data = "";
         this.dataSlot2 = "";
         this.dataSlot3 = "";
