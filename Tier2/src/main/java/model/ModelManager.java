@@ -213,9 +213,7 @@ public class ModelManager implements Model {
     {
         try{
             ArrayList<Match> matches = iTier2RMIClient.getMatches(username);
-            System.out.println(new Gson().toJson(matches));
             matches.removeIf(Match::getFinished);
-            System.out.println(new Gson().toJson(matches));
             for (Match m : matches){
                 ArrayList<Participant> participants = iTier2RMIClient.getParticipants(m.getMatchID());
                 for(Participant p: participants){
