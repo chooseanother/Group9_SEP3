@@ -4,6 +4,7 @@ import model.Match;
 import model.Move;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public interface MatchPersistence {
@@ -17,5 +18,12 @@ public interface MatchPersistence {
 
    void UpdateMatchUserTurn(int matchId,String color) throws SQLException;
 
+    void setMatchOutcome(int matchId, boolean finished) throws SQLException;
+
     ArrayList<Move> getMoves(int matchID) throws SQLException;
+
+    Match getMatch(int matchId) throws SQLException;
+
+    ArrayList<Match> getMatches(String username)
+        throws SQLException;
 }

@@ -182,6 +182,18 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         return tier3.getMoves(matchID);
     }
 
+    @Override public ArrayList<Match> getMatches(String username)
+        throws RemoteException
+    {
+        return tier3.getMatches(username);
+    }
+
+    @Override public ArrayList<Participant> getParticipants(int matchId)
+        throws RemoteException
+    {
+        return tier3.getParticipants(matchId);
+    }
+
     @Override
     public Match createMatch(int turnTime) throws RemoteException {
         try {
@@ -238,5 +250,29 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void updateOutcome(String player, String outcome, int matchId) throws RemoteException {
+        try{
+            tier3.updateOutcome(player, outcome, matchId);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getParticipationColor(String player, int matchId) throws RemoteException {
+        return tier3.getParticipationColor(player, matchId);
+    }
+
+    @Override
+    public boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException {
+        return tier3.setMatchOutcome(matchId, finished);
+    }
+
+    @Override
+    public Match getMatch(int matchId) throws RemoteException {
+        return tier3.getMatch(matchId);
     }
 }

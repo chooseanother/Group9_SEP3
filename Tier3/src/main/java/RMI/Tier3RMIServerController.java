@@ -8,6 +8,8 @@ import model.TournamentParticipation;
 import model.Match;
 import model.Move;
 import model.User;
+
+import model.*;
 import persistence.Persistence;
 import persistence.PersistenceDB;
 
@@ -111,6 +113,64 @@ public class Tier3RMIServerController
         }
     }
 
+    @Override public ArrayList<Match> getMatches(String username)
+        throws RemoteException
+    {
+        try
+        {
+            return persistence.getMatches(username);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override public ArrayList<Participant> getParticipants(int matchId)
+        throws RemoteException
+    {
+        try
+        {
+            return persistence.getParticipants(matchId);
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public void updateOutcome(String player, String outcome, int matchId) throws RemoteException {
+        try {
+            persistence.updateOutcome(player, outcome, matchId);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getParticipationColor(String player, int matchId) throws RemoteException {
+        try{
+            return persistence.getParticipationColor(player,matchId);
+        }catch (SQLException e){
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    @Override
+    public boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException {
+        try {
+            persistence.setMatchOutcome(matchId, finished);
+            return true;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public ArrayList<Challenge> loadChallenges() throws RemoteException {
         try {
             ArrayList<Challenge> challenges = persistence.loadChallenges();
@@ -170,7 +230,16 @@ public class Tier3RMIServerController
     }
 
     @Override
+    public Match getMatch(int matchId) throws RemoteException {
+        try{
+            return persistence.getMatch(matchId);
+        } catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    @Override
     public boolean UpdateMatchUserTurn(int matchID, String color) throws RemoteException{
         try{
             persistence.UpdateMatchUserTurn(matchID,color);

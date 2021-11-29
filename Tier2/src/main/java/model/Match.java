@@ -1,20 +1,22 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Date;
+
 
 public class Match implements Serializable {
+
     private int matchID;
     private int tournamentID;
     private int turnTime;
     private String type;
     private boolean finished;
     private String usersTurn;
-    private Date latestMove;
+    private long latestMove;
     private Participant whitePlayer;
     private Participant blackPlayer;
 
-    public Match(int matchID, int tournamentID, int turnTime, String type, boolean finished, String usersTurn, Date latestMove, Participant whitePlayer, Participant blackPlayer) {
+
+    public Match(int matchID, int tournamentID, int turnTime, String type, boolean finished, String usersTurn, long latestMove, Participant whitePlayer, Participant blackPlayer) {
         this.matchID = matchID;
         this.tournamentID = tournamentID;
         this.turnTime = turnTime;
@@ -26,7 +28,8 @@ public class Match implements Serializable {
         this.blackPlayer = blackPlayer;
     }
 
-    public Match(int matchID, int tournamentID, int turnTime, String type, boolean finished, String usersTurn, Date latestMove) {
+
+    public Match(int matchID, int tournamentID, int turnTime, String type, boolean finished, String usersTurn, long latestMove) {
         this.matchID = matchID;
         this.tournamentID = tournamentID;
         this.turnTime = turnTime;
@@ -84,11 +87,11 @@ public class Match implements Serializable {
         this.usersTurn = usersTurn;
     }
 
-    public Date getLatestMove() {
+    public long getLatestMove() {
         return latestMove;
     }
 
-    public void setLatestMove(Date latestMove) {
+    public void setLatestMove(long latestMove) {
         this.latestMove = latestMove;
     }
 

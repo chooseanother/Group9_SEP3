@@ -25,6 +25,20 @@ public class ChessPiece {
     }
 
     /**
+     * Creating a chess piece with more variables
+     * @param type
+     * @param color
+     * @param newPosition
+     */
+    public ChessPiece(String type,String color,Position oldPosition,Position newPosition){
+        this.type = type;
+        selected = false;
+        this.oldPosition = oldPosition;
+        this.newPosition=newPosition;
+        this.color=color;
+    }
+
+    /**
      * Returns the type
      * @return type
      */

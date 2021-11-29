@@ -8,6 +8,7 @@ import model.TournamentParticipation;
 import model.Match;
 import model.Move;
 import model.User;
+import model.*;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -60,6 +61,18 @@ public interface ITier3RMIServer
     public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException;
 
     public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException;
+
+    ArrayList<Match> getMatches(String username) throws RemoteException;
+
+    ArrayList<Participant> getParticipants(int matchId) throws RemoteException;
+
+    void updateOutcome(String player, String outcome, int matchId) throws RemoteException;
+
+    String getParticipationColor(String player, int matchId) throws RemoteException;
+
+    boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException;
+
+    Match getMatch(int matchId) throws RemoteException;
 
     public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }

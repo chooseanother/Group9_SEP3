@@ -6,6 +6,7 @@ import model.TournamentParticipation;
 import model.Match;
 import model.Move;
 import model.User;
+import model.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -81,8 +82,19 @@ public class PersistenceDB implements Persistence{
     }
 
     @Override
+    public void setMatchOutcome(int matchId, boolean finished) throws SQLException {
+        matchDB.setMatchOutcome(matchId, finished);
+    }
+
+    @Override
     public ArrayList<Move> getMoves(int matchID) throws SQLException {
         return matchDB.getMoves(matchID);
+    }
+
+    @Override public ArrayList<Match> getMatches(String username)
+        throws SQLException
+    {
+        return matchDB.getMatches(username);
     }
 
     @Override
@@ -100,6 +112,16 @@ public class PersistenceDB implements Persistence{
         tournamentParticipationPersistence.UpdateParticipantsPlacement(username, placement, tournamentId);
     }
 
+    @Override
+    public void updateOutcome(String player, String outcome, int matchId) throws SQLException {
+        matchParticipationDB.updateOutcome(player, outcome, matchId);
+    }
+
+    @Override
+    public String getParticipationColor(String player, int matchId) throws SQLException {
+        return matchParticipationDB.getParticipationColor(player,matchId);
+    }
+
     @Override public User validateLogin(String username, String password)
         throws SQLException
     {
@@ -114,6 +136,17 @@ public class PersistenceDB implements Persistence{
     @Override
     public User getUser(String username) throws SQLException {
         return userDB.getUser(username);
+    }
+
+    @Override public ArrayList<Participant> getParticipants(int matchId)
+        throws SQLException
+    {
+        return matchParticipationDB.getParticipants(matchId);
+    }
+
+    @Override
+    public Match getMatch(int matchId) throws SQLException {
+        return matchDB.getMatch(matchId);
     }
 
     @Override

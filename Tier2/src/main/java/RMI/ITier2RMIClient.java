@@ -20,7 +20,6 @@ public interface ITier2RMIClient extends Remote {
 
     ArrayList<Challenge> loadChallenges(String username) throws RemoteException;
 
-
     boolean rejectChallenge(Challenge challenge) throws RemoteException;
 
     User validateLogin(String username, String password) throws RemoteException;
@@ -42,6 +41,10 @@ public interface ITier2RMIClient extends Remote {
 //    void createMatch(String challenger, String challenged, int turnTime) throws RemoteException;
     ArrayList<Move> getMoves(int matchID) throws RemoteException;
 
+    ArrayList<Match> getMatches(String username) throws RemoteException;
+
+    ArrayList<Participant> getParticipants(int matchId) throws RemoteException;
+
     Match createMatch(int turnTime) throws RemoteException;
 
     boolean createParticipation(String username, String color, int matchId) throws RemoteException;
@@ -54,5 +57,11 @@ public interface ITier2RMIClient extends Remote {
 
     public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException;
 
+    void updateOutcome(String player, String outcome, int matchId) throws RemoteException;
 
+    String getParticipationColor(String player, int matchId) throws RemoteException;
+
+    boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException;
+
+    Match getMatch(int matchId) throws RemoteException;
 }
