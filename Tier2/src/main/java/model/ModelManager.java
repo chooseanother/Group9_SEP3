@@ -37,9 +37,9 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ChessPiece MoveChessPiece(ChessPiece selected) {
+    public ChessPiece MoveChessPiece(ChessPiece selected, int matchID) {
         try {
-            ChessPiece toMove = getChessBoard().MoveAttackChessPiece(selected, iTier2RMIClient, 1);
+            ChessPiece toMove = getChessBoard(matchID).MoveAttackChessPiece(selected, iTier2RMIClient, matchID);
             return toMove;
 
         } catch (RemoteException e) {
@@ -49,9 +49,9 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ChessPiece UpgradeChessPiece(String upgradeSelected,ChessPiece toUpgrade) {
+    public ChessPiece UpgradeChessPiece(String upgradeSelected,ChessPiece toUpgrade, int matchID) {
         try {
-            ChessPiece upgraded = getChessBoard().UpgradeChessPiece(upgradeSelected, toUpgrade, iTier2RMIClient, 1);
+            ChessPiece upgraded = getChessBoard(matchID).UpgradeChessPiece(upgradeSelected, toUpgrade, iTier2RMIClient, matchID);
             if (upgraded == null) {
                 System.out.println("Chess piece was not upgraded as it was not saved");
             }
@@ -63,10 +63,10 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ChessBoard getChessBoard() {
+    public ChessBoard getChessBoard(int matchID) {
         ChessBoard chessBoard = new ChessBoard();
         try {
-            ArrayList<Move> moves = iTier2RMIClient.getMoves(1);
+            ArrayList<Move> moves = iTier2RMIClient.getMoves(matchID);
             if (moves.size() > 0) {
                 for (Move m : moves) {
                     String[] start = m.getStartPosition().split(":");
@@ -75,11 +75,11 @@ public class ModelManager implements Model {
                     Position newPosition = new Position(Integer.parseInt(end[0]), Integer.parseInt(end[1]));
                     ChessPiece toMove = new ChessPiece(m.getPiece(), m.getColor(), oldPosition, newPosition);
                     if (m.getStartPosition().equals(m.getEndPosition())) {
-                        chessBoard.MoveAttackChessPiece(toMove, null, 1);
-                        chessBoard.UpgradeChessPiece(m.getPiece(),toMove, null, 1);
+                        chessBoard.MoveAttackChessPiece(toMove, null, matchID);
+                        chessBoard.UpgradeChessPiece(m.getPiece(),toMove, null, matchID);
 
                     } else {
-                        chessBoard.MoveAttackChessPiece(toMove, null, 1);
+                        chessBoard.MoveAttackChessPiece(toMove, null, matchID);
                     }
                 }
             }
@@ -176,16 +176,16 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ArrayList<ChessPiece> getRemovedChessPieces() {
-        return getChessBoard().getRemovedChessPieces();
+    public ArrayList<ChessPiece> getRemovedChessPieces(int matchID) {
+        return getChessBoard(matchID).getRemovedChessPieces();
     }
 
     @Override
-    public int getMatchScores(boolean Black) {
+    public int getMatchScores(boolean Black,int matchID) {
         if (Black){
-            return getChessBoard().GetScore("Black");
+            return getChessBoard(matchID).GetScore("Black");
         } else {
-            return getChessBoard().GetScore("White");
+            return getChessBoard(matchID).GetScore("White");
         }
     }
 
