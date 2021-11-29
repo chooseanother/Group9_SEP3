@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ModelManager implements Model {
     private ITier2RMIClient iTier2RMIClient;
@@ -16,6 +17,7 @@ public class ModelManager implements Model {
     public ModelManager() throws RemoteException {
         iTier2RMIClient = new Tier2RMIClient();
         rabbitMQClient = new RabbitMQClientController(this);
+
         try {
             rabbitMQClient.initRPCQueue();
         } catch (Exception e) {
@@ -187,21 +189,76 @@ public class ModelManager implements Model {
         }
     }
 
+    @Override
+    public Match checkTurnTime(Match match) {
+        Date moveDate = new Date(match.getLatestMove());
+        Date currentDate = new Date();
+        int difference = (int)(currentDate.getTime()-moveDate.getTime())/1000;
+        int turnTime = match.getTurnTime();
+        int matchId = match.getMatchID();
+        if (difference > turnTime){
+            Participant loser;
+            Participant winner;
+            if (match.getUsersTurn().equals("White")){
+                loser = match.getWhitePlayer();
+                winner = match.getBlackPlayer();
+            }
+            else {
+                loser = match.getBlackPlayer();
+                winner = match.getWhitePlayer();
+            }
+
+            try{
+                iTier2RMIClient.updateOutcome(loser.getUsername(),"Loss", matchId);
+                iTier2RMIClient.updateOutcome(winner.getUsername(), "Win", matchId);
+                iTier2RMIClient.setMatchOutcome(matchId,true);
+            }
+            catch (RemoteException e){
+                e.printStackTrace();
+            }
+        }
+
+        return match;
+    }
+
+    @Override
+    public Match addParticipantsToMatch(Match match) {
+        try {
+            ArrayList<Participant> participants = iTier2RMIClient.getParticipants(match.getMatchID());
+            for(Participant p: participants){
+                if(p.getColor().equals("Black")){
+                    match.setBlackPlayer(p);
+                }
+                else{
+                    match.setWhitePlayer(p);
+                }
+            }
+            return match;
+        } catch (RemoteException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Match getMatch(int matchId) {
+        try{
+            Match match = iTier2RMIClient.getMatch(matchId);
+            match = addParticipantsToMatch(match);
+            return match;
+        } catch (RemoteException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override public ArrayList<Match> getMatches(String username)
     {
         try{
             ArrayList<Match> matches = iTier2RMIClient.getMatches(username);
             matches.removeIf(Match::getFinished);
             for (Match m : matches){
-                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(m.getMatchID());
-                for(Participant p: participants){
-                    if(p.getColor().equals("Black")){
-                        m.setBlackPlayer(p);
-                    }
-                    else{
-                        m.setWhitePlayer(p);
-                    }
-                }
+                addParticipantsToMatch(m);
             }
             return matches;
 

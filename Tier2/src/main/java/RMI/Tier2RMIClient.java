@@ -200,4 +200,9 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     public boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException {
         return tier3.setMatchOutcome(matchId, finished);
     }
+
+    @Override
+    public Match getMatch(int matchId) throws RemoteException {
+        return tier3.getMatch(matchId);
+    }
 }

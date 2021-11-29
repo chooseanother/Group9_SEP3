@@ -164,4 +164,33 @@ public class MatchDB implements MatchPersistence{
             statement.executeUpdate();
         }
     }
+
+    @Override
+    public Match getMatch(int matchId) throws SQLException {
+        try (Connection connection = ConnectionDB.getInstance().getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM MATCH WHERE MATCHID = ?");
+            statement.setInt(1, matchId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if(resultSet.next()) {
+                int localMatchId = resultSet.getInt("matchid");
+                int tournamentId = resultSet.getInt("tournamentid");
+                int turnTime = resultSet.getInt("turntime");
+                String type = resultSet.getString("type");
+                boolean finished = resultSet.getBoolean("finished");
+                String usersTurn = resultSet.getString("usersturn");
+                String latestMove = resultSet.getString("latestmove");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = null;
+                try {
+                    date = format.parse(latestMove);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return new Match(localMatchId, tournamentId, turnTime, type, finished, usersTurn, date.getTime());
+            }
+        }
+        return null;
+    }
 }

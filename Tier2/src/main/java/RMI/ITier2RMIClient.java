@@ -47,4 +47,6 @@ public interface ITier2RMIClient extends Remote {
     String getParticipationColor(String player, int matchId) throws RemoteException;
 
     boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException;
+
+    Match getMatch(int matchId) throws RemoteException;
 }

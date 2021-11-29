@@ -22,6 +22,8 @@ public interface MatchPersistence {
 
     ArrayList<Move> getMoves(int matchID) throws SQLException;
 
+    Match getMatch(int matchId) throws SQLException;
+
     ArrayList<Match> getMatches(String username)
         throws SQLException;
 }

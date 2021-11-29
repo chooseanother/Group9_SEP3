@@ -124,4 +124,9 @@ public class PersistenceDB implements Persistence{
     {
         return matchParticipationDB.getParticipants(matchId);
     }
+
+    @Override
+    public Match getMatch(int matchId) throws SQLException {
+        return matchDB.getMatch(matchId);
+    }
 }

@@ -224,7 +224,16 @@ public class Tier3RMIServerController
     }
 
     @Override
+    public Match getMatch(int matchId) throws RemoteException {
+        try{
+            return persistence.getMatch(matchId);
+        } catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    @Override
     public boolean UpdateMatchUserTurn(int matchID, String color) throws RemoteException{
         try{
             persistence.UpdateMatchUserTurn(matchID,color);

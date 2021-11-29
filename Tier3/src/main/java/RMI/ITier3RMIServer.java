@@ -51,5 +51,7 @@ public interface ITier3RMIServer
 
     boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException;
 
+    Match getMatch(int matchId) throws RemoteException;
+
     public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }
