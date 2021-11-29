@@ -1,0 +1,27 @@
+#editComponent{
+    float: left;
+    margin-right: 50px;
+}
+
+#component{
+    float: left;
+    margin-right: 50px;
+}
+
+#challengeComponent{
+
+}
+
+#hostTournamentComponent{
+
+}
+
+#joinTournamentComponent{
+
+}
+
+#listComponent{
+    float: right;
+    width: 1000px;
+}
+
