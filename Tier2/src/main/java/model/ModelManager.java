@@ -12,32 +12,10 @@ import java.util.ArrayList;
 public class ModelManager implements Model {
     private ITier2RMIClient iTier2RMIClient;
     private RabbitMQClient rabbitMQClient;
-    private ChessBoard chessBoard; //Should be match
 
     public ModelManager() throws RemoteException {
         iTier2RMIClient = new Tier2RMIClient();
-//        chessBoard = new ChessBoard();
         rabbitMQClient = new RabbitMQClientController(this);
-
-        // for testing only
-//        ArrayList<Move> moves = iTier2RMIClient.getMoves(1);
-
-//        if (moves.size() > 0) {
-//            for (Move m : moves) {
-////            System.out.println(new Gson().toJson(m));
-//                String[] start = m.getStartPosition().split(":");
-//                String[] end = m.getEndPosition().split(":");
-//                if (m.getStartPosition().equals(m.getEndPosition())) {
-//                    chessBoard.MoveAttackChessPiece(Integer.parseInt(start[0]), Integer.parseInt(start[1]), null, 1);
-//                    chessBoard.UpgradeChessPiece(m.getPiece(), null, 1);
-//                } else {
-//                    chessBoard.MoveAttackChessPiece(Integer.parseInt(start[0]), Integer.parseInt(start[1]), null, 1);
-//                    chessBoard.MoveAttackChessPiece(Integer.parseInt(end[0]), Integer.parseInt(end[1]), null, 1);
-//                }
-//            }
-//        }
-
-
         try {
             rabbitMQClient.initRPCQueue();
         } catch (Exception e) {
@@ -295,11 +273,7 @@ public class ModelManager implements Model {
                     }
                     break;
                 default:
-
             }
-
-            // Check if both match outcome for both players is market
-            // do stuff based on mark from both players
         }catch (RemoteException e){
             e.printStackTrace();
         }
