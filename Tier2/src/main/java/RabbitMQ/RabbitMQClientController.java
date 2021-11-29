@@ -162,7 +162,6 @@ public class RabbitMQClientController implements RabbitMQClient {
                                 response = gson.toJson(new Message("Fail"));
                             }
                             break;
-                            break;
                         case "GetMatches":
                             username = gson.fromJson(message.getData(), String.class);
                             System.out.println(username);

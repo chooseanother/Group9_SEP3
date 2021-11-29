@@ -74,5 +74,7 @@ public interface ITier3RMIServer
 
     Match getMatch(int matchId) throws RemoteException;
 
+    public int getNrofOriginalParticipants(int tournamentID) throws RemoteException;
+
     public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }

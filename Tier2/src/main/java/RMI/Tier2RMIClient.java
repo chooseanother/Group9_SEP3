@@ -275,4 +275,9 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     public Match getMatch(int matchId) throws RemoteException {
         return tier3.getMatch(matchId);
     }
+
+    @Override
+    public int getNrofOriginalParticipants(int tournamentID) throws RemoteException {
+        return tier3.getNrofOriginalParticipants(tournamentID);
+    }
 }

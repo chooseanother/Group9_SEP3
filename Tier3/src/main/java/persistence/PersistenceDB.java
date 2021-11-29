@@ -113,6 +113,11 @@ public class PersistenceDB implements Persistence{
     }
 
     @Override
+    public int getNrofOriginalParticipants(int tournamentID) throws SQLException {
+        return tournamentParticipationPersistence.getNrofOriginalParticipants(tournamentID);
+    }
+
+    @Override
     public void updateOutcome(String player, String outcome, int matchId) throws SQLException {
         matchParticipationDB.updateOutcome(player, outcome, matchId);
     }
