@@ -205,4 +205,9 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     public Match getMatch(int matchId) throws RemoteException {
         return tier3.getMatch(matchId);
     }
+
+    @Override
+    public void incrementWinLossDraw(String username, String type) throws RemoteException {
+        tier3.incrementWinLossDraw(username, type);
+    }
 }
