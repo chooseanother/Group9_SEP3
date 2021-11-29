@@ -4,6 +4,8 @@
 @using Group9_SEP3_Chess.Data
 @inject AuthenticationStateProvider authenticationStateProvider;
 @inject IUserService userService;
+
+<link href="Edit.css" rel="stylesheet">
 @if (UserToEdit == null)
 {
     <em>@errorMessage</em>
@@ -17,15 +19,15 @@ else
         <InputText class="input" type="password" hidden="true" disabled="@isDisabled" @bind-Value="UserToEdit.ConfirmPassword" ></InputText>
         <div class="form-group" > New email:<br/> <InputText class="input" disabled="@isDisabled" @bind-Value="UserToEdit.Email" @oninput="ConfirmationSetterEmail" ></InputText></div>
         <InputText class="input" hidden="true" @bind-Value="UserToEdit.ConfirmEmail"></InputText>
-        <button class="btn btn-outline-dark" type="button" @onclick="@onDisabled">Edit </button>
-        <div> Score points: <br/> @UserToEdit.ScorePoints</div>
+        <div><button class="btn btn-outline-dark" type="button" @onclick="@onDisabled">Edit </button>
+            <p class="actions">
+                <button class="btn btn-outline-dark" type="submit">Save</button>
+            </p></div>
+        <div id="scorePoints"> Score points: <br/> @UserToEdit.ScorePoints</div>
         <div> Wins: <br/> @UserToEdit.Wins</div>
         <div> Losses: <br/> @UserToEdit.Losses</div>
         <div> Draws: <br/> @UserToEdit.Draws</div>
         <div> Games played: <br/> @UserToEdit.GamesPlayed</div>
-        <p class="actions">
-            <button class="btn btn-outline-dark" type="submit">Save</button>
-        </p>
     </EditForm>
 }
 

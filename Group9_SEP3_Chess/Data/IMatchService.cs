@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Group9_SEP3_Chess.Models;
+using Match = Group9_SEP3_Chess.Models.Match;
 
 namespace Group9_SEP3_Chess.Data
 {
@@ -16,5 +18,11 @@ namespace Group9_SEP3_Chess.Data
         public IList<ChessPiece> getBlackRemovedChessPieces();
         public IList<ChessPiece> getWhiteRemovedChessPieces();
         String getMatchScores(bool Black);
+
+        Task<IList<Match>> GetMatches(string loggedInUser);
+        Task UpdateOutcome(string username, string outcome, int matchId);
+        
+        Task<IList<Match>> GetFinishedMatches(string loggedInUser);
+
     }
 }
