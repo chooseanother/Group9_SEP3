@@ -1,0 +1,17 @@
+.board {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto auto auto auto;
+    background-color: #da9d1d;
+    padding: 10px;
+    width: 680px;
+    height: 680px;
+}
+.RemovedPiecesTable{
+    margin-top: 20px;
+}
+
+#moveHistory{
+    display: flex;
+    justify-content: center;
+}
