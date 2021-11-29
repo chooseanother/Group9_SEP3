@@ -56,5 +56,8 @@ public interface ITier3RMIServer
 
     Match getMatch(int matchId) throws RemoteException;
 
+    void incrementWinLossDraw(String username, String type) throws RemoteException;
+
+
     public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }

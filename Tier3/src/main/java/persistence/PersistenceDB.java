@@ -129,4 +129,9 @@ public class PersistenceDB implements Persistence{
     public Match getMatch(int matchId) throws SQLException {
         return matchDB.getMatch(matchId);
     }
+
+    @Override
+    public void incrementWinLossDraw(String username, String type) throws SQLException {
+        userDB.incrementWinLossDraw(username, type);
+    }
 }

@@ -12,4 +12,6 @@ public interface UserPersistence {
     void updateUser(User user) throws SQLException;
 
     User getUser(String username) throws SQLException;
+
+    void incrementWinLossDraw(String username, String type) throws SQLException;
 }

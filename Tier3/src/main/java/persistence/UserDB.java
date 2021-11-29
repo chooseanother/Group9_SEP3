@@ -82,4 +82,17 @@ public class UserDB implements UserPersistence {
             }
         }
     }
+
+    @Override
+    public void incrementWinLossDraw(String username, String type) throws SQLException {
+        try (Connection connection = ConnectionDB.getInstance().getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "update _user set ? = ? + 1, gamesplayed = gamesplayed + 1 where username = ?");
+            statement.setString(1, type);
+            statement.setString(2, type);
+            statement.setString(3, username);
+            statement.executeUpdate();
+        }
+
+    }
 }
