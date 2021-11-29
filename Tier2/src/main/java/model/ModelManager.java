@@ -212,9 +212,9 @@ public class ModelManager implements Model {
                 iTier2RMIClient.updateOutcome(loser.getUsername(),"Loss", matchId);
                 iTier2RMIClient.updateOutcome(winner.getUsername(), "Win", matchId);
                 iTier2RMIClient.setMatchOutcome(matchId,true);
-                // award win to winner
-                // give loss to loser
                 // update total games played for winner and loser
+                iTier2RMIClient.incrementWinLossDraw(winner.getUsername(), "wins");// award win to winner
+                iTier2RMIClient.incrementWinLossDraw(loser.getUsername(), "losses");// give loss to loser
             }
             catch (RemoteException e){
                 e.printStackTrace();
@@ -305,34 +305,42 @@ public class ModelManager implements Model {
             Participant player1 = participants.get(0);
             Participant player2 = participants.get(1);
 
-            switch (player1.getOutcome()){
-                case "Draw":
-                    if (player2.getOutcome().equals("Draw")){
-                        // set match to finished
-                        iTier2RMIClient.setMatchOutcome(matchId,true);
-                        // add 1 to drawn games for player 1 and player2
-                        // add 1 to total games played for player1 and player2
-                    }
-                    break;
-                case "Win":
-                    if (player2.getOutcome().equals("Loss")){
-                        // set match to finished
-                        iTier2RMIClient.setMatchOutcome(matchId,true);
-                        // award win to player1
-                        // give loss to player2
-                        // update total games played for player1 and player2
-                    }
-                    break;
-                case "Loss":
-                    if (player2.getOutcome().equals("Win")){
-                        // set match to finished
-                        iTier2RMIClient.setMatchOutcome(matchId,true);
-                        // award win to player2
-                        // give loss to player1
-                        // update total games played for player1 and player2
-                    }
-                    break;
-                default:
+            if (player1.getOutcome() != null && player2.getOutcome() != null) {
+                switch (player1.getOutcome()) {
+                    case "Draw":
+                        if (player2.getOutcome().equals("Draw")) {
+                            // set match to finished
+                            iTier2RMIClient.setMatchOutcome(matchId, true);
+                            // add 1 to drawn games for player 1 and player2
+                            // add 1 to total games played for player1 and player2
+                            iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "draws");
+                            iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "draws");
+                        }
+                        break;
+                    case "Win":
+                        if (player2.getOutcome().equals("Loss")) {
+                            // set match to finished
+                            iTier2RMIClient.setMatchOutcome(matchId, true);
+                            // award win to player1
+                            // give loss to player2
+                            // update total games played for player1 and player2
+                            iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "wins");
+                            iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "losses");
+                        }
+                        break;
+                    case "Loss":
+                        if (player2.getOutcome().equals("Win")) {
+                            // set match to finished
+                            iTier2RMIClient.setMatchOutcome(matchId, true);
+                            // award win to player2
+                            // give loss to player1
+                            // update total games played for player1 and player2
+                            iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "losses");
+                            iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "wins");
+                        }
+                        break;
+                    default:
+                }
             }
         }catch (RemoteException e){
             e.printStackTrace();

@@ -49,4 +49,7 @@ public interface ITier2RMIClient extends Remote {
     boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException;
 
     Match getMatch(int matchId) throws RemoteException;
+
+    void incrementWinLossDraw(String username, String type) throws RemoteException;
+
 }
