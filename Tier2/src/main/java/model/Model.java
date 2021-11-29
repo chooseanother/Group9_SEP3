@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface Model {
     String registerUser(String username, String password, String email);
-    ChessPiece MoveChessPiece(ChessPiece selected, int matchID);
-    ChessPiece UpgradeChessPiece(String upgradeSelected,ChessPiece toUpgrade,int matchID);
+    ChessPiece MoveChessPiece(ChessPiece selected, int matchID,String username);
+    ChessPiece UpgradeChessPiece(String upgradeSelected,ChessPiece toUpgrade,int matchID,String username);
     ChessBoard getChessBoard(int matchID);
     String validateChallenge(Challenge challenge);
     User validateLogin(String userName, String password);

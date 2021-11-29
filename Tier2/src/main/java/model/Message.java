@@ -4,26 +4,24 @@ import com.google.gson.Gson;
 
 public class Message {
     private String action;
-    private String username;
-    private String password;
-    private String email;
     private String data;
     private String dataSlot2;
     private String dataSlot3;
+    private String dataSlot4;
 
+    public String getDataSlot4() {
+        return dataSlot4;
+    }
+
+    public void setDataSlot4(String dataSlot4) {
+        this.dataSlot4 = dataSlot4;
+    }
 
     public Message(){
         this.action="";
         this.data = "";
         this.dataSlot2 = "";
         this.dataSlot3 = "";
-    }
-
-    public Message(String action, String username, String password, String email) {
-        this.action = action;
-        this.username = username;
-        this.password = password;
-        this.email = email;
     }
 
     public Message(String action) {
@@ -41,30 +39,6 @@ public class Message {
 
     public void setAction(String action) {
         this.action = action;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public void setData(String data) {
