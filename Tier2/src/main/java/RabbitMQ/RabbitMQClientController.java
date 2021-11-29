@@ -45,16 +45,19 @@ public class RabbitMQClientController implements RabbitMQClient {
                     String jsonMessage = new String(delivery.getBody(), "UTF-8");
                     Message message = gson.fromJson(jsonMessage, Message.class);
                     System.out.println(" [.] message(" + message + ")");
-
+                    int matchID = 0;
+                    if(message.getAction().equals("Move") || message.getAction().equals("Load") || message.getAction().equals("Upgrade")){
+                         matchID = Integer.parseInt(message.getDataSlot2());
+                    }
                     switch (message.getAction()) {
-                        case "Move":                        
+                        case "Move":
                             Message toSend = new Message();
                             ChessPiece selected = gson.fromJson(message.getData(),ChessPiece.class);
-                            ChessPiece movedChessPiece = model.MoveChessPiece(selected);
+                            ChessPiece movedChessPiece = model.MoveChessPiece(selected,matchID);
                             if (movedChessPiece != null) {
                                 toSend.setData(gson.toJson(movedChessPiece));
-                                toSend.setDataSlot2(gson.toJson(model.getRemovedChessPieces()));
-                                toSend.setDataSlot3(model.getMatchScores(true) + " " + model.getMatchScores(false));
+                                toSend.setDataSlot2(gson.toJson(model.getRemovedChessPieces(matchID)));
+                                toSend.setDataSlot3(model.getMatchScores(true,matchID) + " " + model.getMatchScores(false,matchID));
                                 toSend.setAction("Sending A chess Piece");
                             } else {
                                 toSend.setAction("No chess Piece");
@@ -67,8 +70,8 @@ public class RabbitMQClientController implements RabbitMQClient {
                         case "Upgrade":
                             Message toSendUpgrade = new Message();
                             toSendUpgrade.setAction("Upgrade Chess Piece");
-                            ChessPiece toUpgrade = gson.fromJson(message.getDataSlot2(),ChessPiece.class);
-                            ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getData(),toUpgrade);
+                            ChessPiece toUpgrade = gson.fromJson(message.getDataSlot3(),ChessPiece.class);
+                            ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getData(),toUpgrade,matchID);
                             toSendUpgrade.setData(gson.toJson(upgradedChessPiece));
 
                             System.out.println(toSendUpgrade.getData());
@@ -78,10 +81,10 @@ public class RabbitMQClientController implements RabbitMQClient {
                         case "Load":
                             Message toLoadChessPieces = new Message();
                             toLoadChessPieces.setAction("Load ChessBoard");
-                            ChessPiece[][] chessBoard = model.getChessBoard().getChessBoard();
+                            ChessPiece[][] chessBoard = model.getChessBoard(matchID).getChessBoard();
                             toLoadChessPieces.setData(gson.toJson(chessBoard));
-                            toLoadChessPieces.setDataSlot2(gson.toJson(model.getRemovedChessPieces()));
-                            toLoadChessPieces.setDataSlot3(model.getMatchScores(true) + " " +model.getMatchScores(false));
+                            toLoadChessPieces.setDataSlot2(gson.toJson(model.getRemovedChessPieces(matchID)));
+                            toLoadChessPieces.setDataSlot3(model.getMatchScores(true,matchID) + " " +model.getMatchScores(false,matchID));
                             response = gson.toJson(toLoadChessPieces);
                             break;
                         case "Register":
