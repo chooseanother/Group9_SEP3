@@ -3,10 +3,11 @@
 @using Group9_SEP3_Chess.Data
 @using System.Text.Json
 @using Microsoft.AspNetCore.Mvc.Formatters
+@using System.Timers
 @inject IMatchService _matchService
 @inject AuthenticationStateProvider _authenticationStateProvider
-<div>
-    <p>Time: @Time Left: @Left</p>
+<div class="row" style="justify-content: center">
+    <p>@Counter.ToString()</p>
 </div>
 <div class="row">
     <div class="col">
@@ -145,9 +146,13 @@
     String BlackScore = "";
     private string Outcome { get; set; }
     private Match Match { get; set; }
-    private int Time { get; set; }
-    private int Left { get; set; }
+
+
     private bool isDisabled { get; set; }
+
+    private CountdownDisplay Counter { get; set; }
+    private static Timer _aTimer;
+
 
     [Parameter]
     public int id { get; set; }
@@ -162,9 +167,9 @@
         BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
         BlackScore = _matchService.getMatchScores(true);
         WhiteScore = _matchService.getMatchScores(false);
+        
         Match = await _matchService.GetMatch(id);
-        Time = Match.TurnTime;
-        Left = (int)(Match.LatestMove / 1000);
+
         if (Match.Finished)
         {
             isDisabled = true;
@@ -173,22 +178,41 @@
         {
             isDisabled = false;
         }
+
+        Counter = new CountdownDisplay(Match);
+        StartTimer();
     }
     
-    // public void StartTimer()
-    // {
-    //     aTimer = new System.Timers.Timer(1000);
-    //     aTimer.Elapsed += CountDownTimer;
-    //     aTimer.Enabled = true;
-    // }
+    public void StartTimer()
+    {
+        _aTimer = new Timer(1000);
+        _aTimer.Elapsed += CountDownTimer;
+        _aTimer.Enabled = true;
+
+    }
+    
+    public void CountDownTimer(Object source, ElapsedEventArgs e)
+    {
+        if (Counter.TimeLeft > 0)
+        {
+            Counter.Decrement();
+        }
+        else
+        {
+            _aTimer.Enabled = false;
+        }
+        InvokeAsync(StateHasChanged);
+    }
 
     private async Task UpdateOutcome()
     {
+
         if (Match.Finished)
         {
             return;
         }
         await _matchService.UpdateOutcome(loggedIn.Username, Outcome, 1);
+
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
@@ -247,6 +271,7 @@
             {
                 Data = JsonSerializer.Serialize(selected),
                 DataSlot2 = $"{id}",
+                DataSlot3 = loggedIn.Username,
                 Action = "Move"
             };
             ChessPiece moved = await _matchService.MoveChessPiece(message);
@@ -327,7 +352,8 @@
             Action = "Upgrade",
             Data = UpgradeSelected,
             DataSlot2 = $"{id}",
-            DataSlot3 = JsonSerializer.Serialize(selected)
+            DataSlot3 = JsonSerializer.Serialize(selected),
+            DataSlot4 = loggedIn.Username
         };
         ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
         if (toUpdate != null)
