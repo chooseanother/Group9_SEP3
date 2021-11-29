@@ -387,18 +387,12 @@ public class ModelManager implements Model {
                 }
             } else {
                 iTier2RMIClient.updateOutcome(player, outcome, matchId);
-
-            ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchId);
+                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchId);
 
                 int TournamentID = iTier2RMIClient.getMatch(matchId).getTournamentID();
-                int StartingParticipants = iTier2RMIClient.getNrofOriginalParticipants(TournamentID);
                 ArrayList<TournamentParticipation> currentParticipants = iTier2RMIClient.getTournamentParticipationByTournamentID(TournamentID);
-                int Placement = 0;
-                if(StartingParticipants == currentParticipants.size()){
-                    Placement = StartingParticipants/2 + 1;
-                } else {
-                    Placement = StartingParticipants - currentParticipants.size() + 1;
-                }
+                int Placement = currentParticipants.size();
+
 
                 Participant player1 = participants.get(0);
                 Participant player2 = participants.get(1);
@@ -412,7 +406,7 @@ public class ModelManager implements Model {
                                 // add 1 to drawn games for player 1 and player2
                                 // add 1 to total games played for player1 and player2
                                 if (player1.getColor().equals("White")) {
-                                    if (getMatchScores(false) > getMatchScores(true)) {
+                                    if (getMatchScores(false, matchId) > getMatchScores(true, matchId)) {
                                         iTier2RMIClient.UpdateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
                                     } else {
                                         iTier2RMIClient.UpdateParticipantsPlacement(player1.getUsername(), Placement, TournamentID);
@@ -444,6 +438,9 @@ public class ModelManager implements Model {
                             StartTournamentMatches(TournamentID);
                             break;
                         default:
+                    }
+                    if( iTier2RMIClient.getTournamentParticipationByTournamentID(TournamentID).size() == 1){
+                        iTier2RMIClient.UpdateParticipantsPlacement(currentParticipants.get(0).getUsername(), 1, TournamentID);
                     }
                 }
             }
