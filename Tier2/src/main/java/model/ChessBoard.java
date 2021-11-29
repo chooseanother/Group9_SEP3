@@ -71,7 +71,7 @@ public class ChessBoard {
      * @return chesspiece moved
      * @throws RemoteException
      */
-    public ChessPiece MoveAttackChessPiece(ChessPiece selected, ITier2RMIClient iTier2RMIClient, int matchID) throws RemoteException {
+    public ChessPiece MoveAttackChessPiece(ChessPiece selected, ITier2RMIClient iTier2RMIClient, int matchID,String username) throws RemoteException {
         String buildString = "";
         if (selected != null && selected.getColor().equals(turnColor)) {
             if (selected.getColor().equals("Black")) {
@@ -83,20 +83,22 @@ public class ChessBoard {
             if (iTier2RMIClient == null) {
                 testForNullRMI = true;
             } else {
-                if (iTier2RMIClient.MovePiece(selected, matchID) && iTier2RMIClient.UpdateMatchUserTurn(matchID, turnColor)) {
-                    //Sending of email after making the turn
-                   ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
-                   for (Participant p: participants){
-                       if(p.getColor().equals(turnColor)){
-                           User user = iTier2RMIClient.getUser(p.getUsername());
-                           Email email = new Email();
-                           email.sendEmail("NotSoBusyChess@gmail.com",user.getEmail(), user.getUsername(), matchID);
-                       }
-                   }
-                    testForNullRMI = true;
-                    System.out.println(turnColor + " -----------------------------------------------------$$$$$$$$");
+                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
+                for(int i=0;i<participants.size();i++){
+                    if(participants.get(i).getUsername().equals(username) && participants.get(i).getColor().equals(selected.getColor())) {
+                        if (iTier2RMIClient.MovePiece(selected, matchID) && iTier2RMIClient.UpdateMatchUserTurn(matchID, turnColor)) {
+                            //Sending of email after making the turn
+                            for (Participant p : participants) {
+                                if (p.getColor().equals(turnColor)) {
+                                    User user = iTier2RMIClient.getUser(p.getUsername());
+                                    Email email = new Email();
+                                    email.sendEmail("NotSoBusyChess@gmail.com", user.getEmail(), user.getUsername(), matchID);
+                                }
+                            }
+                            testForNullRMI = true;
+                        }
+                    }
                 }
-                System.out.println("=================================>" + testForNullRMI);
             }
             if (testForNullRMI) {
                 if (chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()] != null) {
@@ -122,11 +124,7 @@ public class ChessBoard {
             }
      
           
-        } else if (!selected.getColor().equals(turnColor)) {
-            System.out.println("Turn color is not matching");
         }
-      
-      System.out.println(new Gson().toJson(chessPieces));
         return null;
     }
 
@@ -136,14 +134,19 @@ public class ChessBoard {
      * @param UpgradeSelected the type of upgrade
      */
 
-    public ChessPiece UpgradeChessPiece(String UpgradeSelected, ChessPiece toUpgrade, ITier2RMIClient iTier2RMIClient, int matchID) throws RemoteException {
+    public ChessPiece UpgradeChessPiece(String UpgradeSelected, ChessPiece toUpgrade, ITier2RMIClient iTier2RMIClient, int matchID,String username) throws RemoteException {
         if(toUpgrade!=null && UpgradeSelected!=null){
             toUpgrade.setType(UpgradeSelected);
             // dont want to persist when recreating match from move history
             if (iTier2RMIClient != null) {
-                if (iTier2RMIClient.UpgradePiece(toUpgrade, matchID)) {
-                    chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()] = toUpgrade.copy();
-                    return chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()];
+                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
+                for (Participant p:participants){
+                    if(p.getColor().equals(toUpgrade.getColor()) && p.getUsername().equals(username)){
+                        if (iTier2RMIClient.UpgradePiece(toUpgrade, matchID)) {
+                            chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()] = toUpgrade.copy();
+                            return chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()];
+                        }
+                    }
                 }
             } else {
                 chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()] = toUpgrade.copy();

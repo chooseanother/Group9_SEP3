@@ -37,9 +37,9 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ChessPiece MoveChessPiece(ChessPiece selected, int matchID) {
+    public ChessPiece MoveChessPiece(ChessPiece selected, int matchID,String username) {
         try {
-            ChessPiece toMove = getChessBoard(matchID).MoveAttackChessPiece(selected, iTier2RMIClient, matchID);
+            ChessPiece toMove = getChessBoard(matchID).MoveAttackChessPiece(selected, iTier2RMIClient, matchID,username);
             return toMove;
 
         } catch (RemoteException e) {
@@ -49,9 +49,9 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ChessPiece UpgradeChessPiece(String upgradeSelected,ChessPiece toUpgrade, int matchID) {
+    public ChessPiece UpgradeChessPiece(String upgradeSelected,ChessPiece toUpgrade, int matchID,String username) {
         try {
-            ChessPiece upgraded = getChessBoard(matchID).UpgradeChessPiece(upgradeSelected, toUpgrade, iTier2RMIClient, matchID);
+            ChessPiece upgraded = getChessBoard(matchID).UpgradeChessPiece(upgradeSelected, toUpgrade, iTier2RMIClient, matchID,username);
             if (upgraded == null) {
                 System.out.println("Chess piece was not upgraded as it was not saved");
             }
@@ -75,11 +75,11 @@ public class ModelManager implements Model {
                     Position newPosition = new Position(Integer.parseInt(end[0]), Integer.parseInt(end[1]));
                     ChessPiece toMove = new ChessPiece(m.getPiece(), m.getColor(), oldPosition, newPosition);
                     if (m.getStartPosition().equals(m.getEndPosition())) {
-                        chessBoard.MoveAttackChessPiece(toMove, null, matchID);
-                        chessBoard.UpgradeChessPiece(m.getPiece(),toMove, null, matchID);
+                        chessBoard.MoveAttackChessPiece(toMove, null, matchID,null);
+                        chessBoard.UpgradeChessPiece(m.getPiece(),toMove, null, matchID,null);
 
                     } else {
-                        chessBoard.MoveAttackChessPiece(toMove, null, matchID);
+                        chessBoard.MoveAttackChessPiece(toMove, null, matchID,null);
                     }
                 }
             }

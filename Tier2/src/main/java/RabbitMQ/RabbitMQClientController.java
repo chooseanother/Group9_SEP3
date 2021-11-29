@@ -53,7 +53,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                         case "Move":
                             Message toSend = new Message();
                             ChessPiece selected = gson.fromJson(message.getData(),ChessPiece.class);
-                            ChessPiece movedChessPiece = model.MoveChessPiece(selected,matchID);
+                            ChessPiece movedChessPiece = model.MoveChessPiece(selected,matchID,message.getDataSlot3());
                             if (movedChessPiece != null) {
                                 toSend.setData(gson.toJson(movedChessPiece));
                                 toSend.setDataSlot2(gson.toJson(model.getRemovedChessPieces(matchID)));
@@ -71,7 +71,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                             Message toSendUpgrade = new Message();
                             toSendUpgrade.setAction("Upgrade Chess Piece");
                             ChessPiece toUpgrade = gson.fromJson(message.getDataSlot3(),ChessPiece.class);
-                            ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getData(),toUpgrade,matchID);
+                            ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getData(),toUpgrade,matchID,message.getDataSlot4());
                             toSendUpgrade.setData(gson.toJson(upgradedChessPiece));
 
                             System.out.println(toSendUpgrade.getData());
