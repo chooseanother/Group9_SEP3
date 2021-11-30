@@ -2,6 +2,12 @@ package RMI;/*
  * 12.09.2018 Original version
  */
 
+import model.Challenge;
+import model.Tournament;
+import model.TournamentParticipation;
+import model.Match;
+import model.Move;
+import model.User;
 
 import model.*;
 import persistence.Persistence;
@@ -234,6 +240,16 @@ public class Tier3RMIServerController
     }
 
     @Override
+    public int getNrofOriginalParticipants(int tournamentID) throws RemoteException {
+        try {
+            return persistence.getNrofOriginalParticipants(tournamentID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
     public boolean UpdateMatchUserTurn(int matchID, String color) throws RemoteException{
         try{
             persistence.UpdateMatchUserTurn(matchID,color);
@@ -248,6 +264,16 @@ public class Tier3RMIServerController
         try {
             return persistence.createMatch(turnTime, "Friendly");
         }catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Match createMatch(int turnTime, int tournamentID) throws RemoteException {
+        try {
+            return persistence.createMatch(turnTime, "Friendly", tournamentID);
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -290,6 +316,74 @@ public class Tier3RMIServerController
             return null;
         }
     }
+
+    @Override
+    public int validateTournament(Tournament tournament) throws RemoteException{
+        try {
+            int id = persistence.createTournament(tournament.getCreator(), tournament.getTurnTime(), tournament.getNrOfParticipants());
+            System.out.println("Tournament was created by " + tournament.getCreator());
+            return id;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException {
+        try {
+            persistence.CreateTournamentParticipation(username, tournamentID, placement);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Tournament GetTournamentById(int id){
+        try {
+            ArrayList<Tournament> tournaments = persistence.loadTournaments();
+            for (Tournament i : tournaments) {
+               if (i.getTournamentId() == id){
+                   return i;
+               }
+           }
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException{
+        try {
+          return persistence.loadTournamentParticipants(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException {
+        try {
+            persistence.UpdateTournamentNrOfParticipants(ID, newSize);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException {
+        try {
+            persistence.UpdateParticipantsPlacement(username, placement, tournamentId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     @Override
     public void incrementWinLossDraw(String username, String type) throws RemoteException {

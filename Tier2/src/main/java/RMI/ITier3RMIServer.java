@@ -44,6 +44,10 @@ public interface ITier3RMIServer
 
     Match createMatch(int turnTime) throws RemoteException;
 
+    public Match createMatch(int turnTime, int tournamentID) throws RemoteException;
+
+    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException;
+
     boolean createParticipation(String username, String color, int matchId) throws RemoteException;
 
     boolean removeChallenge(Challenge challenge) throws RemoteException;
@@ -55,6 +59,18 @@ public interface ITier3RMIServer
     boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException;
 
     Match getMatch(int matchId) throws RemoteException;
+
+    public int validateTournament(Tournament tournament) throws RemoteException;
+
+    public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException;
+
+    public Tournament GetTournamentById(int id) throws RemoteException;
+
+    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException;
+
+    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException;
+
+    public int getNrofOriginalParticipants(int tournamentID) throws RemoteException;
 
     void incrementWinLossDraw(String username, String type) throws RemoteException;
 

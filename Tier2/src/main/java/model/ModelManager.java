@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 public class ModelManager implements Model {
@@ -155,8 +156,8 @@ public class ModelManager implements Model {
     public boolean acceptChallenge(Challenge challenge) {
         try {
             Match match = iTier2RMIClient.createMatch(challenge.getTurnTime());
-            iTier2RMIClient.createParticipation(challenge.getChallenger(),"White",match.getMatchID());
-            iTier2RMIClient.createParticipation(challenge.getChallenged(),"Black",match.getMatchID());
+            iTier2RMIClient.createParticipation(challenge.getChallenger(), "White", match.getMatchID());
+            iTier2RMIClient.createParticipation(challenge.getChallenged(), "Black", match.getMatchID());
             iTier2RMIClient.removeChallenge(challenge);
             return true;
         } catch (RemoteException e) {
@@ -188,6 +189,53 @@ public class ModelManager implements Model {
             return getChessBoard(matchID).GetScore("White");
         }
     }
+
+    @Override
+    public int CreateTournament(Tournament tournament) {
+        try {
+            return iTier2RMIClient.validateTournament(tournament);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean joinATournament(String username, int tournamentID, int placement) {
+        try {
+            if (iTier2RMIClient.joinATournament(username, tournamentID, placement)) {
+                StartTournamentMatches(tournamentID);
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void StartTournamentMatches(int tournamentID) {
+        try {
+            Tournament tournament = iTier2RMIClient.GetTournamentById(tournamentID);
+            ArrayList<TournamentParticipation> tournamentParticipations = iTier2RMIClient.getTournamentParticipationByTournamentID(tournamentID);
+            System.out.println("List: " + tournamentParticipations.toString());
+
+            if (tournamentParticipations.size() == tournament.getNrOfParticipants()) {
+
+                for (int i = 0; i < tournamentParticipations.size(); i += 2) {
+                    Match match = iTier2RMIClient.createMatch(tournament.getTurnTime(), tournamentID);
+                    iTier2RMIClient.createParticipation(tournamentParticipations.get(i).getUsername(), "White", match.getMatchID());
+                    iTier2RMIClient.createParticipation(tournamentParticipations.get(i + 1).getUsername(), "Black", match.getMatchID());
+                }
+
+
+                iTier2RMIClient.UpdateTournamentNrOfParticipants(tournamentID, tournamentParticipations.size() / 2);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public Match checkTurnTime(Match match) {
@@ -297,49 +345,103 @@ public class ModelManager implements Model {
 
     @Override
     public void updateOutcome(String player, String outcome, int matchId) {
-        try{
-            iTier2RMIClient.updateOutcome(player, outcome, matchId);
+        try {
+            if (iTier2RMIClient.getMatch(matchId).getTournamentID() == 0) {
+                iTier2RMIClient.updateOutcome(player, outcome, matchId);
 
-            ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchId);
+                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchId);
 
-            Participant player1 = participants.get(0);
-            Participant player2 = participants.get(1);
+                Participant player1 = participants.get(0);
+                Participant player2 = participants.get(1);
 
-            if (player1.getOutcome() != null && player2.getOutcome() != null) {
-                switch (player1.getOutcome()) {
-                    case "Draw":
-                        if (player2.getOutcome().equals("Draw")) {
-                            // set match to finished
-                            iTier2RMIClient.setMatchOutcome(matchId, true);
-                            // add 1 to drawn games for player 1 and player2
-                            // add 1 to total games played for player1 and player2
-                            iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "draws");
-                            iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "draws");
-                        }
-                        break;
-                    case "Win":
-                        if (player2.getOutcome().equals("Loss")) {
-                            // set match to finished
-                            iTier2RMIClient.setMatchOutcome(matchId, true);
-                            // award win to player1
-                            // give loss to player2
-                            // update total games played for player1 and player2
-                            iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "wins");
-                            iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "losses");
-                        }
-                        break;
-                    case "Loss":
-                        if (player2.getOutcome().equals("Win")) {
-                            // set match to finished
-                            iTier2RMIClient.setMatchOutcome(matchId, true);
-                            // award win to player2
-                            // give loss to player1
-                            // update total games played for player1 and player2
-                            iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "losses");
-                            iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "wins");
-                        }
-                        break;
-                    default:
+                if(player1.getOutcome() != null && player2.getOutcome() != null) {
+                    switch (player1.getOutcome()) {
+                        case "Draw":
+                            if (player2.getOutcome().equals("Draw")) {
+                                // set match to finished
+                                iTier2RMIClient.setMatchOutcome(matchId, true);
+                                // add 1 to drawn games for player 1 and player2
+                                // add 1 to total games played for player1 and player2
+                            }
+                            break;
+                        case "Win":
+                            if (player2.getOutcome().equals("Loss")) {
+                                // set match to finished
+                                iTier2RMIClient.setMatchOutcome(matchId, true);
+                                // award win to player1
+                                // give loss to player2
+                                // update total games played for player1 and player2
+                            }
+                            break;
+                        case "Loss":
+                            if (player2.getOutcome().equals("Win")) {
+                                // set match to finished
+                                iTier2RMIClient.setMatchOutcome(matchId, true);
+                                // award win to player2
+                                // give loss to player1
+                                // update total games played for player1 and player2
+                            }
+                            break;
+                        default:
+                    }
+                }
+            } else {
+                iTier2RMIClient.updateOutcome(player, outcome, matchId);
+                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchId);
+
+                int TournamentID = iTier2RMIClient.getMatch(matchId).getTournamentID();
+                ArrayList<TournamentParticipation> currentParticipants = iTier2RMIClient.getTournamentParticipationByTournamentID(TournamentID);
+                int Placement = currentParticipants.size();
+
+
+                Participant player1 = participants.get(0);
+                Participant player2 = participants.get(1);
+
+                if (player1.getOutcome() != null && player2.getOutcome() != null) {
+                    switch (player1.getOutcome()) {
+                        case "Draw":
+                            if (player2.getOutcome().equals("Draw")) {
+                                // set match to finished
+                                iTier2RMIClient.setMatchOutcome(matchId, true);
+                                // add 1 to drawn games for player 1 and player2
+                                // add 1 to total games played for player1 and player2
+                                if (player1.getColor().equals("White")) {
+                                    if (getMatchScores(false, matchId) > getMatchScores(true, matchId)) {
+                                        iTier2RMIClient.UpdateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
+                                    } else {
+                                        iTier2RMIClient.UpdateParticipantsPlacement(player1.getUsername(), Placement, TournamentID);
+                                    }
+                                }
+                            }
+                            StartTournamentMatches(TournamentID);
+                            break;
+                        case "Win":
+                            if (player2.getOutcome().equals("Loss")) {
+                                // set match to finished
+                                iTier2RMIClient.setMatchOutcome(matchId, true);
+                                // award win to player1
+                                // give loss to player2
+                                // update total games played for player1 and player2
+                                iTier2RMIClient.UpdateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
+                            }
+                            StartTournamentMatches(TournamentID);
+                            break;
+                        case "Loss":
+                            if (player2.getOutcome().equals("Win")) {
+                                // set match to finished
+                                iTier2RMIClient.setMatchOutcome(matchId, true);
+                                // award win to player2
+                                // give loss to player1
+                                // update total games played for player1 and player2
+                                iTier2RMIClient.UpdateParticipantsPlacement(player1.getUsername(), Placement, TournamentID);
+                            }
+                            StartTournamentMatches(TournamentID);
+                            break;
+                        default:
+                    }
+                    if( iTier2RMIClient.getTournamentParticipationByTournamentID(TournamentID).size() == 1){
+                        iTier2RMIClient.UpdateParticipantsPlacement(currentParticipants.get(0).getUsername(), 1, TournamentID);
+                    }
                 }
             }
         }catch (RemoteException e){

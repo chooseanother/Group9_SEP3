@@ -1,5 +1,11 @@
 package persistence;
 
+import model.Challenge;
+import model.Tournament;
+import model.TournamentParticipation;
+import model.Match;
+import model.Move;
+import model.User;
 import model.*;
 
 import java.sql.SQLException;
@@ -11,13 +17,16 @@ public class PersistenceDB implements Persistence{
     ChallengePersistence challengeDB;
     MatchPersistence matchDB;
     MatchParticipationPersistence matchParticipationDB;
+    TournamentPersistence tournamentPersistence;
+    TournamentParticipationPersistence tournamentParticipationPersistence;
 
     public PersistenceDB(){
         userDB = new UserDB();
         challengeDB = new ChallengeDB();
         matchDB = new MatchDB();
         matchParticipationDB = new MatchParticipationDB();
-
+        tournamentPersistence = new TournamentDB();
+        tournamentParticipationPersistence = new TournamentParticipationDb();
     }
 
     @Override
@@ -43,7 +52,7 @@ public class PersistenceDB implements Persistence{
 
     @Override
     public Match createMatch(int turnTime, String type, int tournamentId) throws SQLException {
-        return matchDB.createMatch(turnTime,toString(),tournamentId);
+        return matchDB.createMatch(turnTime, type ,tournamentId);
     }
 
     public void createChallenge(Challenge challenge) throws SQLException {
@@ -94,6 +103,21 @@ public class PersistenceDB implements Persistence{
     }
 
     @Override
+    public ArrayList<TournamentParticipation> loadTournamentParticipants(int tournamentId) throws SQLException {
+        return tournamentParticipationPersistence.loadTournamentParticipants(tournamentId);
+    }
+
+    @Override
+    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws SQLException {
+        tournamentParticipationPersistence.UpdateParticipantsPlacement(username, placement, tournamentId);
+    }
+
+    @Override
+    public int getNrofOriginalParticipants(int tournamentID) throws SQLException {
+        return tournamentParticipationPersistence.getNrofOriginalParticipants(tournamentID);
+    }
+
+    @Override
     public void updateOutcome(String player, String outcome, int matchId) throws SQLException {
         matchParticipationDB.updateOutcome(player, outcome, matchId);
     }
@@ -128,6 +152,26 @@ public class PersistenceDB implements Persistence{
     @Override
     public Match getMatch(int matchId) throws SQLException {
         return matchDB.getMatch(matchId);
+    }
+
+    @Override
+    public int CreateTournamentParticipation(String username, int tournamentID, int placement) throws SQLException {
+        return tournamentParticipationPersistence.CreateTournamentParticipation(username, tournamentID, placement);
+    }
+
+    @Override
+    public int createTournament(String username, int turnTime, int participants) throws SQLException {
+        return tournamentPersistence.createTournament(username, turnTime, participants);
+    }
+
+    @Override
+    public ArrayList<Tournament> loadTournaments() throws SQLException {
+        return tournamentPersistence.loadTournaments();
+    }
+
+    @Override
+    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws SQLException {
+        tournamentPersistence.UpdateTournamentNrOfParticipants(ID, newSize);
     }
 
     @Override

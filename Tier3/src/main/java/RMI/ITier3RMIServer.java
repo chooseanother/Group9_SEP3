@@ -2,10 +2,17 @@ package RMI;/*
  * 12.09.2018 Original version
  */
 
+import model.Challenge;
+import model.Tournament;
+import model.TournamentParticipation;
+import model.Match;
+import model.Move;
+import model.User;
 import model.*;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 
@@ -31,6 +38,8 @@ public interface ITier3RMIServer
 
     Match createMatch(int turnTime) throws RemoteException;
 
+    public Match createMatch(int turnTime, int tournamentID) throws RemoteException;
+
     boolean createParticipation(String username, String color, int matchId) throws RemoteException;
 
     boolean removeChallenge(Challenge challenge) throws RemoteException;
@@ -40,6 +49,18 @@ public interface ITier3RMIServer
     public boolean UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
 
     ArrayList<Move> getMoves(int matchID) throws RemoteException;
+
+    public int validateTournament(Tournament tournament) throws RemoteException;
+
+    public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException;
+
+    public Tournament GetTournamentById(int id) throws RemoteException;
+
+    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException;
+
+    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException;
+
+    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException;
 
     ArrayList<Match> getMatches(String username) throws RemoteException;
 
@@ -54,6 +75,8 @@ public interface ITier3RMIServer
     Match getMatch(int matchId) throws RemoteException;
 
     void incrementWinLossDraw(String username, String type) throws RemoteException;
+
+    public int getNrofOriginalParticipants(int tournamentID) throws RemoteException;
 
     public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }

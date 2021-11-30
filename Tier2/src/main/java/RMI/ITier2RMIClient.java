@@ -30,6 +30,15 @@ public interface ITier2RMIClient extends Remote {
 
     User getUser(String username) throws RemoteException;
 
+    public int validateTournament(Tournament tournament) throws RemoteException;
+
+    public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException;
+
+    public Tournament GetTournamentById(int id) throws RemoteException;
+
+    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException;
+
+//    void createMatch(String challenger, String challenged, int turnTime) throws RemoteException;
     ArrayList<Move> getMoves(int matchID) throws RemoteException;
 
     ArrayList<Match> getMatches(String username) throws RemoteException;
@@ -42,6 +51,12 @@ public interface ITier2RMIClient extends Remote {
 
     boolean removeChallenge(Challenge challenge) throws RemoteException;
 
+    public Match createMatch(int turnTime, int tournamentID) throws RemoteException;
+
+    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException;
+
+    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException;
+
     void updateOutcome(String player, String outcome, int matchId) throws RemoteException;
 
     String getParticipationColor(String player, int matchId) throws RemoteException;
@@ -49,6 +64,8 @@ public interface ITier2RMIClient extends Remote {
     boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException;
 
     Match getMatch(int matchId) throws RemoteException;
+
+    public int getNrofOriginalParticipants(int tournamentID) throws RemoteException;
 
     void incrementWinLossDraw(String username, String type) throws RemoteException;
 
