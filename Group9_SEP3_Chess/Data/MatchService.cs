@@ -17,11 +17,13 @@ namespace Group9_SEP3_Chess.Data
         private IRabbitMQ _rabbitMq;
         private List<ChessPiece> removedChessPieces;
         private String MatchScores;
+        private JsonSerializerOptions jsonOptions;
 
         public MatchService(IRabbitMQ rabbitMq)
         {
             this._rabbitMq = rabbitMq;
             removedChessPieces = new List<ChessPiece>();
+            jsonOptions = new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase};
         }
 
         public async Task<ChessPiece> MoveChessPiece(Message message,
@@ -131,10 +133,7 @@ namespace Group9_SEP3_Chess.Data
             Console.WriteLine(response);
             if (response.Action.Equals("Matches"))
             {
-                IList<Match> rm = JsonSerializer.Deserialize<IList<Match>>(response.Data, new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                });
+                IList<Match> rm = JsonSerializer.Deserialize<IList<Match>>(response.Data, jsonOptions);
               return rm;
             }
             else
@@ -163,16 +162,31 @@ namespace Group9_SEP3_Chess.Data
             });
             if (response.Action.Equals("MatchHistory"))
             {
-                IList<Match> rm = JsonSerializer.Deserialize<IList<Match>>(response.Data, new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                });
+                IList<Match> rm = JsonSerializer.Deserialize<IList<Match>>(response.Data, jsonOptions);
                 return rm;
             }
             else
             {
                 throw new Exception($"{response.Action}");
             }
+        }
+
+        public async Task<Match> GetMatch(int matchId)
+        {
+            var response = await _rabbitMq.SendRequestAsync(new Message
+            {
+                Action = "GetMatch",
+                Data = ""+matchId
+            });
+            if (response.Action.Equals("Match"))
+            {
+                return JsonSerializer.Deserialize<Match>(response.Data, jsonOptions);
+            }
+            else
+            {
+                throw new Exception($"{response.Action}");
+            }
+            
         }
 
         public async Task<IList<Move>> GetMoves(int matchId)

@@ -15,6 +15,8 @@ namespace Group9_SEP3_Chess.Models
         
         [JsonPropertyName("dataSlot3")]
         public string DataSlot3 { get; set; }
+        [JsonPropertyName("dataSlot4")]
+        public string DataSlot4 { get; set; }
         
         public override string ToString()
         {

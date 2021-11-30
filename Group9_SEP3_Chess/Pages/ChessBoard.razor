@@ -2,8 +2,13 @@
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
 @using System.Text.Json
+@using Microsoft.AspNetCore.Mvc.Formatters
+@using System.Timers
 @inject IMatchService _matchService
 @inject AuthenticationStateProvider _authenticationStateProvider
+<div class="row" style="justify-content: center">
+    <p>@Counter.ToString()</p>
+</div>
 <div class="row">
     <div class="col">
         <div class="RemovedPiecesTable">
@@ -20,69 +25,71 @@
         </div>
     </div>
     <div class="col">
+    
         <div class="board">
             @for (int i = 0; i < chessPieces.GetLength(0); i++)
-            {
-                if (i % 2 == 0)
-                {
-                    for (int j = 0; j < chessPieces.GetLength(1); j++)
                     {
-                        int verticalaxis = i;
-                        int horizontalaxis = j;
-                        if (chessPieces[i, j] != null)
+                        if (i % 2 == 0)
                         {
-                            if (j % 2 == 0)
+                            for (int j = 0; j < chessPieces.GetLength(1); j++)
                             {
-                                <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                            }
-                            else
-                            {
-                                <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                int verticalaxis = i;
+                                int horizontalaxis = j;
+                                if (chessPieces[i, j] != null)
+                                {
+                                    if (j % 2 == 0)
+                                    {
+                                        <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()"  ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                    }
+                                    else
+                                    {
+                                        <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                    }
+                                }
+                                else
+                                {
+                                    if (j % 2 == 0)
+                                    {
+                                        <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                    }
+                                    else
+                                    {
+                                        <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                    }
+                                }
                             }
                         }
                         else
                         {
-                            if (j % 2 == 0)
+                            for (int j = 0; j < chessPieces.GetLength(1); j++)
                             {
-                                <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                            }
-                            else
-                            {
-                                <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    for (int j = 0; j < chessPieces.GetLength(1); j++)
-                    {
-                        int verticalaxis = i;
-                        int horizontalaxis = j;
-                        if (chessPieces[i, j] != null)
-                        {
-                            if (j % 2 == 0)
-                            {
-                                <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                            }
-                            else
-                            {
-                                <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                            }
-                        }
-                        else
-                        {
-                            if (j % 2 == 0)
-                            {
-                                <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                            }
-                            else
-                            {
-                                <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                int verticalaxis = i;
+                                int horizontalaxis = j;
+                                if (chessPieces[i, j] != null)
+                                {
+                                    if (j % 2 == 0)
+                                    {
+                                        <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                    }
+                                    else
+                                    {
+                                        <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                    }
+                                }
+                                else
+                                {
+                                    if (j % 2 == 0)
+                                    {
+                                        <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                    }
+                                    else
+                                    {
+                                        <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                    }
+                                }
                             }
                         }
                     }
-                }
             }
         </div>
     </div>
@@ -106,41 +113,28 @@
 
 <div class="UpgradePart" style="text-align: center">
     <label>Select upgrade: </label>
-    <select @bind="UpgradeSelected">
+    <select @bind="UpgradeSelected" disabled="@isDisabled">
         <option>Rook</option>
         <option>Knight</option>
         <option>Bishop</option>
         <option>Queen</option>
     </select>
-    <button class="btn btn-outline-dark" @onclick="UpgradeChessPiece">Upgrade</button>
+    <button class="btn btn-outline-dark" disabled="@isDisabled "@onclick="UpgradeChessPiece">Upgrade</button>
 </div>
 
 <div class="MarkMatch" style="text-align: center">
     <label>Select match outcome: </label>
-    <select @bind="Outcome">
+    <select @bind="Outcome" disabled="@isDisabled">
         <option value="">Clear</option>
         <option>Win</option>
         <option>Loss</option>
         <option>Draw</option>
     </select>
-    <button class="btn btn-outline-dark" @onclick="UpdateOutcome">Submit</button>
+    <button class="btn btn-outline-dark" @onclick="UpdateOutcome" disabled="@isDisabled">Submit</button>
 </div>
 
-<style>
-    .board {
-        display: grid;
-        grid-template-columns: auto auto auto auto auto auto auto auto;
-        grid-template-rows: auto auto auto auto auto auto auto auto;
-        background-color: #da9d1d;
-        padding: 10px;
-        width: 680px;
-        height: 680px;
-    }
-    .RemovedPiecesTable{
-       margin-top: 20px;
-    }
-   
-</style>
+<div id="moveHistory"><MoveHistory id="@id"></MoveHistory></div>
+
 
 @code {
     private ChessPiece[,] chessPieces = new ChessPiece[8, 8];
@@ -151,6 +145,14 @@
     String WhiteScore = "";
     String BlackScore = "";
     private string Outcome { get; set; }
+    private Match Match { get; set; }
+
+
+    private bool isDisabled { get; set; }
+
+    private CountdownDisplay Counter { get; set; }
+    private static Timer _aTimer;
+
 
     [Parameter]
     public int id { get; set; }
@@ -165,15 +167,58 @@
         BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
         BlackScore = _matchService.getMatchScores(true);
         WhiteScore = _matchService.getMatchScores(false);
+        
+        Match = await _matchService.GetMatch(id);
+
+        if (Match.Finished)
+        {
+            isDisabled = true;
+        }
+        else
+        {
+            isDisabled = false;
+        }
+
+        Counter = new CountdownDisplay(Match);
+        StartTimer();
+    }
+    
+    public void StartTimer()
+    {
+        _aTimer = new Timer(1000);
+        _aTimer.Elapsed += CountDownTimer;
+        _aTimer.Enabled = true;
+
+    }
+    
+    public void CountDownTimer(Object source, ElapsedEventArgs e)
+    {
+        if (Counter.TimeLeft > 0)
+        {
+            Counter.Decrement();
+        }
+        else
+        {
+            _aTimer.Enabled = false;
+        }
+        InvokeAsync(StateHasChanged);
     }
 
     private async Task UpdateOutcome()
     {
-        await _matchService.UpdateOutcome(loggedIn.Username, Outcome, id);
+        if (Match.Finished)
+        {
+            return;
+        }
+        await _matchService.UpdateOutcome(loggedIn.Username, Outcome, 1);
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
     {
+        if (Match.Finished)
+        {
+            return;
+        }
         ChessPiece selected = null;
         for (int i = 0; i < chessPieces.GetLength(0); i++)
         {
@@ -224,6 +269,7 @@
             {
                 Data = JsonSerializer.Serialize(selected),
                 DataSlot2 = $"{id}",
+                DataSlot3 = loggedIn.Username,
                 Action = "Move"
             };
             ChessPiece moved = await _matchService.MoveChessPiece(message);
@@ -272,6 +318,10 @@
 
     private async Task UpgradeChessPiece()
     {
+        if (Match.Finished)
+        {
+            return;
+        }
         ChessPiece selected = null;
         for (int i = 0; i < chessPieces.GetLength(0); i++)
         {
@@ -300,7 +350,8 @@
             Action = "Upgrade",
             Data = UpgradeSelected,
             DataSlot2 = $"{id}",
-            DataSlot3 = JsonSerializer.Serialize(selected)
+            DataSlot3 = JsonSerializer.Serialize(selected),
+            DataSlot4 = loggedIn.Username
         };
         ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
         if (toUpdate != null)
