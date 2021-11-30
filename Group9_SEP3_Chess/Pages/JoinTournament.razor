@@ -1,0 +1,89 @@
+@using Group9_SEP3_Chess.Models
+@using Group9_SEP3_Chess.Data
+@inject AuthenticationStateProvider _customAuthenticationStateProvider;
+@inject ITournament _tournamnet;
+
+<h4>Host Tournament</h4>
+<div>
+    <div class="HostTournament">
+        <EditForm Model="@newTournament" OnValidSubmit="@CreateTournament">
+            <DataAnnotationsValidator/>
+            <ValidationSummary/>
+            <div class="form-group">
+                Select turn length:<br/>
+                <InputSelect @bind-Value="newTournament.TurnTime">
+                    @foreach (var (key, value) in turnLengths)
+                    {
+                        <option value="@key">@value</option>
+                    }
+                </InputSelect>
+                <br/>
+
+                Nr of Participants:
+                <InputSelect @bind-Value="newTournament.NrOfParticipants" style="margin-top: 19px">
+                    <option>4</option>
+                    <option>8</option>
+                    <option>16</option>
+                    <option>32</option>
+                </InputSelect>
+
+                <p style="margin-top: 35px" class="actions">
+                    <button class="btn btn-outline-dark" type="submit">Create</button>
+                </p>
+            </div>
+        </EditForm>
+    </div>
+
+    <div class="JoinTournament">
+        <form>
+            <label for="">
+                <b>Tournament ID:</b>
+            </label>
+            <input type="number" @bind-value="TorunamentIdInserted" required>
+        </form>
+    </div>
+    
+    <button @onclick="JoinATournament">Join</button>
+    
+    <h4>@Notification</h4>
+    
+</div>
+
+
+@code {
+    private Tournament newTournament = new();
+
+    private String Notification;
+    private int TorunamentIdInserted;
+
+    String CurrentUser;
+
+    private readonly IDictionary<int, string> turnLengths = new Dictionary<int, string>
+    {
+        {120, "2 Minutes"}, {1800, "30 Minutes"}, {3600, "1 Hour"}, {7200, "2 Hours"}, {36000, "10 Hours"}, {86400, "1 Day"}, {259200, "3 Days"}, {604800, "7 Days"}
+    };
+    
+    protected override void OnInitialized()
+    {
+        CurrentUser = ((CustomAuthenticationStateProvider) _customAuthenticationStateProvider).GetCachedUser().Username;
+    }
+
+    private async Task CreateTournament()
+    {
+        newTournament.Creator = CurrentUser;
+        
+        Notification = "Tournament ID Generated: " + await _tournamnet.CreateTournament(newTournament);
+        
+    }
+
+    private async Task JoinATournament()
+    {
+        var result = await _tournamnet.joinATournament(CurrentUser, TorunamentIdInserted, 0);
+
+        if (result)
+        {
+            Notification = "U successfully joined tournament " + TorunamentIdInserted;
+        }
+    }
+
+}

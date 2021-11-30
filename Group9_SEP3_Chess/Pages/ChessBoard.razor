@@ -206,13 +206,11 @@
 
     private async Task UpdateOutcome()
     {
-
         if (Match.Finished)
         {
             return;
         }
         await _matchService.UpdateOutcome(loggedIn.Username, Outcome, 1);
-
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
