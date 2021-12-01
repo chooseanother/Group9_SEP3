@@ -7,8 +7,8 @@ namespace Group9_SEP3_Chess.Data
 {
     public interface ITournament
     {
-        Task<String> CreateTournament(Tournament tournament);
-        Task<bool> joinATournament(String username, int tournamentID, int placement);
+        Task<string> CreateTournament(Tournament tournament);
+        Task<bool> JoinATournament(string username, int tournamentId, int placement);
         Task<IList<Tournament>> GetTournamentsByUser(string loggedInUser);
     }
 }

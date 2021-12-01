@@ -36,12 +36,12 @@ else
                 @* <td>@c.Username</td> *@
                 <td>@turnLengths[c.TurnLength]</td>
                 <td>
-                    <button @onclick='() => AcceptChallenge(c)'>
+                    <button class="btn btn-outline-dark" @onclick='() => AcceptChallenge(c)'>
                         <i class="oi oi-check" style="color:green;"></i>
                     </button>
                 </td>
                 <td>
-                    <button @onclick='() => RejectChallenge(c)'>
+                    <button class="btn btn-outline-dark" @onclick='() => RejectChallenge(c)'>
                         <i class="oi oi-trash" style="color:red;"></i>
                     </button>
                 </td>

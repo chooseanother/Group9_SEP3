@@ -27,10 +27,10 @@ namespace Group9_SEP3_Chess.Json2DArrayHelp
 
         class Array2DConverterInner<T> : JsonConverter<T[,]>
         {
-            readonly JsonConverter<T> _valueConverter;
+            private readonly JsonConverter<T> valueConverter;
 
             public Array2DConverterInner(JsonSerializerOptions options) =>
-                this._valueConverter = (typeof(T) == typeof(object)
+                this.valueConverter = (typeof(T) == typeof(object)
                     ? null
                     : (JsonConverter<T>) options
                         .GetConverter(typeof(T))); // Encountered a bug using the builtin ObjectConverter 
@@ -50,7 +50,7 @@ namespace Group9_SEP3_Chess.Json2DArrayHelp
                 {
                     writer.WriteStartArray();
                     for (var j = columnsFirstIndex; j <= columnsLastIndex; j++)
-                        _valueConverter.WriteOrSerialize(writer, array[i, j], options);
+                        valueConverter.WriteOrSerialize(writer, array[i, j], options);
                     writer.WriteEndArray();
                 }
 
@@ -62,7 +62,7 @@ namespace Group9_SEP3_Chess.Json2DArrayHelp
         }
     }
 
-    public static partial class ArrayExtensions
+    public static class ArrayExtensions
     {
         public static T[,] To2D<T>(this List<List<T>> source)
         {

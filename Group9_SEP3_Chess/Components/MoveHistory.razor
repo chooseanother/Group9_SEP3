@@ -1,8 +1,6 @@
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
-@inject IMatchService matchService;
-@inject AuthenticationStateProvider authenticationStateProvider
-@inject NavigationManager _navigationManager
+@inject IMatchService matchService
 
 @if (moves == null)
 {
@@ -41,13 +39,13 @@ else
 @code {
 
     [Parameter]
-    public int id { get; set; }
+    public int Id { get; set; }
 
     private IList<Move> moves;
 
     protected override async Task OnInitializedAsync()
     {
-        moves = await matchService.GetMoves(id);
+        moves = await matchService.GetMoves(Id);
     }
 
 }

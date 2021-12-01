@@ -7,7 +7,7 @@ namespace Group9_SEP3_Chess.Models
     public class Tournament
     {
         [JsonPropertyName("creator")]
-        public String Creator { get; set; }
+        public string Creator { get; set; }
         
         [JsonPropertyName("NrOfParticipants")]
         public int NrOfParticipants { get; set; }
@@ -19,7 +19,7 @@ namespace Group9_SEP3_Chess.Models
         public int TournamentId { get; set; }
         
         [JsonPropertyName("top3Players")]
-        public String top3Players { get; set; }
+        public string Top3Players { get; set; }
 
        
         

@@ -17,10 +17,7 @@ namespace Group9_SEP3_Chess.Models
         [JsonPropertyName("color")]
         public string Color { get; set; }
 
-        public ChessPiece()
-        {
-        }
-        public String GetPiece()
+        public string GetPiece()
         {
             switch (Color.ToLower()+"-"+Type.ToLower())
             {

@@ -1,8 +1,5 @@
 @page "/"
 @using Group9_SEP3_Chess.Components
-@using Group9_SEP3_Chess.Data
-@using Group9_SEP3_Chess.Models
-@inject AuthenticationStateProvider authenticationStateProvider;
 
 <link href="Index.css" rel="stylesheet">
 <AuthorizeView>
@@ -12,26 +9,25 @@
         </div>
         <div id="component">
             <div id="challengeComponent">
-                <Play></Play>
+                <CreateChallenge/>
             </div>
-            <div id="hostTournamentComponent">
-                <JoinTournament></JoinTournament>
+            <div id="TournamentComponent">
+                <JoinTournament/>
             </div>
-            <div id="joinTournamentComponent"></div>
         </div>
         <div id="listComponent">
             <TabControl>
                 <TabPage Text="Matches">
-                    <MatchList/>
+                    <MatchList ActiveMatches="true"/>
                 </TabPage>
                 <TabPage Text="History">
-                    <HistoryOfMatches></HistoryOfMatches>
+                    <MatchList ActiveMatches="false"/>
                 </TabPage>
                 <TabPage Text="Challenges">
-                    <Challenges></Challenges>
+                    <Challenges/>
                 </TabPage>
                 <TabPage Text="Tournament History">
-                    <TournamentHistory></TournamentHistory>
+                    <TournamentHistory/>
                 </TabPage>
             </TabControl>
         </div>

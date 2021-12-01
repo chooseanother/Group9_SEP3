@@ -1,10 +1,9 @@
-@page "/MatchList"
 @using Group9_SEP3_Chess.Data
 @using Group9_SEP3_Chess.Models
 @using System.Text.Json
 @inject IMatchService matchService;
 @inject AuthenticationStateProvider authenticationStateProvider
-@inject NavigationManager _navigationManager
+@inject NavigationManager navigationManager
 
 @if (matches == null)
 {
@@ -20,7 +19,7 @@ else if (!matches.Any())
 }
 else
 {
-    <table>
+    <table class="table">
         <thead>
         <th>Match ID</th>
         <th>Tournament ID</th>
@@ -31,14 +30,14 @@ else
         @foreach (var item in matches)
         {
             <tr>
-                <td>@item.MatchID</td>
-                @if (item.TournamentID == 0)
+                <td>@item.MatchId</td>
+                @if (item.TournamentId == 0)
                 {
                     <td></td>
                 }
                 else
                 {
-                    <td>@item.TournamentID</td>
+                    <td>@item.TournamentId</td>
                 }
                 @if (item.WhitePlayer.Username.Equals(loggedInUser.Username))
                 {
@@ -51,7 +50,7 @@ else
                 <td>@item.TurnTime</td>
                 <td>@(new DateTime(1970,1,1,1,0,0,0, DateTimeKind.Utc).AddMilliseconds(item.LatestMove))</td>
                 <td>
-                    <button class="moi btn-outline-dark" @onclick="@(() => PlayMatch(item.MatchID))">Play match</button>
+                    <button class="btn btn-outline-dark" @onclick="@(() => ViewMatch(item.MatchId))">@(ActiveMatches ? "Play match" : "View")</button>
                 </td>
             </tr>
         }
@@ -59,18 +58,28 @@ else
 }
 
 @code {
+    [Parameter]
+    public bool ActiveMatches { get; set; }
+    
     private IList<Match> matches;
     private User loggedInUser;
 
     protected override async Task OnInitializedAsync()
     {
         loggedInUser = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
-        matches = await matchService.GetMatches(loggedInUser.Username);
+        if (ActiveMatches)
+        {
+            matches = await matchService.GetMatches(loggedInUser.Username);
+        }
+        else
+        {
+            matches = await matchService.GetFinishedMatches(loggedInUser.Username);
+        }
     }
       
-    private void PlayMatch(int MatchID)
+    private void ViewMatch(int matchId)
     {
-        _navigationManager.NavigateTo($"/match/{MatchID}");
+        navigationManager.NavigateTo($"/match/{matchId}");
     }
 }
 

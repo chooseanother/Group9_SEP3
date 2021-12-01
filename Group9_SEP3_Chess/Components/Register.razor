@@ -1,9 +1,8 @@
-@page "/Register"
 @using Microsoft.AspNetCore.Components
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
 
-@inject IUserService _userService
+@inject IUserService userService
 
 <h3>Register</h3>
 <EditForm Model="@newUserItem" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
@@ -53,7 +52,7 @@
         Console.WriteLine(newUserItem);
         try
         {
-            result = await _userService.RegisterUserAsync(newUserItem);
+            result = await userService.RegisterUserAsync(newUserItem);
             // navigate to front page
         }
         catch (Exception e)

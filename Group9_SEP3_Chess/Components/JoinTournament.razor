@@ -1,16 +1,18 @@
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
-@inject AuthenticationStateProvider _customAuthenticationStateProvider;
-@inject ITournament _tournamnet;
+@inject AuthenticationStateProvider customAuthenticationStateProvider;
+@inject ITournament tournamnet;
 
-<h4>Host Tournament</h4>
+
 <div>
     <div class="HostTournament">
         <EditForm Model="@newTournament" OnValidSubmit="@CreateTournament">
             <DataAnnotationsValidator/>
             <ValidationSummary/>
             <div class="form-group">
-                Select turn length:<br/>
+                <h4>Host Tournament</h4>
+                Select turn length:
+                <br/>
                 <InputSelect @bind-Value="newTournament.TurnTime">
                     @foreach (var (key, value) in turnLengths)
                     {
@@ -27,7 +29,7 @@
                     <option>32</option>
                 </InputSelect>
 
-                <p style="margin-top: 35px" class="actions">
+                <p style="margin-top: 10px;margin-bottom: 60px;" class="actions">
                     <button class="btn btn-outline-dark" type="submit">Create</button>
                 </p>
             </div>
@@ -36,14 +38,16 @@
 
     <div class="JoinTournament">
         <form>
-            <label for="">
-                <b>Tournament ID:</b>
-            </label>
-            <input type="number" @bind-value="TorunamentIdInserted" required>
+            
+            <h4>Join Tournament</h4>
+            Tournament ID:
+            <br/>
+            <input type="number" @bind-value="TournamentsIdInserted" required>
         </form>
     </div>
     
-    <button @onclick="JoinATournament">Join</button>
+    
+    <button class="btn btn-outline-dark" style="margin-top: 10px" @onclick="JoinATournament">Join</button>
     
     <h4>@Notification</h4>
     
@@ -53,10 +57,9 @@
 @code {
     private Tournament newTournament = new();
 
-    private String Notification;
-    private int TorunamentIdInserted;
-
-    String CurrentUser;
+    private string Notification { get; set; }
+    private int TournamentsIdInserted { get; set; }
+    private string CurrentUser { get; set; }
 
     private readonly IDictionary<int, string> turnLengths = new Dictionary<int, string>
     {
@@ -65,24 +68,24 @@
     
     protected override void OnInitialized()
     {
-        CurrentUser = ((CustomAuthenticationStateProvider) _customAuthenticationStateProvider).GetCachedUser().Username;
+        CurrentUser = ((CustomAuthenticationStateProvider) customAuthenticationStateProvider).GetCachedUser().Username;
     }
 
     private async Task CreateTournament()
     {
         newTournament.Creator = CurrentUser;
         
-        Notification = "Tournament ID Generated: " + await _tournamnet.CreateTournament(newTournament);
+        Notification = "Tournament ID Generated: " + await tournamnet.CreateTournament(newTournament);
         
     }
 
     private async Task JoinATournament()
     {
-        var result = await _tournamnet.joinATournament(CurrentUser, TorunamentIdInserted, 0);
+        var result = await tournamnet.JoinATournament(CurrentUser, TournamentsIdInserted, 0);
 
         if (result)
         {
-            Notification = "U successfully joined tournament " + TorunamentIdInserted;
+            Notification = "U successfully joined tournament " + TournamentsIdInserted;
         }
     }
 

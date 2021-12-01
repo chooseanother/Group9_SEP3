@@ -7,9 +7,9 @@ namespace Group9_SEP3_Chess.Models
     public class Match
     {
         [JsonPropertyName("matchID")]
-        public int MatchID { get; set; }
+        public int MatchId { get; set; }
         [JsonPropertyName("tournamentID")]
-        public  int TournamentID { get; set; }
+        public  int TournamentId { get; set; }
         [JsonPropertyName("turnTime")]
         public  int TurnTime { get; set; }
         [JsonPropertyName("type")]

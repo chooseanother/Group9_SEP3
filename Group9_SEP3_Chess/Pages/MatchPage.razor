@@ -1,13 +1,14 @@
 @page "/match/{id:int}"
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
+@using Group9_SEP3_Chess.Components
 @using System.Text.Json
-@using Microsoft.AspNetCore.Mvc.Formatters
 @using System.Timers
-@inject IMatchService _matchService
-@inject AuthenticationStateProvider _authenticationStateProvider
+@inject IMatchService matchService
+@inject AuthenticationStateProvider authenticationStateProvider
 <div class="row" style="justify-content: center">
     <p>@Counter.ToString()</p>
+    
 </div>
 <div class="row">
     <div class="col">
@@ -15,10 +16,10 @@
             <h4>Black Score: @BlackScore</h4>
             <h4>White removed: </h4>
             <div class="row">
-                @foreach (ChessPiece chessPiece in WhiteRemovedChessPieces)
+                @foreach (var chessPiece in whiteRemovedChessPieces)
                 {
                     <div class="col-md-2">
-                        <img style="width: 50px; height:50px " src="@chessPiece.GetPiece()">
+                        <img style="width: 50px; height:50px " alt="@chessPiece.Color @chessPiece.Type" src="@chessPiece.GetPiece()">
                     </div>
                 }
             </div>
@@ -28,83 +29,83 @@
 
         <div class="board">
         <Coordinate Type="corner" TextToDisplay=" "/>
-            @for (int i = 0; i < CoordinatesLetters.GetLength(0); i++)
+            @for (var i = 0; i < coordinatesLetters.GetLength(0); i++)
             {
-                <Coordinate Type="ends" TextToDisplay="@CoordinatesLetters[i]"/>
+                <Coordinate Type="ends" TextToDisplay="@coordinatesLetters[i]"/>
             }
         <Coordinate Type="corner" TextToDisplay=" "/>
-            @for (int i = 0; i < chessPieces.GetLength(0); i++)
+            @for (var i = 0; i < chessPieces.GetLength(0); i++)
             {
-                <Coordinate Type="side" TextToDisplay="@CoordinatesNumbers[7 - i]"/>
+                <Coordinate Type="side" TextToDisplay="@coordinatesNumbers[7 - i]"/>
                 if (i % 2 == 0)
                 {
-                    for (int j = 0; j < chessPieces.GetLength(1); j++)
+                    for (var j = 0; j < chessPieces.GetLength(1); j++)
                     {
                         if (j == 0)
                         {
                         }
-                        int verticalaxis = i;
-                        int horizontalaxis = j;
+                        var verticalAxis = i;
+                        var horizontalAxis = j;
                         if (chessPieces[i, j] != null)
                         {
                             if (j % 2 == 0)
                             {
-                                <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalAxis, horizontalAxis))"/>
                             }
                             else
                             {
-                                <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalAxis, horizontalAxis))"/>
                             }
                         }
                         else
                         {
                             if (j % 2 == 0)
                             {
-                                <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalAxis, horizontalAxis))"/>
                             }
                             else
                             {
-                                <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalAxis, horizontalAxis))"/>
                             }
                         }
                     }
                 }
                 else
                 {
-                    for (int j = 0; j < chessPieces.GetLength(1); j++)
+                    for (var j = 0; j < chessPieces.GetLength(1); j++)
                     {
-                        int verticalaxis = i;
-                        int horizontalaxis = j;
+                        var verticalAxis = i;
+                        var horizontalAxis = j;
                         if (chessPieces[i, j] != null)
                         {
                             if (j % 2 == 0)
                             {
-                                <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalAxis, horizontalAxis))"/>
                             }
                             else
                             {
-                                <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalAxis, horizontalAxis))"/>
                             }
                         }
                         else
                         {
                             if (j % 2 == 0)
                             {
-                                <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalAxis, horizontalAxis))"/>
                             }
                             else
                             {
-                                <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                                <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalAxis, horizontalAxis))"/>
                             }
                         }
                     }
                 }
-                <Coordinate Type="side" TextToDisplay="@CoordinatesNumbers[7 - i]"/>
+                <Coordinate Type="side" TextToDisplay="@coordinatesNumbers[7 - i]"/>
             }
             <Coordinate Type="corner" TextToDisplay=" "/>
-            @for (int i = 0; i < CoordinatesLetters.GetLength(0); i++)
+            @for (var i = 0; i < coordinatesLetters.GetLength(0); i++)
             {
-                <Coordinate Type="ends" TextToDisplay="@CoordinatesLetters[i]"/>
+                <Coordinate Type="ends" TextToDisplay="@coordinatesLetters[i]"/>
             }
             <Coordinate Type="corner" TextToDisplay=" "/>
         </div>
@@ -115,10 +116,10 @@
             <h4>White Score: @WhiteScore</h4>
             <h4>Black removed: </h4>
             <div class="row">
-                @foreach (ChessPiece chessPiece in BlackRemovedChessPieces)
+                @foreach (var chessPiece in blackRemovedChessPieces)
                 {
                     <div class="col-md-2">
-                        <img style="width: 50px; height:50px " src="@chessPiece.GetPiece()">
+                        <img style="width: 50px; height:50px " alt="@chessPiece.Color @chessPiece.Type" src="@chessPiece.GetPiece()">
                     </div>
                 }
             </div>
@@ -129,87 +130,76 @@
 
 <div class="UpgradePart" style="text-align: center">
     <label>Select upgrade: </label>
-    <select @bind="UpgradeSelected" disabled="@isDisabled">
+    <select @bind="UpgradeSelected" disabled="@IsDisabled">
         <option>Rook</option>
         <option>Knight</option>
         <option>Bishop</option>
         <option>Queen</option>
     </select>
-    <button class="btn btn-outline-dark" disabled="@isDisabled "@onclick="UpgradeChessPiece">Upgrade</button>
+    <button class="btn btn-outline-dark" disabled="@IsDisabled" @onclick="UpgradeChessPiece">Upgrade</button>
 </div>
 
 <div class="MarkMatch" style="text-align: center">
     <label>Select match outcome: </label>
-    <select @bind="Outcome" disabled="@isDisabled">
+    <select @bind="Outcome" disabled="@IsDisabled">
         <option value="">Clear</option>
         <option>Win</option>
         <option>Loss</option>
         <option>Draw</option>
     </select>
-    <button class="btn btn-outline-dark" @onclick="UpdateOutcome" disabled="@isDisabled">Submit</button>
+    <button class="btn btn-outline-dark" @onclick="UpdateOutcome" disabled="@IsDisabled">Submit</button>
 </div>
 
 <div id="moveHistory">
-    <MoveHistory id="@id"></MoveHistory>
+    <MoveHistory id="@Id"></MoveHistory>
 </div>
 
 
 @code {
     private ChessPiece[,] chessPieces = new ChessPiece[8, 8];
-    private IList<ChessPiece> BlackRemovedChessPieces;
-    private IList<ChessPiece> WhiteRemovedChessPieces;
-    String printoutArray = "";
-    String UpgradeSelected = "";
-    String WhiteScore = "";
-    String BlackScore = "";
+    private IList<ChessPiece> blackRemovedChessPieces;
+    private IList<ChessPiece> whiteRemovedChessPieces;
+    private string UpgradeSelected { get; set; }
+    private string WhiteScore { get; set; }
+    private string BlackScore { get; set; }
     private string Outcome { get; set; }
     private Match Match { get; set; }
-    private string[] CoordinatesLetters = {"A", "B", "C", "D", "E", "F", "G", "H"};
-    private string[] CoordinatesNumbers = {"1", "2", "3", "4", "5", "6", "7", "8"};
+    private readonly string[] coordinatesLetters = {"A", "B", "C", "D", "E", "F", "G", "H"};
+    private readonly string[] coordinatesNumbers = {"1", "2", "3", "4", "5", "6", "7", "8"};
 
-    private bool isDisabled { get; set; }
+    private bool IsDisabled { get; set; }
 
     private CountdownDisplay Counter { get; set; }
     private static Timer _aTimer;
 
 
     [Parameter]
-    public int id { get; set; }
+    public int Id { get; set; }
 
     private User loggedIn;
 
     protected override async Task OnInitializedAsync()
     {
-        loggedIn = ((CustomAuthenticationStateProvider) _authenticationStateProvider).GetCachedUser();
-        chessPieces = await _matchService.LoadChessPieces(new Message {Action = "Load", DataSlot2 = "" + id});
-        WhiteRemovedChessPieces = _matchService.getWhiteRemovedChessPieces();
-        BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
-        BlackScore = _matchService.getMatchScores(true);
-        WhiteScore = _matchService.getMatchScores(false);
-
-        Match = await _matchService.GetMatch(id);
-
-        if (Match.Finished)
-        {
-            isDisabled = true;
-        }
-        else
-        {
-            isDisabled = false;
-        }
-
+        loggedIn = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
+        chessPieces = await matchService.LoadChessPieces(new Message {Action = "Load", DataSlot2 = "" + Id});
+        whiteRemovedChessPieces = matchService.GetWhiteRemovedChessPieces();
+        blackRemovedChessPieces = matchService.GetBlackRemovedChessPieces();
+        BlackScore = matchService.GetMatchScores(true);
+        WhiteScore = matchService.GetMatchScores(false);
+        Match = await matchService.GetMatch(Id);
+        IsDisabled = Match.Finished;
         Counter = new CountdownDisplay(Match);
         StartTimer();
     }
 
-    public void StartTimer()
+    private void StartTimer()
     {
         _aTimer = new Timer(1000);
         _aTimer.Elapsed += CountDownTimer;
         _aTimer.Enabled = true;
     }
 
-    public void CountDownTimer(Object source, ElapsedEventArgs e)
+    private void CountDownTimer(Object source, ElapsedEventArgs e)
     {
         if (Counter.TimeLeft > 0)
         {
@@ -228,10 +218,10 @@
         {
             return;
         }
-        await _matchService.UpdateOutcome(loggedIn.Username, Outcome, 1);
+        await matchService.UpdateOutcome(loggedIn.Username, Outcome, Id);
     }
 
-    private async Task HandleClick(int FirstLayer, int SecondLayer)
+    private async Task HandleClick(int firstLayer, int secondLayer)
     {
         if (Match.Finished)
         {
@@ -254,8 +244,8 @@
                         };
                         selected.NewPosition = new Position()
                         {
-                            VerticalAxis = FirstLayer,
-                            HorizontalAxis = SecondLayer
+                            VerticalAxis = firstLayer,
+                            HorizontalAxis = secondLayer
                         };
                     }
                     else
@@ -263,21 +253,21 @@
                         selected.OldPosition = chessPieces[i, j].NewPosition;
                         selected.NewPosition = new Position()
                         {
-                            VerticalAxis = FirstLayer,
-                            HorizontalAxis = SecondLayer
+                            VerticalAxis = firstLayer,
+                            HorizontalAxis = secondLayer
                         };
                     }
                 }
             }
         }
-        if (chessPieces[FirstLayer, SecondLayer] != null)
+        if (chessPieces[firstLayer, secondLayer] != null)
         {
-            chessPieces[FirstLayer, SecondLayer].Selected = true;
-            Console.WriteLine($"Selected {chessPieces[FirstLayer, SecondLayer].Type} {chessPieces[FirstLayer, SecondLayer].Color}");
+            chessPieces[firstLayer, secondLayer].Selected = true;
+            Console.WriteLine($"Selected {chessPieces[firstLayer, secondLayer].Type} {chessPieces[firstLayer, secondLayer].Color}");
         }
-        if (selected != null && selected.OldPosition.VerticalAxis == FirstLayer && selected.OldPosition.HorizontalAxis == SecondLayer)
+        if (selected != null && selected.OldPosition.VerticalAxis == firstLayer && selected.OldPosition.HorizontalAxis == secondLayer)
         {
-            chessPieces[FirstLayer, SecondLayer].Selected = false;
+            chessPieces[firstLayer, secondLayer].Selected = false;
             Console.WriteLine($"Deselected{selected.Type} {selected.Color}");
             selected = null;
         }
@@ -286,22 +276,22 @@
             Message message = new Message()
             {
                 Data = JsonSerializer.Serialize(selected),
-                DataSlot2 = $"{id}",
+                DataSlot2 = $"{Id}",
                 DataSlot3 = loggedIn.Username,
                 Action = "Move"
             };
-            ChessPiece moved = await _matchService.MoveChessPiece(message);
+            ChessPiece moved = await matchService.MoveChessPiece(message);
     //Console.WriteLine($"moved to{FirstLayer} {SecondLayer}");
             if (moved != null)
             {
                 Console.WriteLine($"Chess piece moved: {moved.Color} {moved.Type} {moved.OldPosition} {moved.NewPosition}");
-                WhiteRemovedChessPieces = _matchService.getWhiteRemovedChessPieces();
-                BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
-                BlackScore = _matchService.getMatchScores(true);
-                WhiteScore = _matchService.getMatchScores(false);
-                chessPieces[FirstLayer, SecondLayer] = moved;
-                if (chessPieces[FirstLayer, SecondLayer].OldPosition.VerticalAxis != chessPieces[FirstLayer, SecondLayer].NewPosition.VerticalAxis
-                    || chessPieces[FirstLayer, SecondLayer].OldPosition.HorizontalAxis != chessPieces[FirstLayer, SecondLayer].NewPosition.HorizontalAxis)
+                whiteRemovedChessPieces = matchService.GetWhiteRemovedChessPieces();
+                blackRemovedChessPieces = matchService.GetBlackRemovedChessPieces();
+                BlackScore = matchService.GetMatchScores(true);
+                WhiteScore = matchService.GetMatchScores(false);
+                chessPieces[firstLayer, secondLayer] = moved;
+                if (chessPieces[firstLayer, secondLayer].OldPosition.VerticalAxis != chessPieces[firstLayer, secondLayer].NewPosition.VerticalAxis
+                    || chessPieces[firstLayer, secondLayer].OldPosition.HorizontalAxis != chessPieces[firstLayer, secondLayer].NewPosition.HorizontalAxis)
                 {
                     chessPieces[moved.OldPosition.VerticalAxis, moved.OldPosition.HorizontalAxis] = null;
                 }
@@ -367,15 +357,14 @@
         {
             Action = "Upgrade",
             Data = UpgradeSelected,
-            DataSlot2 = $"{id}",
+            DataSlot2 = $"{Id}",
             DataSlot3 = JsonSerializer.Serialize(selected),
             DataSlot4 = loggedIn.Username
         };
-        ChessPiece toUpdate = await _matchService.UpgradeChessPiece(message);
+        ChessPiece toUpdate = await matchService.UpgradeChessPiece(message);
         if (toUpdate != null)
         {
             chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
         }
     }
-
 }
