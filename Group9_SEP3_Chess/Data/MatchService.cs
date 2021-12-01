@@ -1,39 +1,33 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.Json;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using Group9_SEP3_Chess.Json2DArrayHelp;
 using Group9_SEP3_Chess.Models;
-using Match = Group9_SEP3_Chess.Models.Match;
 
 namespace Group9_SEP3_Chess.Data
 {
     public class MatchService : IMatchService
     {
-        private IRabbitMQ _rabbitMq;
+        private readonly IRabbitMQ rabbitMq;
         private List<ChessPiece> removedChessPieces;
-        private string MatchScores;
-        private JsonSerializerOptions jsonOptions;
+        private string matchScores;
+        private readonly JsonSerializerOptions jsonOptions;
 
         public MatchService(IRabbitMQ rabbitMq)
         {
-            this._rabbitMq = rabbitMq;
+            this.rabbitMq = rabbitMq;
             removedChessPieces = new List<ChessPiece>();
             jsonOptions = new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase};
         }
 
-        public async Task<ChessPiece> MoveChessPiece(Message message,
-            CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ChessPiece> MoveChessPiece(Message message)
         {
-            Message response = await _rabbitMq.SendRequestAsync(message, cancellationToken);
+            Message response = await rabbitMq.SendRequestAsync(message);
             if (response.Action.Equals("Sending A chess Piece"))
             {
                 removedChessPieces = JsonSerializer.Deserialize<List<ChessPiece>>(response.DataSlot2);
-                MatchScores = response.DataSlot3;
+                matchScores = response.DataSlot3;
                 ChessPiece chessPiece = JsonSerializer.Deserialize<ChessPiece>(response.Data);
                 /*Console.WriteLine(response.Data);
                 Console.WriteLine("Old position" + chessPiece.OldPosition.ToString());
@@ -46,10 +40,9 @@ namespace Group9_SEP3_Chess.Data
 
         }
 
-        public async Task<ChessPiece> UpgradeChessPiece(Message message,
-            CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ChessPiece> UpgradeChessPiece(Message message)
         {
-            Message response = await _rabbitMq.SendRequestAsync(message, cancellationToken);
+            Message response = await rabbitMq.SendRequestAsync(message);
             if (response.Action.Equals("Upgrade Chess Piece"))
             {
                 ChessPiece chessPiece = JsonSerializer.Deserialize<ChessPiece>(response.Data);
@@ -59,14 +52,13 @@ namespace Group9_SEP3_Chess.Data
             return null;
         }
 
-        public async Task<ChessPiece[,]> LoadChessPieces(Message message,
-            CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ChessPiece[,]> LoadChessPieces(Message message)
         {
-            Message response = await _rabbitMq.SendRequestAsync(message, cancellationToken);
+            Message response = await rabbitMq.SendRequestAsync(message);
             if (response.Action.Equals("Load ChessBoard"))
             {
                 removedChessPieces = JsonSerializer.Deserialize<List<ChessPiece>>(response.DataSlot2);
-                MatchScores = response.DataSlot3;
+                matchScores = response.DataSlot3;
                 ChessPiece[,] chessPieces = JsonSerializer.Deserialize<ChessPiece[,]>(response.Data,
                     new JsonSerializerOptions
                     {
@@ -79,7 +71,7 @@ namespace Group9_SEP3_Chess.Data
             return null;
         }
 
-        public IList<ChessPiece> getWhiteRemovedChessPieces()
+        public IList<ChessPiece> GetWhiteRemovedChessPieces()
         {
             List<ChessPiece> whiteChessPieces = new List<ChessPiece>();
 
@@ -94,7 +86,7 @@ namespace Group9_SEP3_Chess.Data
             return whiteChessPieces;
         }
 
-        public IList<ChessPiece> getBlackRemovedChessPieces()
+        public IList<ChessPiece> GetBlackRemovedChessPieces()
         {
             List<ChessPiece> blackChessPieces = new List<ChessPiece>();
 
@@ -109,24 +101,15 @@ namespace Group9_SEP3_Chess.Data
             return blackChessPieces;
         }
 
-        public string getMatchScores(bool Black)
+        public string GetMatchScores(bool black)
         {
-            string[] words = MatchScores.Split(" ");
-            Console.WriteLine(MatchScores);
-            if (Black)
-            {
-                return words[1];
-            }
-            else
-            {
-                return words[0];
-            }
-
+            string[] words = matchScores.Split(" ");
+            return black ? words[1] : words[0];
         }
 
         public async Task<IList<Match>> GetMatches(string loggedInUser)
         {
-            Message response = await _rabbitMq.SendRequestAsync(new Message
+            Message response = await rabbitMq.SendRequestAsync(new Message
             {
                 Action = "GetMatches",
                 Data = JsonSerializer.Serialize(loggedInUser)
@@ -145,7 +128,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task UpdateOutcome(string username, string outcome, int matchId)
         {
-            var response = await _rabbitMq.SendRequestAsync(new Message
+            var response = await rabbitMq.SendRequestAsync(new Message
             {
                 Action = "UpdateOutcome",
                 Data = username,
@@ -156,7 +139,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<IList<Match>> GetFinishedMatches(string loggedInUser)
         {
-            Message response = await _rabbitMq.SendRequestAsync(new Message
+            Message response = await rabbitMq.SendRequestAsync(new Message
             {
                 Action = "GetMatchHistory",
                 Data = JsonSerializer.Serialize(loggedInUser)
@@ -174,7 +157,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<Match> GetMatch(int matchId)
         {
-            var response = await _rabbitMq.SendRequestAsync(new Message
+            var response = await rabbitMq.SendRequestAsync(new Message
             {
                 Action = "GetMatch",
                 Data = ""+matchId
@@ -192,33 +175,37 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<IList<Move>> GetMoves(int matchId)
         {
-            Message response = await _rabbitMq.SendRequestAsync(new Message
+            Message response = await rabbitMq.SendRequestAsync(new Message
             {
                 Action = "MoveHistory",
                 Data = JsonSerializer.Serialize(matchId)
             });
             if (response.Action.Equals("HistoryOfMoves"))
             {
-                IList<Move> Rm = JsonSerializer.Deserialize<IList<Move>>(response.Data, new JsonSerializerOptions
+                var moves = JsonSerializer.Deserialize<IList<Move>>(response.Data, new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 });
-                IList<string> Letters = new List<string>
+                IList<string> letters = new List<string>
                 {
                     "A", "B", "C", "D", "E", "F", "G", "H"
                 };
-                IList<string> Numbers = new List<string>
+                IList<string> numbers = new List<string>
                 {
                     "8", "7", "6", "5", "4", "3", "2", "1" 
                 };
-                foreach (Move m in Rm)
+                if (moves == null)
                 {
-                    string[] Start = m.StartPosition.Split(":");
-                    string[] End = m.EndPosition.Split(":");
-                    m.StartPosition = Letters[int.Parse(Start[1])] + ": " + Numbers[int.Parse(Start[0])];
-                    m.EndPosition = Letters[int.Parse(End[1])] + ": " + Numbers[int.Parse(End[0])];
+                    return moves;
                 }
-                return Rm;
+                foreach (var m in moves)
+                {
+                    var start = m.StartPosition.Split(":");
+                    var end = m.EndPosition.Split(":");
+                    m.StartPosition = letters[int.Parse(start[1])] + ": " + numbers[int.Parse(start[0])];
+                    m.EndPosition = letters[int.Parse(end[1])] + ": " + numbers[int.Parse(end[0])];
+                }
+                return moves;
             }
             else
             {

@@ -10,21 +10,16 @@ namespace Group9_SEP3_Chess.Data
 {
     public interface IMatchService
     {
-        Task<ChessPiece> MoveChessPiece(Message message, CancellationToken cancellationToken = default(CancellationToken));
-        Task<ChessPiece> UpgradeChessPiece(Message message, CancellationToken cancellationToken = default(CancellationToken));
-
-        Task<ChessPiece[,]> LoadChessPieces(Message message,
-            CancellationToken cancellationToken = default(CancellationToken));
-        public IList<ChessPiece> getBlackRemovedChessPieces();
-        public IList<ChessPiece> getWhiteRemovedChessPieces();
-        String getMatchScores(bool Black);
-
+        Task<ChessPiece> MoveChessPiece(Message message);
+        Task<ChessPiece> UpgradeChessPiece(Message message);
+        Task<ChessPiece[,]> LoadChessPieces(Message message);
+        public IList<ChessPiece> GetBlackRemovedChessPieces();
+        public IList<ChessPiece> GetWhiteRemovedChessPieces();
+        string GetMatchScores(bool black);
         Task<IList<Match>> GetMatches(string loggedInUser);
         Task<Match> GetMatch(int matchId);
         Task UpdateOutcome(string username, string outcome, int matchId);
-        
         Task<IList<Match>> GetFinishedMatches(string loggedInUser);
-
         Task<IList<Move>> GetMoves(int matchId);
 
     }

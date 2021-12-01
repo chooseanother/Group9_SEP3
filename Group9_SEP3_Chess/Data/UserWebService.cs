@@ -8,18 +8,17 @@ namespace Group9_SEP3_Chess.Data
 {
     public class UserWebService : IUserService
     {
-        private IRabbitMQ _rabbitMq;
-        private User returnedUser;
+        private readonly IRabbitMQ rabbitMq;
 
         public UserWebService(IRabbitMQ rabbitMq)
         {
-            _rabbitMq = rabbitMq;
+            this.rabbitMq = rabbitMq;
         }
 
         public async Task<string> RegisterUserAsync(User user)
         {
             var userJson = JsonSerializer.Serialize(user);
-            var response = await _rabbitMq.SendRequestAsync(new Message
+            var response = await rabbitMq.SendRequestAsync(new Message
             {
                 Action = "Register",
                 Data = userJson
@@ -29,47 +28,41 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<User> ValidateLogin(string username, string password)
         {
-            User user = new User
+            var user = new User
             {
                 Username = username,
                 Password = password
             };
-            var response = await _rabbitMq.SendRequestAsync(new Message
+            var response = await rabbitMq.SendRequestAsync(new Message
             {
                 Action = "Login",
                 Data = JsonSerializer.Serialize(user)
             });
             if (response.Action.Equals("LoggedIn"))
             {
-                return  returnedUser = JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
+                return JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
             }
-            else
-            {
-                throw new Exception($"{response.Action}");
-            }
+            throw new Exception($"{response.Action}");
         }
 
         public async Task<User> UpdateUser(User user)
         {
-            var response = await _rabbitMq.SendRequestAsync(new Message
+            var response = await rabbitMq.SendRequestAsync(new Message
             {
                 Action = "UpdateUser",
                 Data = JsonSerializer.Serialize(user)
                 });
             if (response.Action.Equals("UserUpdated"))
             {
-                return returnedUser =  JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
+                return JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 }); 
             }
-            else
-            {
-                throw new Exception($"{response.Action}");
-            }
+            throw new Exception($"{response.Action}");
         }
     }
 }

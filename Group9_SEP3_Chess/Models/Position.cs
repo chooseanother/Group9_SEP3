@@ -10,10 +10,6 @@ namespace Group9_SEP3_Chess.Models
         [JsonPropertyName("horizontalAxis")]
         public int HorizontalAxis { get; set; }
 
-        public Position()
-        {
-        }
-
         public override string ToString()
         {
             return $"Coordinates (Y,X): {VerticalAxis},{HorizontalAxis}";

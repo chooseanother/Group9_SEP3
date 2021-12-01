@@ -1,9 +1,8 @@
-@page "/play"
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
 @inject AuthenticationStateProvider authenticationStateProvider;
 
-@inject IPlayMatch _playMatch
+@inject IPlayMatch playMatch
 
 <h3>Challenge User</h3>
 <div>
@@ -27,11 +26,11 @@
             </div>
             @if (showError)
             {
-                <p style="color:@errorColor;margin: 0 10px;">@_errorMessage</p>
+                <p style="color:@ErrorColor;margin: 0 10px;">@ErrorMessage</p>
             }
         </div>
-        <p class="actions">
-            <button class="btn btn-dark" type="submit">Challenge</button>
+        <p class="actions" style="margin-bottom: 50px">
+            <button class="btn btn-outline-dark" type="submit">Challenge</button>
         </p>
     </EditForm>
 </div>
@@ -39,8 +38,8 @@
 @code {
     private string Username { get; set; }
 
-    private string _errorMessage;
-    private string errorColor;
+    private string ErrorMessage { get; set; }
+    private string ErrorColor { get; set; }
     
     private readonly IDictionary<int, string> turnLengths = new Dictionary<int, string>
     {
@@ -63,11 +62,11 @@
         showError = false;
         newChallenge.Challenger = Username;
 
-        var result = await _playMatch.ChallengeUser(newChallenge);
+        var result = await playMatch.ChallengeUser(newChallenge);
 
-        errorColor = result.Contains("Failed") ? "red" : "green";
+        ErrorColor = result.Contains("Failed") ? "red" : "green";
         showError = true;
-        _errorMessage = result;
+        ErrorMessage = result;
     }
     
     private void HandleInvalidSubmit()

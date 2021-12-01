@@ -5,9 +5,9 @@ namespace Group9_SEP3_Chess.Models
     public class Move
     {
         [JsonPropertyName("matchId")]
-        public int MatchID { get; set; }
+        public int MatchId { get; set; }
         [JsonPropertyName("moveId")]
-        public int MoveID { get; set; }
+        public int MoveId { get; set; }
         [JsonPropertyName("piece")]
         public string Piece { get; set; }
         [JsonPropertyName("color")]
