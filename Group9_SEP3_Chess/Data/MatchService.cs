@@ -16,7 +16,7 @@ namespace Group9_SEP3_Chess.Data
     {
         private IRabbitMQ _rabbitMq;
         private List<ChessPiece> removedChessPieces;
-        private String MatchScores;
+        private string MatchScores;
         private JsonSerializerOptions jsonOptions;
 
         public MatchService(IRabbitMQ rabbitMq)
@@ -112,13 +112,14 @@ namespace Group9_SEP3_Chess.Data
         public string getMatchScores(bool Black)
         {
             string[] words = MatchScores.Split(" ");
+            Console.WriteLine(MatchScores);
             if (Black)
             {
-                return words[0];
+                return words[1];
             }
             else
             {
-                return words[1];
+                return words[0];
             }
 
         }
@@ -208,14 +209,14 @@ namespace Group9_SEP3_Chess.Data
                 };
                 IList<string> Numbers = new List<string>
                 {
-                    "1", "2", "3", "4", "5", "6", "7", "8"
+                    "8", "7", "6", "5", "4", "3", "2", "1" 
                 };
                 foreach (Move m in Rm)
                 {
                     string[] Start = m.StartPosition.Split(":");
                     string[] End = m.EndPosition.Split(":");
-                    m.StartPosition = Letters[int.Parse(Start[0])] + ": " + Numbers[int.Parse(Start[1])];
-                    m.EndPosition = Letters[int.Parse(End[0])] + ": " + Numbers[int.Parse(End[1])];
+                    m.StartPosition = Letters[int.Parse(Start[1])] + ": " + Numbers[int.Parse(Start[0])];
+                    m.EndPosition = Letters[int.Parse(End[1])] + ": " + Numbers[int.Parse(End[0])];
                 }
                 return Rm;
             }

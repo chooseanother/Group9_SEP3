@@ -1,13 +1,14 @@
 @page "/match/{id:int}"
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
+@using Group9_SEP3_Chess.Components
 @using System.Text.Json
-@using Microsoft.AspNetCore.Mvc.Formatters
 @using System.Timers
 @inject IMatchService _matchService
 @inject AuthenticationStateProvider _authenticationStateProvider
 <div class="row" style="justify-content: center">
     <p>@Counter.ToString()</p>
+    
 </div>
 <div class="row">
     <div class="col">
@@ -135,7 +136,7 @@
         <option>Bishop</option>
         <option>Queen</option>
     </select>
-    <button class="btn btn-outline-dark" disabled="@isDisabled "@onclick="UpgradeChessPiece">Upgrade</button>
+    <button class="btn btn-outline-dark" disabled="@isDisabled" @onclick="UpgradeChessPiece">Upgrade</button>
 </div>
 
 <div class="MarkMatch" style="text-align: center">
@@ -158,10 +159,9 @@
     private ChessPiece[,] chessPieces = new ChessPiece[8, 8];
     private IList<ChessPiece> BlackRemovedChessPieces;
     private IList<ChessPiece> WhiteRemovedChessPieces;
-    String printoutArray = "";
-    String UpgradeSelected = "";
-    String WhiteScore = "";
-    String BlackScore = "";
+    private string UpgradeSelected = "";
+    private string WhiteScore = "";
+    private string BlackScore = "";
     private string Outcome { get; set; }
     private Match Match { get; set; }
     private string[] CoordinatesLetters = {"A", "B", "C", "D", "E", "F", "G", "H"};
@@ -228,7 +228,7 @@
         {
             return;
         }
-        await _matchService.UpdateOutcome(loggedIn.Username, Outcome, 1);
+        await _matchService.UpdateOutcome(loggedIn.Username, Outcome, id);
     }
 
     private async Task HandleClick(int FirstLayer, int SecondLayer)
@@ -377,5 +377,4 @@
             chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
         }
     }
-
 }
