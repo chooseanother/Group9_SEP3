@@ -10,11 +10,15 @@
         <div id="editComponent">
             <Edit></Edit>
         </div>
-        <div id="component"><div id="challengeComponent"><Play></Play></div>
+        <div id="component">
+            <div id="challengeComponent">
+                <Play></Play>
+            </div>
             <div id="hostTournamentComponent">
                 <JoinTournament></JoinTournament>
             </div>
-        <div id="joinTournamentComponent"></div></div>
+            <div id="joinTournamentComponent"></div>
+        </div>
         <div id="listComponent">
             <TabControl>
                 <TabPage Text="Matches">
@@ -24,7 +28,10 @@
                     <HistoryOfMatches></HistoryOfMatches>
                 </TabPage>
                 <TabPage Text="Challenges">
-                <Challenges></Challenges>
+                    <Challenges></Challenges>
+                </TabPage>
+                <TabPage Text="Tournament History">
+                    <TournamentHistory></TournamentHistory>
                 </TabPage>
             </TabControl>
         </div>

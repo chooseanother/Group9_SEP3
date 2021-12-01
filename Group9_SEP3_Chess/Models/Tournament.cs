@@ -17,6 +17,9 @@ namespace Group9_SEP3_Chess.Models
         
         [JsonPropertyName("tournamentId")]
         public int TournamentId { get; set; }
+        
+        [JsonPropertyName("top3Players")]
+        public String top3Players { get; set; }
 
        
         
