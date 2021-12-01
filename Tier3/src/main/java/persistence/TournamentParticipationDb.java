@@ -12,7 +12,21 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * @author group9
+ * @version 1.0
+ */
+
 public class TournamentParticipationDb implements TournamentParticipationPersistence{
+
+    /**
+     * Create a tournament participation in the database
+     * @param username username
+     * @param tournamentID tournament id
+     * @param placement placement
+     * @return id
+     * @throws SQLException SQLException
+     */
     @Override
     public int CreateTournamentParticipation(String username, int tournamentID, int placement) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
@@ -25,6 +39,12 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
         return 1;
     }
 
+    /**
+     * Loads tournaments from the database
+     * @param tournamentID id
+     * @return tournaments
+     * @throws SQLException SQLException
+     */
     @Override
     public ArrayList<TournamentParticipation> loadTournamentParticipants(int tournamentID) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
@@ -43,6 +63,13 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
         }
     }
 
+    /**
+     * Updates the participants placement in the database
+     * @param username username
+     * @param placement placement
+     * @param tournamentId id
+     * @throws SQLException  SQLException
+     */
     @Override
     public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
@@ -54,6 +81,12 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
         }
     }
 
+    /**
+     * Returns the number of participants from the database
+     * @param tournamentID id
+     * @return nr of participants
+     * @throws SQLException SQLException
+     */
     @Override
     public int getNrofOriginalParticipants(int tournamentID) throws SQLException{
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
@@ -68,6 +101,12 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
         return 0;
     }
 
+    /**
+     * Returns the top 3 players from the database
+     * @param tournamentID id
+     * @return top 3 players
+     * @throws SQLException SQLException
+     */
     @Override
     public ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {

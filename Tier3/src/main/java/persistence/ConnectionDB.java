@@ -4,6 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * @author group9
+ * @version 1.0
+ */
+
 public class ConnectionDB {
     private static ConnectionDB instance;
     private String url;
@@ -17,11 +22,19 @@ public class ConnectionDB {
     private final static String PASSWORD = "postgres";
 
 
-
+    /**
+     * Creates the connection
+     * @throws SQLException SQLException
+     */
     private ConnectionDB() throws SQLException {
         DriverManager.registerDriver(new org.postgresql.Driver());
     }
 
+    /**
+     * Gets he instance
+     * @return Connection
+     * @throws SQLException SQLException
+     */
     public static synchronized ConnectionDB getInstance() throws SQLException {
         if (instance == null) {
             instance = new ConnectionDB();
@@ -30,6 +43,11 @@ public class ConnectionDB {
     }
 
 
+    /**
+     * Returns  the connection
+     * @return connection
+     * @throws SQLException SQLException
+     */
     public Connection getConnection() throws SQLException {
         this.url = URL;
         this.schemaName = SCHEMA_NAME;
