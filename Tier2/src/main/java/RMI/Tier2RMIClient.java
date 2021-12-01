@@ -34,9 +34,9 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     }
 
     @Override
-    public boolean MovePiece(ChessPiece piece, int matchId) throws RemoteException {
+    public boolean movePiece(ChessPiece piece, int matchId) throws RemoteException {
         try {
-            return tier3.MovePiece(matchId, piece.getType(), piece.getColor(), piece.getOldPosition().getVerticalAxis() + ":" + piece.getOldPosition().getHorizontalAxis()
+            return tier3.movePiece(matchId, piece.getType(), piece.getColor(), piece.getOldPosition().getVerticalAxis() + ":" + piece.getOldPosition().getHorizontalAxis()
                     , piece.getNewPosition().getVerticalAxis() + ":" + piece.getNewPosition().getHorizontalAxis());
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,9 +77,9 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     }
 
     @Override
-    public boolean UpgradePiece(ChessPiece chessPiece, int matchID) {
+    public boolean upgradePiece(ChessPiece chessPiece, int matchID) {
         try {
-            return tier3.UpgradePiece(matchID, chessPiece.getType(), chessPiece.getColor(), chessPiece.getOldPosition().getVerticalAxis() + ":" + chessPiece.getOldPosition().getHorizontalAxis()
+            return tier3.upgradePiece(matchID, chessPiece.getType(), chessPiece.getColor(), chessPiece.getOldPosition().getVerticalAxis() + ":" + chessPiece.getOldPosition().getHorizontalAxis()
                     , chessPiece.getNewPosition().getVerticalAxis() + ":" + chessPiece.getNewPosition().getHorizontalAxis());
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,9 +108,9 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     }
 
     @Override
-    public boolean UpdateMatchUserTurn(int matchID, String color) throws RemoteException {
+    public boolean updateMatchUsersTurn(int matchID, String color) throws RemoteException {
         try {
-            return tier3.UpdateMatchUserTurn(matchID, color);
+            return tier3.updateMatchUsersTurn(matchID, color);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -158,9 +158,9 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     }
 
     @Override
-    public Tournament GetTournamentById(int id) throws RemoteException {
+    public Tournament getTournamentById(int id) throws RemoteException {
         try {
-            return tier3.GetTournamentById(id);
+            return tier3.getTournamentById(id);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -215,9 +215,9 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     }
 
     @Override
-    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException {
+    public void updateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException {
         try {
-            tier3.UpdateParticipantsPlacement(username, placement, tournamentId);
+            tier3.updateParticipantsPlacement(username, placement, tournamentId);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -244,9 +244,9 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     }
 
     @Override
-    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException {
+    public void updateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException {
         try {
-            tier3.UpdateTournamentNrOfParticipants(ID, newSize);
+            tier3.updateTournamentNrOfParticipants(ID, newSize);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
@@ -278,7 +278,7 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
 
     @Override
     public int getNrofOriginalParticipants(int tournamentID) throws RemoteException {
-        return tier3.getNrofOriginalParticipants(tournamentID);
+        return tier3.getNrOfOriginalParticipants(tournamentID);
     }
 
     @Override

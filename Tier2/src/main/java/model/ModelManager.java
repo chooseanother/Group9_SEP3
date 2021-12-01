@@ -4,11 +4,9 @@ import RMI.ITier2RMIClient;
 import RMI.Tier2RMIClient;
 import RabbitMQ.RabbitMQClient;
 import RabbitMQ.RabbitMQClientController;
-import com.google.gson.Gson;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 public class ModelManager implements Model {
@@ -237,7 +235,7 @@ public class ModelManager implements Model {
 
     public void StartTournamentMatches(int tournamentID) {
         try {
-            Tournament tournament = iTier2RMIClient.GetTournamentById(tournamentID);
+            Tournament tournament = iTier2RMIClient.getTournamentById(tournamentID);
             ArrayList<TournamentParticipation> tournamentParticipations = iTier2RMIClient.getTournamentParticipationByTournamentID(tournamentID);
             System.out.println("List: " + tournamentParticipations.toString());
 
@@ -250,7 +248,7 @@ public class ModelManager implements Model {
                 }
 
 
-                iTier2RMIClient.UpdateTournamentNrOfParticipants(tournamentID, tournamentParticipations.size() / 2);
+                iTier2RMIClient.updateTournamentNrOfParticipants(tournamentID, tournamentParticipations.size() / 2);
             }
 
         } catch (Exception e) {
@@ -429,9 +427,9 @@ public class ModelManager implements Model {
                                 // add 1 to total games played for player1 and player2
                                 if (player1.getColor().equals("White")) {
                                     if (getMatchScores(false, matchId) > getMatchScores(true, matchId)) {
-                                        iTier2RMIClient.UpdateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
+                                        iTier2RMIClient.updateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
                                     } else {
-                                        iTier2RMIClient.UpdateParticipantsPlacement(player1.getUsername(), Placement, TournamentID);
+                                        iTier2RMIClient.updateParticipantsPlacement(player1.getUsername(), Placement, TournamentID);
                                     }
                                 }
                             }
@@ -444,7 +442,7 @@ public class ModelManager implements Model {
                                 // award win to player1
                                 // give loss to player2
                                 // update total games played for player1 and player2
-                                iTier2RMIClient.UpdateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
+                                iTier2RMIClient.updateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
                             }
                             StartTournamentMatches(TournamentID);
                             break;
@@ -455,14 +453,14 @@ public class ModelManager implements Model {
                                 // award win to player2
                                 // give loss to player1
                                 // update total games played for player1 and player2
-                                iTier2RMIClient.UpdateParticipantsPlacement(player1.getUsername(), Placement, TournamentID);
+                                iTier2RMIClient.updateParticipantsPlacement(player1.getUsername(), Placement, TournamentID);
                             }
                             StartTournamentMatches(TournamentID);
                             break;
                         default:
                     }
                     if( iTier2RMIClient.getTournamentParticipationByTournamentID(TournamentID).size() == 1){
-                        iTier2RMIClient.UpdateParticipantsPlacement(currentParticipants.get(0).getUsername(), 1, TournamentID);
+                        iTier2RMIClient.updateParticipantsPlacement(currentParticipants.get(0).getUsername(), 1, TournamentID);
                     }
                 }
             }

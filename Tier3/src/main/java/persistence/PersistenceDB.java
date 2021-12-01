@@ -59,8 +59,8 @@ public class PersistenceDB implements Persistence{
      * @param endPosition   end position
      */
     @Override
-    public void MovePiece( int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
-        matchDB.MovePiece( matchId, piece, color, startPosition, endPosition);
+    public void movePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
+        matchDB.movePiece( matchId, piece, color, startPosition, endPosition);
     }
 
     /**
@@ -73,8 +73,8 @@ public class PersistenceDB implements Persistence{
      * @param endPosition   end position
      */
     @Override
-    public void UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException{
-        matchDB.UpgradePiece(matchId,piece, color,startPosition, endPosition);
+    public void upgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException{
+        matchDB.upgradePiece(matchId,piece, color,startPosition, endPosition);
     }
 
     /**
@@ -148,8 +148,8 @@ public class PersistenceDB implements Persistence{
      * @param color   color
      */
     @Override
-    public void UpdateMatchUserTurn(int matchId, String color) throws SQLException {
-        matchDB.UpdateMatchUserTurn(matchId,color);
+    public void updateMatchUserTurn(int matchId, String color) throws SQLException {
+        matchDB.updateMatchUserTurn(matchId,color);
     }
 
 
@@ -216,8 +216,8 @@ public class PersistenceDB implements Persistence{
      * @param tournamentId id
      */
     @Override
-    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws SQLException {
-        tournamentParticipationPersistence.UpdateParticipantsPlacement(username, placement, tournamentId);
+    public void updateParticipantsPlacement(String username, int placement, int tournamentId) throws SQLException {
+        tournamentParticipationPersistence.updateParticipantsPlacement(username, placement, tournamentId);
     }
 
     /**
@@ -227,8 +227,8 @@ public class PersistenceDB implements Persistence{
      * @return number of original players in a tournament
      */
     @Override
-    public int getNrofOriginalParticipants(int tournamentID) throws SQLException {
-        return tournamentParticipationPersistence.getNrofOriginalParticipants(tournamentID);
+    public int getNrOfOriginalParticipants(int tournamentID) throws SQLException {
+        return tournamentParticipationPersistence.getNrOfOriginalParticipants(tournamentID);
     }
 
     /**
@@ -332,8 +332,8 @@ public class PersistenceDB implements Persistence{
      * @return id
      */
     @Override
-    public int CreateTournamentParticipation(String username, int tournamentID, int placement) throws SQLException {
-        return tournamentParticipationPersistence.CreateTournamentParticipation(username, tournamentID, placement);
+    public int createTournamentParticipation(String username, int tournamentID, int placement) throws SQLException {
+        return tournamentParticipationPersistence.createTournamentParticipation(username, tournamentID, placement);
     }
 
     /**
@@ -363,8 +363,8 @@ public class PersistenceDB implements Persistence{
      * @param newSize new size
      */
     @Override
-    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws SQLException {
-        tournamentPersistence.UpdateTournamentNrOfParticipants(ID, newSize);
+    public void updateTournamentNrOfParticipants(int ID, int newSize) throws SQLException {
+        tournamentPersistence.updateTournamentNrOfParticipants(ID, newSize);
     }
 
     /**

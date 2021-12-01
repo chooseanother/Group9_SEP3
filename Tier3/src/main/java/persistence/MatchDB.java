@@ -2,15 +2,10 @@ package persistence;
 
 import model.Match;
 import model.Move;
-import model.Participant;
-import model.User;
-
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -30,7 +25,6 @@ public class MatchDB implements MatchPersistence{
      */
     @Override
     public Match createMatch(int turnTime, String type) throws SQLException {
-        // should set latest move to current time
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO MATCH (TURNTIME,TYPE,LATESTMOVE) VALUES(?, ?, ?)",PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setInt(1, turnTime);
@@ -58,7 +52,6 @@ public class MatchDB implements MatchPersistence{
      */
     @Override
     public Match createMatch(int turnTime, String type, int tournamentId) throws SQLException {
-        // should set latest move to current time
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO MATCH (TURNTIME,TYPE,TOURNAMENTID,LATESTMOVE) VALUES(?, ?, ?, ?)",PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setInt(1, turnTime);
@@ -156,7 +149,7 @@ public class MatchDB implements MatchPersistence{
      * @throws SQLException SQLException
      */
     @Override
-    public void UpdateMatchUserTurn(int matchId, String color) throws SQLException {
+    public void updateMatchUserTurn(int matchId, String color) throws SQLException {
         try(Connection connection = ConnectionDB.getInstance().getConnection()){
             PreparedStatement statement = connection.prepareStatement("UPDATE MATCH SET USERSTURN = ?, LATESTMOVE = ? WHERE MATCHID = ?");
             statement.setString(1,color);
@@ -192,7 +185,7 @@ public class MatchDB implements MatchPersistence{
      * @throws SQLException SQLException
      */
     @Override
-    public void MovePiece( int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
+    public void movePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO MOVE ( MATCHID, PIECE, COLOR, STARTPOSITION, ENDPOSITION) " +
                     "VALUES(?, ?, ?, ?, ?)");
@@ -215,7 +208,7 @@ public class MatchDB implements MatchPersistence{
      * @throws SQLException SQLException
      */
     @Override
-    public void UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
+    public void upgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
         try(Connection connection = ConnectionDB.getInstance().getConnection()){
             PreparedStatement statement = connection.prepareStatement("INSERT INTO MOVE ( MATCHID, PIECE, COLOR, STARTPOSITION, ENDPOSITION) " +
                     "VALUES(?, ?, ?, ?, ?)");

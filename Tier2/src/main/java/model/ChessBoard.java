@@ -2,7 +2,6 @@ package model;
 
 
 import RMI.ITier2RMIClient;
-import com.google.gson.Gson;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -86,7 +85,7 @@ public class ChessBoard {
                 ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
                 for(int i=0;i<participants.size();i++){
                     if(participants.get(i).getUsername().equals(username) && participants.get(i).getColor().equals(selected.getColor())) {
-                        if (iTier2RMIClient.MovePiece(selected, matchID) && iTier2RMIClient.UpdateMatchUserTurn(matchID, turnColor)) {
+                        if (iTier2RMIClient.movePiece(selected, matchID) && iTier2RMIClient.updateMatchUsersTurn(matchID, turnColor)) {
                             testForNullRMI = true;
                         }
                     }
@@ -134,7 +133,7 @@ public class ChessBoard {
                 ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
                 for (Participant p:participants){
                     if(p.getColor().equals(toUpgrade.getColor()) && p.getUsername().equals(username)){
-                        if (iTier2RMIClient.UpgradePiece(toUpgrade, matchID)) {
+                        if (iTier2RMIClient.upgradePiece(toUpgrade, matchID)) {
                             chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()] = toUpgrade.copy();
                             return chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()];
                         }

@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -40,7 +39,6 @@ public class TournamentDB implements TournamentPersistence {
             if (keys.next()) {
                 tournamentID = keys.getInt(1);
                 return tournamentID;
-                // return new Match(Id, and all the other stuff)
             } else {
                 throw new SQLException("No keys generated");
             }
@@ -106,7 +104,7 @@ public class TournamentDB implements TournamentPersistence {
      * @throws SQLException SQLException
      */
     @Override
-    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws SQLException {
+    public void updateTournamentNrOfParticipants(int ID, int newSize) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("UPDATE TOURNAMENT SET PARTICIPANTS = ? WHERE TOURNAMENTID = ?");
             statement.setInt(1, newSize);

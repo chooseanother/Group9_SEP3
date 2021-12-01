@@ -45,7 +45,8 @@ public class MatchParticipationDB implements MatchParticipationPersistence{
         return null;
     }
 
-    @Override public ArrayList<Participant> getParticipants(int matchId)
+    @Override
+    public ArrayList<Participant> getParticipants(int matchId)
         throws SQLException
     {
         ArrayList<Participant> participants = new ArrayList<>();
