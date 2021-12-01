@@ -118,6 +118,11 @@ public class PersistenceDB implements Persistence{
     }
 
     @Override
+    public ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws SQLException {
+        return tournamentParticipationPersistence.getTopPlayersInATournament(tournamentID);
+    }
+
+    @Override
     public void updateOutcome(String player, String outcome, int matchId) throws SQLException {
         matchParticipationDB.updateOutcome(player, outcome, matchId);
     }
@@ -172,6 +177,11 @@ public class PersistenceDB implements Persistence{
     @Override
     public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws SQLException {
         tournamentPersistence.UpdateTournamentNrOfParticipants(ID, newSize);
+    }
+
+    @Override
+    public ArrayList<Tournament> loadTournamentsForASpecificUser(String username) throws SQLException {
+        return tournamentPersistence.loadTournamentsForASpecificUser(username);
     }
 
     @Override

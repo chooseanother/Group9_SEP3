@@ -7,6 +7,7 @@ public class Tournament implements Serializable {
     private int turnTime;
     private int NrOfParticipants;
     private int tournamentId;
+    private String top3Players;
 
     public Tournament(String creator, int turnTime, int nrOfParticipants){
         this.creator = creator;
@@ -44,6 +45,14 @@ public class Tournament implements Serializable {
 
     public void setTournamentId(int tournamentId) {
         this.tournamentId = tournamentId;
+    }
+
+    public String getTop3Players() {
+        return top3Players;
+    }
+
+    public void setTop3Players(String top3Players) {
+        this.top3Players = top3Players;
     }
 
 }

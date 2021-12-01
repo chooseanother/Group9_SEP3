@@ -68,4 +68,22 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
         return 0;
     }
 
+    @Override
+    public ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws SQLException {
+        try (Connection connection = ConnectionDB.getInstance().getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("select TOURNAMENT_PARTICIPATION.USERNAME, TOURNAMENT_PARTICIPATION.TOURNAMENTID, PLACEMENT from tournament_participation join TOURNAMENT T on TOURNAMENT_PARTICIPATION.TOURNAMENTID = T.TOURNAMENTID where T.TOURNAMENTID = ? order by PLACEMENT asc;");
+            statement.setInt(1, tournamentID);
+            ResultSet resultSet = statement.executeQuery();
+            ArrayList<TournamentParticipation> topPlayers = new ArrayList<>();
+
+            while (resultSet.next()) {
+                String username = resultSet.getString("USERNAME");
+                int TournamentId = resultSet.getInt("TOURNAMENTID");
+                int placement = resultSet.getInt("PLACEMENT");
+                topPlayers.add(new TournamentParticipation(username, TournamentId, placement));
+            }
+            return topPlayers;
+        }
+    }
+
 }

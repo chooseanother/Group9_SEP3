@@ -67,6 +67,10 @@ public interface ITier2RMIClient extends Remote {
 
     public int getNrofOriginalParticipants(int tournamentID) throws RemoteException;
 
+    public ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen(String username) throws RemoteException;
+
+    public ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws RemoteException;
+
     void incrementWinLossDraw(String username, String type) throws RemoteException;
 
 }

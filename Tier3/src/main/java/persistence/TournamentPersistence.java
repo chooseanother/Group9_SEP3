@@ -11,4 +11,6 @@ public interface TournamentPersistence {
     public ArrayList<Tournament> loadTournaments() throws SQLException;
 
     public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws SQLException;
+
+    public ArrayList<Tournament> loadTournamentsForASpecificUser(String username) throws SQLException;
 }

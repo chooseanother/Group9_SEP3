@@ -341,7 +341,7 @@ public class Tier3RMIServerController
     }
 
     @Override
-    public Tournament GetTournamentById(int id){
+    public Tournament GetTournamentById(int id) throws RemoteException{
         try {
             ArrayList<Tournament> tournaments = persistence.loadTournaments();
             for (Tournament i : tournaments) {
@@ -354,6 +354,27 @@ public class Tier3RMIServerController
         }
         return null;
     }
+
+    @Override
+    public ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen(String username) throws RemoteException{
+        try {
+            return persistence.loadTournamentsForASpecificUser(username);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws RemoteException {
+        try {
+            return persistence.getTopPlayersInATournament(tournamentID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     @Override
     public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException{

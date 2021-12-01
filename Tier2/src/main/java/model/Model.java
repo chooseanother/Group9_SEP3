@@ -28,4 +28,6 @@ public interface Model {
     Match addParticipantsToMatch(Match match);
     Match checkTurnTime(Match match);
     ArrayList<Move> getMoves(int matchId);
+    public ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen(String username);
+    public void loadTop3PlayersInTournament(ArrayList<Tournament> tournamentsToLoad);
 }
