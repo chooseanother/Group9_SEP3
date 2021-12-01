@@ -150,6 +150,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                             }catch(Exception e){
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
+                            break;
                         case "CreateTournament":
                             String TournamentJson = message.getData();
                             Tournament tournament = gson.fromJson(TournamentJson, Tournament.class);
@@ -157,6 +158,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                             Message IdToSend = new Message();
                             IdToSend.setData(Id+"");
                             response = gson.toJson(IdToSend);
+                            break;
                         case "JoinTournament":
                             if (model.joinATournament(message.getData(), Integer.parseInt(message.getDataSlot2()), Integer.parseInt(message.getDataSlot3())))
                             {
@@ -216,6 +218,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                             }catch (Exception e){
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
+                            break;
                         case "TournamentHistory":
                             username = gson.fromJson(message.getData(), String.class);
                             String tournamentsToSend = gson.toJson(model.getAllTournamentsWhereAUserHasBeen(username));
