@@ -28,6 +28,7 @@ public interface Model {
     Match addParticipantsToMatch(Match match);
     Match checkTurnTime(Match match);
     ArrayList<Move> getMoves(int matchId);
-    public ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen(String username);
-    public void loadTop3PlayersInTournament(ArrayList<Tournament> tournamentsToLoad);
+    ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen(String username);
+    void loadTop3PlayersInTournament(ArrayList<Tournament> tournamentsToLoad);
+    void sendMail(int matchId, String username);
 }

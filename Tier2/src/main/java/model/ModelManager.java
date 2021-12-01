@@ -38,9 +38,31 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void sendMail(int matchId, String username) {
+        new Thread(()->{
+            try {
+                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchId);
+                for (Participant p : participants) {
+                    if (!p.getUsername().equals(username)) {
+                        User user = iTier2RMIClient.getUser(p.getUsername());
+                        Email email = new Email();
+                        email.sendEmail("NotSoBusyChess@gmail.com", user.getEmail(), user.getUsername(), matchId);
+                    }
+                }
+            }
+            catch (RemoteException e){
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    @Override
     public ChessPiece MoveChessPiece(ChessPiece selected, int matchID,String username) {
         try {
             ChessPiece toMove = getChessBoard(matchID).MoveAttackChessPiece(selected, iTier2RMIClient, matchID,username);
+            if (toMove!=null) {
+                sendMail(matchID,username);
+            }
             return toMove;
 
         } catch (RemoteException e) {
