@@ -14,4 +14,6 @@ public interface TournamentParticipationPersistence {
     public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws SQLException;
 
     public int getNrofOriginalParticipants(int tournamentID) throws SQLException;
+
+    public ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws SQLException;
 }

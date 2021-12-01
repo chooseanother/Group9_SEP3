@@ -74,6 +74,9 @@ public interface ITier3RMIServer
 
     void incrementWinLossDraw(String username, String type) throws RemoteException;
 
+    public ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen(String username) throws RemoteException;
+
+    public ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws RemoteException;
 
     public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }
