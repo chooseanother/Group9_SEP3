@@ -25,76 +25,92 @@
         </div>
     </div>
     <div class="col">
-    
+
         <div class="board">
+        <Coordinate Type="corner" TextToDisplay=" "/>
+            @for (int i = 0; i < CoordinatesLetters.GetLength(0); i++)
+            {
+                <Coordinate Type="ends" TextToDisplay="@CoordinatesLetters[i]"/>
+            }
+        <Coordinate Type="corner" TextToDisplay=" "/>
             @for (int i = 0; i < chessPieces.GetLength(0); i++)
+            {
+                <Coordinate Type="side" TextToDisplay="@CoordinatesNumbers[7 - i]"/>
+                if (i % 2 == 0)
+                {
+                    for (int j = 0; j < chessPieces.GetLength(1); j++)
                     {
-                        if (i % 2 == 0)
+                        if (j == 0)
                         {
-                            for (int j = 0; j < chessPieces.GetLength(1); j++)
+                        }
+                        int verticalaxis = i;
+                        int horizontalaxis = j;
+                        if (chessPieces[i, j] != null)
+                        {
+                            if (j % 2 == 0)
                             {
-                                int verticalaxis = i;
-                                int horizontalaxis = j;
-                                if (chessPieces[i, j] != null)
-                                {
-                                    if (j % 2 == 0)
-                                    {
-                                        <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()"  ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                                    }
-                                    else
-                                    {
-                                        <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                                    }
-                                }
-                                else
-                                {
-                                    if (j % 2 == 0)
-                                    {
-                                        <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                                    }
-                                    else
-                                    {
-                                        <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                                    }
-                                }
+                                <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                            }
+                            else
+                            {
+                                <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
                             }
                         }
                         else
                         {
-                            for (int j = 0; j < chessPieces.GetLength(1); j++)
+                            if (j % 2 == 0)
                             {
-                                int verticalaxis = i;
-                                int horizontalaxis = j;
-                                if (chessPieces[i, j] != null)
-                                {
-                                    if (j % 2 == 0)
-                                    {
-                                        <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                                    }
-                                    else
-                                    {
-                                        <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                                    }
-                                }
-                                else
-                                {
-                                    if (j % 2 == 0)
-                                    {
-                                        <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                                    }
-                                    else
-                                    {
-                                        <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
-                                    }
-                                }
+                                <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                            }
+                            else
+                            {
+                                <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
                             }
                         }
                     }
+                }
+                else
+                {
+                    for (int j = 0; j < chessPieces.GetLength(1); j++)
+                    {
+                        int verticalaxis = i;
+                        int horizontalaxis = j;
+                        if (chessPieces[i, j] != null)
+                        {
+                            if (j % 2 == 0)
+                            {
+                                <BoardSquareBlack Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                            }
+                            else
+                            {
+                                <BoardSquareWhite Image="@chessPieces[i, j].GetPiece()" ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                            }
+                        }
+                        else
+                        {
+                            if (j % 2 == 0)
+                            {
+                                <BoardSquareBlack ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                            }
+                            else
+                            {
+                                <BoardSquareWhite ClickHandler="@(() => HandleClick(verticalaxis, horizontalaxis))"/>
+                            }
+                        }
+                    }
+                }
+                <Coordinate Type="side" TextToDisplay="@CoordinatesNumbers[7 - i]"/>
             }
+            <Coordinate Type="corner" TextToDisplay=" "/>
+            @for (int i = 0; i < CoordinatesLetters.GetLength(0); i++)
+            {
+                <Coordinate Type="ends" TextToDisplay="@CoordinatesLetters[i]"/>
+            }
+            <Coordinate Type="corner" TextToDisplay=" "/>
         </div>
     </div>
     <div class="col">
-        
+
         <div class="RemovedPiecesTable">
             <h4>White Score: @WhiteScore</h4>
             <h4>Black removed: </h4>
@@ -133,7 +149,9 @@
     <button class="btn btn-outline-dark" @onclick="UpdateOutcome" disabled="@isDisabled">Submit</button>
 </div>
 
-<div id="moveHistory"><MoveHistory id="@id"></MoveHistory></div>
+<div id="moveHistory">
+    <MoveHistory id="@id"></MoveHistory>
+</div>
 
 
 @code {
@@ -146,7 +164,8 @@
     String BlackScore = "";
     private string Outcome { get; set; }
     private Match Match { get; set; }
-
+    private string[] CoordinatesLetters = {"A", "B", "C", "D", "E", "F", "G", "H"};
+    private string[] CoordinatesNumbers = {"1", "2", "3", "4", "5", "6", "7", "8"};
 
     private bool isDisabled { get; set; }
 
@@ -167,7 +186,7 @@
         BlackRemovedChessPieces = _matchService.getBlackRemovedChessPieces();
         BlackScore = _matchService.getMatchScores(true);
         WhiteScore = _matchService.getMatchScores(false);
-        
+
         Match = await _matchService.GetMatch(id);
 
         if (Match.Finished)
@@ -182,15 +201,14 @@
         Counter = new CountdownDisplay(Match);
         StartTimer();
     }
-    
+
     public void StartTimer()
     {
         _aTimer = new Timer(1000);
         _aTimer.Elapsed += CountDownTimer;
         _aTimer.Enabled = true;
-
     }
-    
+
     public void CountDownTimer(Object source, ElapsedEventArgs e)
     {
         if (Counter.TimeLeft > 0)
@@ -359,4 +377,5 @@
             chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
         }
     }
+
 }

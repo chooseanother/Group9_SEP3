@@ -1,0 +1,15 @@
+﻿.side {
+    text-align: center;
+    padding: 2rem;
+    width: 2rem;
+    height: 5rem;
+}
+.corner{
+    width: 2rem;
+    height: 2rem;
+}
+.ends{
+    width: 5rem;
+    height: 2rem;
+    text-align: center;
+}
