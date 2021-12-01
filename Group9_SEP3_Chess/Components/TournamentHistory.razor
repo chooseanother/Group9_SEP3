@@ -1,7 +1,6 @@
-@page "/TournamentHistory"
 @using Group9_SEP3_Chess.Data
 @using Group9_SEP3_Chess.Models
-@inject ITournament _tournamnet;
+@inject ITournament tournamentService;
 @inject AuthenticationStateProvider authenticationStateProvider
 
 @if (tournaments == null)
@@ -32,7 +31,7 @@ else
                 <td>@item.Creator</td>
                 <td>@item.TurnTime</td>
                 <td>@item.TournamentId</td>
-                <td>@item.top3Players</td>
+                <td>@item.Top3Players</td>
             </tr>
         }
     </table>
@@ -43,7 +42,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         loggedInUser = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
-        tournaments = await _tournamnet.GetTournamentsByUser(loggedInUser.Username);
+        tournaments = await tournamentService.GetTournamentsByUser(loggedInUser.Username);
     }
 
 }}
