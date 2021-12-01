@@ -54,6 +54,27 @@ public class TournamentDB implements TournamentPersistence {
     }
 
     @Override
+    public ArrayList<Tournament> loadTournamentsForASpecificUser(String username) throws SQLException {
+        try (Connection connection = ConnectionDB.getInstance().getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("select TOURNAMENT.TOURNAMENTID,TOURNAMENT.USERNAME,TURNTIME,PARTICIPANTS from TOURNAMENT join TOURNAMENT_PARTICIPATION TP on TOURNAMENT.TOURNAMENTID = TP.TOURNAMENTID where TP.USERNAME = ?;");
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            ArrayList<Tournament> tournaments = new ArrayList<>();
+
+            while (resultSet.next()) {
+                String creator = resultSet.getString("USERNAME");
+                int id = resultSet.getInt("TOURNAMENTID");
+                int turnTime = resultSet.getInt("TURNTIME");
+                int participants = resultSet.getInt("PARTICIPANTS");
+                Tournament tournament = new Tournament(creator, turnTime, participants);
+                tournament.setTournamentId(id);
+                tournaments.add(tournament);
+            }
+            return tournaments;
+        }
+    }
+
+    @Override
     public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("UPDATE TOURNAMENT SET PARTICIPANTS = ? WHERE TOURNAMENTID = ?");

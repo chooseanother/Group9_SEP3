@@ -282,6 +282,16 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     }
 
     @Override
+    public ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen(String username) throws RemoteException {
+        return tier3.getAllTournamentsWhereAUserHasBeen(username);
+    }
+
+    @Override
+    public ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws RemoteException {
+        return tier3.getTopPlayersInATournament(tournamentID);
+    }
+
+    @Override
     public void incrementWinLossDraw(String username, String type) throws RemoteException {
         tier3.incrementWinLossDraw(username, type);
     }

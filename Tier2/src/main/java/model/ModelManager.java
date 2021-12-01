@@ -470,4 +470,31 @@ public class ModelManager implements Model {
             return null;
         }
     }
+
+    @Override
+    public ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen (String username){
+        try {
+            ArrayList<Tournament> toReturn = iTier2RMIClient.getAllTournamentsWhereAUserHasBeen(username);
+            loadTop3PlayersInTournament(toReturn);
+            return toReturn;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public void loadTop3PlayersInTournament(ArrayList<Tournament> tournamentsToLoad){
+        try {
+            for(Tournament t: tournamentsToLoad){
+                ArrayList<TournamentParticipation> tournamentParticipation = iTier2RMIClient.getTopPlayersInATournament(t.getTournamentId());
+                t.setTop3Players("1: " + tournamentParticipation.get(0).getUsername() + ", 2: " + tournamentParticipation.get(1).getUsername() +
+                ", 3: " + tournamentParticipation.get(2).getUsername());
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
 }
