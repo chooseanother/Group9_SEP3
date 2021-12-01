@@ -1,0 +1,49 @@
+@page "/TournamentHistory"
+@using Group9_SEP3_Chess.Data
+@using Group9_SEP3_Chess.Models
+@inject ITournament _tournamnet;
+@inject AuthenticationStateProvider authenticationStateProvider
+
+@if (tournaments == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else if (!tournaments.Any())
+{
+    <p>
+        <em>No Tournaments in the system. </em>
+    </p>
+}
+else
+{
+    <table>
+        <thead>
+        <th>Creator </th>
+        <th>TurnTime</th>
+        <th>TournamentId</th>
+        <th>top3Players</th>
+        </thead>
+
+        @foreach (var item in tournaments)
+        {
+            <tr>
+                <td>@item.Creator</td>
+                <td>@item.TurnTime</td>
+                <td>@item.TournamentId</td>
+                <td>@item.top3Players</td>
+            </tr>
+        }
+    </table>
+@code {
+    private IList<Tournament> tournaments;
+    private User loggedInUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loggedInUser = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
+        tournaments = await _tournamnet.GetTournamentsByUser(loggedInUser.Username);
+    }
+
+}}
