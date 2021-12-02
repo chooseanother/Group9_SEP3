@@ -50,23 +50,17 @@ public class Email {
         session.setDebug(true);
 
         try {
-            // Create a default MimeMessage object.
             MimeMessage message = new MimeMessage(session);
 
-            // Set From: header field of the header.
             message.setFrom(new InternetAddress(source));
 
-            // Set To: header field of the header.
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 
-            // Set Subject: header field
             message.setSubject("It's your time to make a move!");
 
-            // Now set the actual message
             message.setText("Your opponent " + username + " has made a move in the match with id: " + matchId);
 
             System.out.println("sending...");
-            // Send message
             Transport.send(message);
             System.out.println("Sent message successfully....");
         } catch (MessagingException mex) {

@@ -1,8 +1,3 @@
-/*
- * 12.09.2018 Original version
- */
-
-
 import RMI.Tier3RMIServerController;
 
 /**

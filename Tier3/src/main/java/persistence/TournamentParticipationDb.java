@@ -28,7 +28,7 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
      * @throws SQLException SQLException
      */
     @Override
-    public int CreateTournamentParticipation(String username, int tournamentID, int placement) throws SQLException {
+    public int createTournamentParticipation(String username, int tournamentID, int placement) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement2 = connection.prepareStatement("INSERT INTO TOURNAMENT_PARTICIPATION (USERNAME, TOURNAMENTID, PLACEMENT) VALUES (?,?,?)");
             statement2.setString(1, username);
@@ -71,7 +71,7 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
      * @throws SQLException  SQLException
      */
     @Override
-    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws SQLException {
+    public void updateParticipantsPlacement(String username, int placement, int tournamentId) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("UPDATE TOURNAMENT_PARTICIPATION SET PLACEMENT = ? WHERE USERNAME = ? AND TOURNAMENTID = ?");
             statement.setInt(1, placement);
@@ -79,26 +79,6 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
             statement.setInt(3, tournamentId);
             statement.executeUpdate();
         }
-    }
-
-    /**
-     * Returns the number of participants from the database
-     * @param tournamentID id
-     * @return nr of participants
-     * @throws SQLException SQLException
-     */
-    @Override
-    public int getNrofOriginalParticipants(int tournamentID) throws SQLException{
-        try (Connection connection = ConnectionDB.getInstance().getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("select count(TOURNAMENT_PARTICIPATION) from tournament_participation where TOURNAMENTID = ?;");
-            statement.setInt(1, tournamentID);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-              return resultSet.getInt("count");
-            }
-        }
-        return 0;
     }
 
     /**
