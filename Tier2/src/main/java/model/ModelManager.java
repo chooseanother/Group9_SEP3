@@ -382,7 +382,6 @@ public class ModelManager implements Model {
 
                 Participant player1 = participants.get(0);
                 Participant player2 = participants.get(1);
-                Participant winner, looser;
 
                 if(player1.getOutcome() != null && player2.getOutcome() != null) {
                     switch (player1.getOutcome()) {
