@@ -366,21 +366,29 @@ public class ModelManager implements Model {
 
                 Participant player1 = participants.get(0);
                 Participant player2 = participants.get(1);
+                Participant winner, looser;
+
                 if(player1.getOutcome() != null && player2.getOutcome() != null) {
                     switch (player1.getOutcome()) {
                         case "Draw":
                             if (player2.getOutcome().equals("Draw")) {
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
+                                iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "draws");
+                                iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "draws");
                             }
                             break;
                         case "Win":
                             if (player2.getOutcome().equals("Loss")) {
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
+                                iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "wins");
+                                iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "losses");
                             }
                             break;
                         case "Loss":
                             if (player2.getOutcome().equals("Win")) {
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
+                                iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "wins");
+                                iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "losses");
                             }
                             break;
                         default:
@@ -403,6 +411,8 @@ public class ModelManager implements Model {
                         case "Draw":
                             if (player2.getOutcome().equals("Draw")) {
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
+                                iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "draws");
+                                iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "draws");
                                 if (player1.getColor().equals("White")) {
                                     if (getMatchScores(false, matchId) > getMatchScores(true, matchId)) {
                                         iTier2RMIClient.updateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
@@ -416,6 +426,9 @@ public class ModelManager implements Model {
                         case "Win":
                             if (player2.getOutcome().equals("Loss")) {
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
+                                iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "wins");
+                                iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "losses");
+                                iTier2RMIClient.UpdateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
                                 iTier2RMIClient.updateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
                             }
                             StartTournamentMatches(TournamentID);
@@ -423,6 +436,9 @@ public class ModelManager implements Model {
                         case "Loss":
                             if (player2.getOutcome().equals("Win")) {
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
+                                iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "wins");
+                                iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "losses");
+                                iTier2RMIClient.UpdateParticipantsPlacement(player1.getUsername(), Placement, TournamentID);
                                 iTier2RMIClient.updateParticipantsPlacement(player1.getUsername(), Placement, TournamentID);
                             }
                             StartTournamentMatches(TournamentID);
