@@ -5,13 +5,13 @@
 @inject IChallenge challenge
 
 
-@if (_challenges == null)
+@if (challenges == null)
 {
     <p>
         <em>Loading...</em>
     </p>
 }
-else if (!_challenges.Any())
+else if (!challenges.Any())
 {
     <p>
         <em>No Challenges</em>
@@ -30,7 +30,7 @@ else
         </tr>
         </thead>
         <tbody>
-        @foreach (var c in _challenges)
+        @foreach (var c in challenges)
         {
             <tr>
                 <td>@c.Challenger</td>
@@ -61,12 +61,12 @@ else
         {120,"2 Minutes"}, {1800,"30 Minutes"}, {3600,"1 Hour"}, {7200,"2 Hours"}, {36000,"10 Hours"}, {86400,"1 Day"}, {259200,"3 Days"}, {604800,"7 Days"}
     };
     
-    private IList<Challenge> _challenges;
+    private IList<Challenge> challenges;
 
     protected override async Task OnInitializedAsync()
     {
         Username = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser().Username;
-        _challenges = await challenge.GetChallenges(Username);
+        challenges = await challenge.GetChallenges(Username);
         // await Task.Delay(100);
     }
 
@@ -75,7 +75,7 @@ else
         var result = await this.challenge.AcceptChallenge(challenge);
         if (result)
         {
-            _challenges.Remove(challenge);
+            challenges.Remove(challenge);
         }
         
     // await OnInitializedAsync();
@@ -87,7 +87,7 @@ else
         var result = await this.challenge.DeclineChallenge(challenge);
         if (result)
         {
-            _challenges.Remove(challenge);
+            challenges.Remove(challenge);
         }
         
             // StateHasChanged.Invoke();

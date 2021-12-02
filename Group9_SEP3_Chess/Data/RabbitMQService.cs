@@ -12,12 +12,12 @@ namespace Group9_SEP3_Chess.Data
 {
     public class RabbitMQService : IRabbitMQ
     {
-        private const string QUEUE_NAME = "rpc_queue";
+        private const string QueueName = "rpc_queue";
 
         private readonly IConnection connection;
         private readonly IModel channel;
         private readonly string replyQueueName;
-        private readonly EventingBasicConsumer consumer;
+
         private readonly ConcurrentDictionary<string, TaskCompletionSource<string>> callbackMapper =
             new ConcurrentDictionary<string, TaskCompletionSource<string>>();
 
@@ -32,7 +32,7 @@ namespace Group9_SEP3_Chess.Data
             channel = connection.CreateModel();
             // declare a server-named queue
             replyQueueName = channel.QueueDeclare(queue: "").QueueName;
-            consumer = new EventingBasicConsumer(channel);
+            var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, ea) =>
             {
                 if (!callbackMapper.TryRemove(ea.BasicProperties.CorrelationId, out TaskCompletionSource<string> tcs))
@@ -62,7 +62,7 @@ namespace Group9_SEP3_Chess.Data
 
             channel.BasicPublish(
                 exchange: "",
-                routingKey: QUEUE_NAME,
+                routingKey: QueueName,
                 basicProperties: props,
                 body: messageBytes);
 
