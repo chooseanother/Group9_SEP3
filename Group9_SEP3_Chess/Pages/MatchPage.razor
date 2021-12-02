@@ -4,6 +4,7 @@
 @using Group9_SEP3_Chess.Components
 @using System.Text.Json
 @using System.Timers
+@using Group9_SEP3_Chess.Authentication
 @inject IMatchService matchService
 @inject AuthenticationStateProvider authenticationStateProvider
 @if (!IsDisabled)
@@ -190,9 +191,9 @@
         WhiteScore = matchService.GetMatchScores(false);
         Match = await matchService.GetMatch(Id);
         IsDisabled = Match.Finished;
+        Counter = new CountdownDisplay(Match);
         if (!IsDisabled)
         {
-            Counter = new CountdownDisplay(Match);
             StartTimer();
         }
     }

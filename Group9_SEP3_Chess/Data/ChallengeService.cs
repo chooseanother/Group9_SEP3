@@ -6,11 +6,11 @@ using Group9_SEP3_Chess.Models;
 
 namespace Group9_SEP3_Chess.Data
 {
-    public class PlayMatchWebService : IPlayMatch
+    public class ChallengeService : IChallenge
     {
         private readonly IRabbitMQ rabbitMq;
 
-        public PlayMatchWebService(IRabbitMQ rabbitMq)
+        public ChallengeService(IRabbitMQ rabbitMq)
         {
             this.rabbitMq = rabbitMq;
         }

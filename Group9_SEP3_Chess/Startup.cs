@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Group9_SEP3_Chess.Authentication;
 using Group9_SEP3_Chess.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -30,9 +31,9 @@ namespace Group9_SEP3_Chess
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<IRabbitMQ, RabbitMQService>();
-            services.AddScoped<IUserService, UserWebService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMatchService, MatchService>();
-            services.AddScoped<IPlayMatch, PlayMatchWebService>();
+            services.AddScoped<IChallenge, ChallengeService>();
             services.AddScoped<ITournament, TournamentService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
         }

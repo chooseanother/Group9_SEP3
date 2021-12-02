@@ -1,8 +1,9 @@
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
+@using Group9_SEP3_Chess.Authentication
 @inject AuthenticationStateProvider authenticationStateProvider;
 
-@inject IPlayMatch playMatch
+@inject IChallenge challenge
 
 <h3>Challenge User</h3>
 <div>
@@ -62,7 +63,7 @@
         showError = false;
         newChallenge.Challenger = Username;
 
-        var result = await playMatch.ChallengeUser(newChallenge);
+        var result = await challenge.ChallengeUser(newChallenge);
 
         ErrorColor = result.Contains("Failed") ? "red" : "green";
         showError = true;

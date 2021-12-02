@@ -6,11 +6,11 @@ using Group9_SEP3_Chess.Models;
 
 namespace Group9_SEP3_Chess.Data
 {
-    public class UserWebService : IUserService
+    public class UserService : IUserService
     {
         private readonly IRabbitMQ rabbitMq;
 
-        public UserWebService(IRabbitMQ rabbitMq)
+        public UserService(IRabbitMQ rabbitMq)
         {
             this.rabbitMq = rabbitMq;
         }

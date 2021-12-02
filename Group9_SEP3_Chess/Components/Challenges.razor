@@ -1,7 +1,8 @@
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
+@using Group9_SEP3_Chess.Authentication
 @inject AuthenticationStateProvider authenticationStateProvider;
-@inject IPlayMatch _playMatch
+@inject IChallenge challenge
 
 
 @if (_challenges == null)
@@ -65,13 +66,13 @@ else
     protected override async Task OnInitializedAsync()
     {
         Username = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser().Username;
-        _challenges = await _playMatch.GetChallenges(Username);
+        _challenges = await challenge.GetChallenges(Username);
         // await Task.Delay(100);
     }
 
     private async Task AcceptChallenge(Challenge challenge)
     {
-        var result = await _playMatch.AcceptChallenge(challenge);
+        var result = await this.challenge.AcceptChallenge(challenge);
         if (result)
         {
             _challenges.Remove(challenge);
@@ -83,7 +84,7 @@ else
 
     private async Task RejectChallenge(Challenge challenge)
     {
-        var result = await _playMatch.DeclineChallenge(challenge);
+        var result = await this.challenge.DeclineChallenge(challenge);
         if (result)
         {
             _challenges.Remove(challenge);

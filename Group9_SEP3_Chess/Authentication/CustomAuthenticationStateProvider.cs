@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Group9_SEP3_Chess.Data;
 using Group9_SEP3_Chess.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 
-
-namespace Group9_SEP3_Chess.Data
+namespace Group9_SEP3_Chess.Authentication
 {
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
