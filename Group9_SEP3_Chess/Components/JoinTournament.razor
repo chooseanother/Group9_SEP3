@@ -2,7 +2,7 @@
 @using Group9_SEP3_Chess.Data
 @using Group9_SEP3_Chess.Authentication
 @inject AuthenticationStateProvider customAuthenticationStateProvider;
-@inject ITournament tournamnet;
+@inject ITournament tournament;
 
 
 <div>
@@ -76,13 +76,13 @@
     {
         newTournament.Creator = CurrentUser;
         
-        Notification = "Tournament ID Generated: " + await tournamnet.CreateTournament(newTournament);
+        Notification = "Tournament ID Generated: " + await tournament.CreateTournament(newTournament);
         
     }
 
     private async Task JoinATournament()
     {
-        var result = await tournamnet.JoinATournament(CurrentUser, TournamentsIdInserted, 0);
+        var result = await tournament.JoinATournament(CurrentUser, TournamentsIdInserted, 0);
 
         if (result)
         {
