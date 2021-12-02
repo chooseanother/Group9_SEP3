@@ -29,6 +29,7 @@ else
         <div> Draws: <br/> @UserToEdit.Draws</div>
         <div> Games played: <br/> @UserToEdit.GamesPlayed</div>
     </EditForm>
+    <em>@ErrorMessage</em>
 }
 
 @code {
@@ -47,7 +48,19 @@ else
     
     private async Task Save()
     {
-        await userService.UpdateUser(UserToEdit);
+        try
+        {
+            await userService.UpdateUser(UserToEdit);
+            if (UserToEdit != null)
+            {
+                ErrorMessage = "User was updated successfully";
+            }
+        }
+        catch (Exception e)
+        {
+            ErrorMessage = e.Message;
+        }
+
     }
     
     private void ConfirmationSetterPassword(ChangeEventArgs args)
