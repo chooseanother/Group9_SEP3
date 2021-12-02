@@ -1,7 +1,7 @@
 package model;
 
 /**
- * @author Nick/Rokas
+ * @author group9
  * @version 1.0
  */
 

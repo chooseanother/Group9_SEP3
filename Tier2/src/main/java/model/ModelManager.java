@@ -9,10 +9,19 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * @author group9
+ * @version 1.0
+ */
+
 public class ModelManager implements Model {
     private ITier2RMIClient iTier2RMIClient;
     private RabbitMQClient rabbitMQClient;
 
+    /**
+     * Creating a model manager
+     * @throws RemoteException
+     */
     public ModelManager() throws RemoteException {
         iTier2RMIClient = new Tier2RMIClient();
         rabbitMQClient = new RabbitMQClientController(this);
@@ -23,6 +32,13 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * Registers user
+     * @param username username
+     * @param password password
+     * @param email email
+     * @return string
+     */
     @Override
     public String registerUser(String username, String password, String email) {
         try {
@@ -34,6 +50,11 @@ public class ModelManager implements Model {
         return "Failed registration";
     }
 
+    /**
+     * Method to send mail
+     * @param matchId match id
+     * @param username username
+     */
     @Override
     public void sendMail(int matchId, String username) {
         new Thread(()->{
@@ -53,6 +74,13 @@ public class ModelManager implements Model {
         }).start();
     }
 
+    /**
+     * Moves the chess piece
+     * @param selected selected
+     * @param matchID match id
+     * @param username username
+     * @return chess piece
+     */
     @Override
     public ChessPiece moveChessPiece(ChessPiece selected, int matchID, String username) {
         try {
@@ -71,6 +99,14 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * Upgrades the chess piece
+     * @param upgradeSelected upgrade selected
+     * @param toUpgrade chess piece
+     * @param matchID match id
+     * @param username username
+     * @return chess pice
+     */
     @Override
     public ChessPiece upgradeChessPiece(String upgradeSelected, ChessPiece toUpgrade, int matchID, String username) {
         try {
@@ -88,6 +124,11 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * Returns the chess board
+     * @param matchID match id
+     * @return chess board
+     */
     @Override
     public ChessBoard getChessBoard(int matchID) {
         ChessBoard chessBoard = new ChessBoard();
@@ -115,6 +156,11 @@ public class ModelManager implements Model {
         return chessBoard;
     }
 
+    /**
+     * Validates the challenge
+     * @param challenge challenge
+     * @return status
+     */
     @Override
     public String validateChallenge(Challenge challenge) {
         try {
@@ -129,6 +175,12 @@ public class ModelManager implements Model {
         return "User doesn't exist or you already challenged that user.";
     }
 
+    /**
+     * Validates the login
+     * @param userName username
+     * @param password password
+     * @return user
+     */
     @Override
     public User validateLogin(String username, String password) {
         try {
@@ -143,6 +195,11 @@ public class ModelManager implements Model {
         return null;
     }
 
+    /**
+     * Updates the user
+     * @param user user
+     * @return user
+     */
     @Override
     public User updateUser(User user) {
         try {
@@ -157,6 +214,10 @@ public class ModelManager implements Model {
         return null;
     }
 
+    /**
+     * loads the challenges
+     * @return challenges
+     */
     @Override
     public ArrayList<Challenge> loadChallenges() {
         try {
@@ -167,6 +228,11 @@ public class ModelManager implements Model {
         return null;
     }
 
+    /**
+     * Loads teh challenges for a user
+     * @param username username
+     * @return challenges
+     */
     @Override
     public ArrayList<Challenge> loadChallenges(String username) {
         try {
@@ -177,6 +243,11 @@ public class ModelManager implements Model {
         return null;
     }
 
+    /**
+     * Accepts the challenge
+     * @param challenge challenge
+     * @return status
+     */
     @Override
     public boolean acceptChallenge(Challenge challenge) {
         try {
@@ -191,6 +262,11 @@ public class ModelManager implements Model {
         return false;
     }
 
+    /**
+     * Rejects the challenge
+     * @param challenge challenge
+     * @return reject status
+     */
     @Override
     public boolean rejectChallenge(Challenge challenge) {
         try {
@@ -201,11 +277,22 @@ public class ModelManager implements Model {
         return false;
     }
 
+    /**
+     * Returns all the removed chess pieces
+     * @param matchID match id
+     * @return chess piece
+     */
     @Override
     public ArrayList<ChessPiece> getRemovedChessPieces(int matchID) {
         return getChessBoard(matchID).getRemovedChessPieces();
     }
 
+    /**
+     * Returns the match scores
+     * @param Black for black or white
+     * @param matchID match id
+     * @return scores
+     */
     @Override
     public int getMatchScores(boolean black, int matchID) {
         if (black){
@@ -215,6 +302,11 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * Creates the tournament
+     * @param tournament tournament
+     * @return tournament id
+     */
     @Override
     public int createTournament(Tournament tournament) {
         try {
@@ -225,6 +317,13 @@ public class ModelManager implements Model {
         return 0;
     }
 
+    /**
+     * Joins a tournament
+     * @param username username
+     * @param tournamentID id
+     * @param placement placement
+     * @return join status
+     */
     @Override
     public boolean joinATournament(String username, int tournamentID, int placement) {
         try {
@@ -238,6 +337,10 @@ public class ModelManager implements Model {
         return false;
     }
 
+    /**
+     * Starts the tournament matches
+     * @param tournamentID id
+     */
     public void StartTournamentMatches(int tournamentID) {
         try {
             Tournament tournament = iTier2RMIClient.getTournamentById(tournamentID);
@@ -255,7 +358,11 @@ public class ModelManager implements Model {
         }
     }
 
-
+    /**
+     * Checks the turn time
+     * @param match match
+     * @return match
+     */
     @Override
     public Match checkTurnTime(Match match) {
         Date moveDate = new Date(match.getLatestMove());
@@ -288,6 +395,11 @@ public class ModelManager implements Model {
         return match;
     }
 
+    /**
+     * Adds participants to a match
+     * @param match match
+     * @return participants
+     */
     @Override
     public Match addParticipantsToMatch(Match match) {
         try {
@@ -307,6 +419,11 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * Returns the match
+     * @param matchId id
+     * @return match
+     */
     @Override
     public Match getMatch(int matchId) {
         try{
@@ -320,6 +437,11 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * Returns the matches
+     * @param username username
+     * @return matches
+     */
     @Override public ArrayList<Match> getMatches(String username)
     {
         try{
@@ -336,6 +458,11 @@ public class ModelManager implements Model {
         return null;
     }
 
+    /**
+     * Returns the match history
+     * @param username username
+     * @return match history
+     */
     @Override public ArrayList<Match> getMatchHistory(String username)
     {
         try{
@@ -352,6 +479,12 @@ public class ModelManager implements Model {
         return null;
     }
 
+    /**
+     * Updates the match outcome
+     * @param player player
+     * @param outcome outcome
+     * @param matchId match id
+     */
     @Override
     public void updateOutcome(String player, String outcome, int matchId) {
         try {
@@ -451,7 +584,11 @@ public class ModelManager implements Model {
         }
     }
 
-    @Override
+    /**
+     * Returns the moves
+     * @param matchId id
+     * @return moves
+     */
     public ArrayList<Move> getMoves(int matchId){
         try
         {
@@ -464,6 +601,11 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * Returns all the tournaments where a user has been
+     * @param username username
+     * @return tournaments
+     */
     @Override
     public ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen (String username){
         try {
@@ -476,6 +618,10 @@ public class ModelManager implements Model {
         }
     }
 
+    /**
+     * Loads the top 3 players from a tournament
+     * @param tournamentsToLoad top 3 players from a tournament
+     */
     @Override
     public void loadTop3PlayersInTournament(ArrayList<Tournament> tournamentsToLoad){
         try {
