@@ -645,8 +645,13 @@ public class ModelManager implements Model {
         try {
             for(Tournament t: tournamentsToLoad){
                 ArrayList<TournamentParticipation> tournamentParticipation = iTier2RMIClient.getTopPlayersInATournament(t.getTournamentId());
-                t.setTop3Players("1: " + tournamentParticipation.get(0).getUsername() + ", 2: " + tournamentParticipation.get(1).getUsername() +
-                ", 3: " + tournamentParticipation.get(2).getUsername());
+
+                if(iTier2RMIClient.getTournamentParticipationByTournamentID(t.getTournamentId()).size() == 0){
+                    t.setTop3Players("1: " + tournamentParticipation.get(0).getUsername() + ", 2: " + tournamentParticipation.get(1).getUsername() +
+                            ", 3: " + tournamentParticipation.get(2).getUsername());
+                } else {
+                    t.setTop3Players("Tournament not Finished");
+                }
             }
         } catch (Exception e){
             e.printStackTrace();
