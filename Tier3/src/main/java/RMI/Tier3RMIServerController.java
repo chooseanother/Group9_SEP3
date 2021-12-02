@@ -222,23 +222,6 @@ public class Tier3RMIServerController
     }
 
     /**
-     * Returns the participants color
-     * @param player player
-     * @param matchId match id
-     * @return participants color
-     * @throws RemoteException Remote exception
-     */
-    @Override
-    public String getParticipationColor(String player, int matchId) throws RemoteException {
-        try{
-            return persistence.getParticipationColor(player,matchId);
-        }catch (SQLException e){
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    /**
      * Sets the match outcome
      * @param matchId match id
      * @param finished status
@@ -338,23 +321,6 @@ public class Tier3RMIServerController
         } catch (SQLException e){
             e.printStackTrace();
             return null;
-        }
-    }
-
-    /**
-     *
-     * Returns the number of original players in a tournament
-     * @param tournamentID tournament id
-     * @return number of original players in a tournament
-     * @throws RemoteException Remote exception
-     */
-    @Override
-    public int getNrOfOriginalParticipants(int tournamentID) throws RemoteException {
-        try {
-            return persistence.getNrOfOriginalParticipants(tournamentID);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return 0;
         }
     }
 

@@ -64,15 +64,11 @@ public interface ITier3RMIServer
 
     void updateOutcome(String player, String outcome, int matchId) throws RemoteException;
 
-    String getParticipationColor(String player, int matchId) throws RemoteException;
-
     boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException;
 
     Match getMatch(int matchId) throws RemoteException;
 
     void incrementWinLossDraw(String username, String type) throws RemoteException;
-
-    int getNrOfOriginalParticipants(int tournamentID) throws RemoteException;
 
     ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen(String username) throws RemoteException;
 

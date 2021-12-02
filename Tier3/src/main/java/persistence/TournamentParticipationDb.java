@@ -82,26 +82,6 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
     }
 
     /**
-     * Returns the number of participants from the database
-     * @param tournamentID id
-     * @return nr of participants
-     * @throws SQLException SQLException
-     */
-    @Override
-    public int getNrOfOriginalParticipants(int tournamentID) throws SQLException{
-        try (Connection connection = ConnectionDB.getInstance().getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("select count(TOURNAMENT_PARTICIPATION) from tournament_participation where TOURNAMENTID = ?;");
-            statement.setInt(1, tournamentID);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-              return resultSet.getInt("count");
-            }
-        }
-        return 0;
-    }
-
-    /**
      * Returns the top 3 players from the database
      * @param tournamentID id
      * @return top 3 players

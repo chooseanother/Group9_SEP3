@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class Tournament implements Serializable {
     private String creator;
     private int turnTime;
-    private int NrOfParticipants;
+    private int nrOfParticipants;
     private int tournamentId;
     private String top3Players;
 
@@ -24,7 +24,7 @@ public class Tournament implements Serializable {
     public Tournament(String creator, int turnTime, int nrOfParticipants){
         this.creator = creator;
         this.turnTime = turnTime;
-        this.NrOfParticipants = nrOfParticipants;
+        this.nrOfParticipants = nrOfParticipants;
     }
 
     /**
@@ -69,7 +69,7 @@ public class Tournament implements Serializable {
      * @return number of participants
      */
     public int getNrOfParticipants() {
-        return NrOfParticipants;
+        return nrOfParticipants;
     }
 
     /**
@@ -78,7 +78,7 @@ public class Tournament implements Serializable {
      * @param participants number of participants
      */
     public void setNrOfParticipants(int participants) {
-        this.NrOfParticipants = participants;
+        this.nrOfParticipants = participants;
     }
 
     /**

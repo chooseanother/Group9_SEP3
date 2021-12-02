@@ -46,18 +46,18 @@ public class RabbitMQClientController implements RabbitMQClient {
                     Message message = gson.fromJson(jsonMessage, Message.class);
                     System.out.println(" [.] message(" + message + ")");
                     int matchID = 0;
-                    if(message.getAction().equals("Move") || message.getAction().equals("Load") || message.getAction().equals("Upgrade")){
-                         matchID = Integer.parseInt(message.getDataSlot2());
+                    if (message.getAction().equals("Move") || message.getAction().equals("Load") || message.getAction().equals("Upgrade")) {
+                        matchID = Integer.parseInt(message.getDataSlot2());
                     }
                     switch (message.getAction()) {
                         case "Move":
                             Message toSend = new Message();
-                            ChessPiece selected = gson.fromJson(message.getData(),ChessPiece.class);
-                            ChessPiece movedChessPiece = model.MoveChessPiece(selected,matchID,message.getDataSlot3());
+                            ChessPiece selected = gson.fromJson(message.getData(), ChessPiece.class);
+                            ChessPiece movedChessPiece = model.moveChessPiece(selected, matchID, message.getDataSlot3());
                             if (movedChessPiece != null) {
                                 toSend.setData(gson.toJson(movedChessPiece));
                                 toSend.setDataSlot2(gson.toJson(model.getRemovedChessPieces(matchID)));
-                                toSend.setDataSlot3(model.getMatchScores(true,matchID) + " " + model.getMatchScores(false,matchID));
+                                toSend.setDataSlot3(model.getMatchScores(true, matchID) + " " + model.getMatchScores(false, matchID));
                                 toSend.setAction("Sending A chess Piece");
                             } else {
                                 toSend.setAction("No chess Piece");
@@ -70,8 +70,8 @@ public class RabbitMQClientController implements RabbitMQClient {
                         case "Upgrade":
                             Message toSendUpgrade = new Message();
                             toSendUpgrade.setAction("Upgrade Chess Piece");
-                            ChessPiece toUpgrade = gson.fromJson(message.getDataSlot3(),ChessPiece.class);
-                            ChessPiece upgradedChessPiece = model.UpgradeChessPiece(message.getData(),toUpgrade,matchID,message.getDataSlot4());
+                            ChessPiece toUpgrade = gson.fromJson(message.getDataSlot3(), ChessPiece.class);
+                            ChessPiece upgradedChessPiece = model.upgradeChessPiece(message.getData(), toUpgrade, matchID, message.getDataSlot4());
                             toSendUpgrade.setData(gson.toJson(upgradedChessPiece));
 
                             System.out.println(toSendUpgrade.getData());
@@ -84,7 +84,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                             ChessPiece[][] chessBoard = model.getChessBoard(matchID).getChessBoard();
                             toLoadChessPieces.setData(gson.toJson(chessBoard));
                             toLoadChessPieces.setDataSlot2(gson.toJson(model.getRemovedChessPieces(matchID)));
-                            toLoadChessPieces.setDataSlot3(model.getMatchScores(true,matchID) + " " +model.getMatchScores(false,matchID));
+                            toLoadChessPieces.setDataSlot3(model.getMatchScores(true, matchID) + " " + model.getMatchScores(false, matchID));
                             response = gson.toJson(toLoadChessPieces);
                             break;
                         case "Register":
@@ -94,36 +94,33 @@ public class RabbitMQClientController implements RabbitMQClient {
                             break;
                         case "Create challenge":
                             String challengeJson = message.getData();
-                            Challenge challenge = gson.fromJson(challengeJson,Challenge.class);
+                            Challenge challenge = gson.fromJson(challengeJson, Challenge.class);
                             result = model.validateChallenge(challenge);
                             response = gson.toJson(new Message(result));
                             break;
                         case "Get challenges":
                             ArrayList<Challenge> challenges;
-                            if (message.getData() == null){
+                            if (message.getData() == null) {
                                 challenges = model.loadChallenges();
-                            }
-                            else {
+                            } else {
                                 challenges = model.loadChallenges(message.getData());
                             }
                             String jsonChallenges = gson.toJson(challenges);
-                            response = gson.toJson(new Message("Returning challenges",jsonChallenges));
+                            response = gson.toJson(new Message("Returning challenges", jsonChallenges));
                             break;
                         case "Accept challenge":
-                            challenge = gson.fromJson(message.getData(),Challenge.class);
-                            if (model.acceptChallenge(challenge)){
+                            challenge = gson.fromJson(message.getData(), Challenge.class);
+                            if (model.acceptChallenge(challenge)) {
                                 response = gson.toJson(new Message("Success"));
-                            }
-                            else {
+                            } else {
                                 response = gson.toJson(new Message("Fail"));
                             }
                             break;
                         case "Reject challenge":
-                            challenge = gson.fromJson(message.getData(),Challenge.class);
-                            if (model.rejectChallenge(challenge)){
+                            challenge = gson.fromJson(message.getData(), Challenge.class);
+                            if (model.rejectChallenge(challenge)) {
                                 response = gson.toJson(new Message("Success"));
-                            }
-                            else{
+                            } else {
                                 response = gson.toJson(new Message("Fail"));
                             }
 
@@ -132,36 +129,34 @@ public class RabbitMQClientController implements RabbitMQClient {
                             user = gson.fromJson(message.getData(), User.class);
                             String username = user.getUsername();
                             String password = user.getPassword();
-                            try{
-                              User validatedUser = model.validateLogin(username, password);
-                              String userToJson = gson.toJson(validatedUser);
-                              response = gson.toJson(new Message("LoggedIn", userToJson));
-                            }
-                            catch(Exception e){
-                              response = gson.toJson(new Message(e.getMessage()));
+                            try {
+                                User validatedUser = model.validateLogin(username, password);
+                                String userToJson = gson.toJson(validatedUser);
+                                response = gson.toJson(new Message("LoggedIn", userToJson));
+                            } catch (Exception e) {
+                                response = gson.toJson(new Message(e.getMessage()));
                             }
                             break;
                         case "UpdateUser":
                             user = gson.fromJson(message.getData(), User.class);
-                            try{
+                            try {
                                 User updatedUser = model.updateUser(user);
                                 String userToJson = gson.toJson(updatedUser);
                                 response = gson.toJson(new Message("UserUpdated", userToJson));
-                            }catch(Exception e){
+                            } catch (Exception e) {
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
                             break;
                         case "CreateTournament":
                             String TournamentJson = message.getData();
                             Tournament tournament = gson.fromJson(TournamentJson, Tournament.class);
-                            int Id = model.CreateTournament(tournament);
+                            int Id = model.createTournament(tournament);
                             Message IdToSend = new Message();
-                            IdToSend.setData(Id+"");
+                            IdToSend.setData(Id + "");
                             response = gson.toJson(IdToSend);
                             break;
                         case "JoinTournament":
-                            if (model.joinATournament(message.getData(), Integer.parseInt(message.getDataSlot2()), Integer.parseInt(message.getDataSlot3())))
-                            {
+                            if (model.joinATournament(message.getData(), Integer.parseInt(message.getDataSlot2()), Integer.parseInt(message.getDataSlot3()))) {
                                 response = gson.toJson(new Message("Success"));
                             } else {
                                 response = gson.toJson(new Message("Fail"));
@@ -170,34 +165,34 @@ public class RabbitMQClientController implements RabbitMQClient {
                         case "GetMatches":
                             username = gson.fromJson(message.getData(), String.class);
                             System.out.println(username);
-                            try{
+                            try {
                                 ArrayList<Match> matches = model.getMatches(username);
                                 String matchesToJson = gson.toJson(matches);
                                 System.out.println(matchesToJson);
                                 response = gson.toJson(new Message("Matches", matchesToJson));
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
                             break;
                         case "GetMatch":
                             int matchId = Integer.parseInt(message.getData());
-                            try{
+                            try {
                                 Match match = model.getMatch(matchId);
                                 String matchJson = gson.toJson(match);
                                 response = gson.toJson(new Message("Match", matchJson));
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 e.printStackTrace();
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
                             break;
                         case "GetMatchHistory":
                             username = gson.fromJson(message.getData(), String.class);
-                            try{
+                            try {
                                 ArrayList<Match> matchHistory = model.getMatchHistory(username);
                                 String matchesToJson = gson.toJson(matchHistory);
                                 response = gson.toJson(new Message("MatchHistory", matchesToJson));
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
                             break;
@@ -205,17 +200,17 @@ public class RabbitMQClientController implements RabbitMQClient {
                             username = message.getData();
                             String outcome = message.getDataSlot2();
                             matchId = Integer.parseInt(message.getDataSlot3());
-                            model.updateOutcome(username,outcome,matchId);
+                            model.updateOutcome(username, outcome, matchId);
                             response = gson.toJson(new Message(":D"));
                             break;
                         case "MoveHistory":
                             matchId = gson.fromJson(message.getData(), Integer.class);
-                            try{
+                            try {
                                 ArrayList<Move> moves = model.getMoves(matchId);
                                 String movesToJson = gson.toJson(moves);
                                 response = gson.toJson(new Message("HistoryOfMoves", movesToJson));
                                 System.out.println(response);
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
                             break;
@@ -227,10 +222,9 @@ public class RabbitMQClientController implements RabbitMQClient {
                         default:
                             break;
                     }
-                    System.out.println("Response "+response);
+                    System.out.println("Response " + response);
 
                 } catch (RuntimeException e) {
-                    System.out.println(" [.] " + e.toString());
                     e.printStackTrace();
                 } finally {
                     channel.basicPublish("", delivery.getProperties().getReplyTo(), replyProps, response.getBytes("UTF-8"));

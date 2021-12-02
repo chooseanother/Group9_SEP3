@@ -53,7 +53,8 @@ public class Position {
      * To String method displaying the coordinates
      * @return coordinates
      */
-    @Override public String toString(){
+    @Override
+    public String toString(){
         return "Coordinates (Y,X): " + verticalAxis + ", " + horizontalAxis;
     }
 }

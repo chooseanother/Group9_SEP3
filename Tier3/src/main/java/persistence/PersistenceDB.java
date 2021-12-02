@@ -220,16 +220,6 @@ public class PersistenceDB implements Persistence{
         tournamentParticipationPersistence.updateParticipantsPlacement(username, placement, tournamentId);
     }
 
-    /**
-     * Returns the number of original players in a tournament
-     *
-     * @param tournamentID tournament id
-     * @return number of original players in a tournament
-     */
-    @Override
-    public int getNrOfOriginalParticipants(int tournamentID) throws SQLException {
-        return tournamentParticipationPersistence.getNrOfOriginalParticipants(tournamentID);
-    }
 
     /**
      * Returns the top players of a tournament
@@ -252,18 +242,6 @@ public class PersistenceDB implements Persistence{
     @Override
     public void updateOutcome(String player, String outcome, int matchId) throws SQLException {
         matchParticipationDB.updateOutcome(player, outcome, matchId);
-    }
-
-
-    /**
-     * Returns the participants color
-     * @param player  player
-     * @param matchId match id
-     * @return participants color
-     */
-    @Override
-    public String getParticipationColor(String player, int matchId) throws SQLException {
-        return matchParticipationDB.getParticipationColor(player,matchId);
     }
 
     /**

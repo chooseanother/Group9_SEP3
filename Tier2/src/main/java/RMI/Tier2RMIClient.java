@@ -13,9 +13,7 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
 
     public Tier2RMIClient() throws RemoteException {
         try {
-
             tier3 = (ITier3RMIServer) Naming.lookup(ITier3RMIServer.T3_SERVICE_NAME);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -23,12 +21,10 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
 
     @Override
     public boolean registerUser(String username, String password, String email) throws RemoteException {
-
         try {
             return tier3.registerUser(new User(username, password, email));
         } catch (IllegalArgumentException e) {
             return false;
-            // actions to counter illegal data
         }
 
     }
@@ -50,14 +46,13 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
             return tier3.validateChallenge(challenge);
         } catch (IllegalArgumentException e) {
             return false;
-            // actions to counter illegal data
         }
     }
 
     @Override
     public ArrayList<Challenge> loadChallenges() throws RemoteException {
         try {
-            ArrayList<Challenge> challenges = (ArrayList<Challenge>) tier3.loadChallenges();
+            ArrayList<Challenge> challenges = tier3.loadChallenges();
             return challenges;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -68,7 +63,7 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     @Override
     public ArrayList<Challenge> loadChallenges(String username) throws RemoteException {
         try {
-            ArrayList<Challenge> challenges = (ArrayList<Challenge>) tier3.loadChallenges(username);
+            ArrayList<Challenge> challenges = tier3.loadChallenges(username);
             return challenges;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -262,11 +257,6 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     }
 
     @Override
-    public String getParticipationColor(String player, int matchId) throws RemoteException {
-        return tier3.getParticipationColor(player, matchId);
-    }
-
-    @Override
     public boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException {
         return tier3.setMatchOutcome(matchId, finished);
     }
@@ -274,11 +264,6 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     @Override
     public Match getMatch(int matchId) throws RemoteException {
         return tier3.getMatch(matchId);
-    }
-
-    @Override
-    public int getNrofOriginalParticipants(int tournamentID) throws RemoteException {
-        return tier3.getNrOfOriginalParticipants(tournamentID);
     }
 
     @Override

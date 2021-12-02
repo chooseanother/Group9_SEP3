@@ -1,19 +1,14 @@
-package RMI;/*
- * 12.09.2018 Original version
- */
+package RMI;
 
 import model.*;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.List;
-
 
 public interface ITier3RMIServer
 	extends Remote
 {
-
 	boolean updateMatchUsersTurn(int matchID, String color) throws RemoteException;
 
     boolean registerUser(User user) throws RemoteException;
@@ -54,8 +49,6 @@ public interface ITier3RMIServer
 
     void updateOutcome(String player, String outcome, int matchId) throws RemoteException;
 
-    String getParticipationColor(String player, int matchId) throws RemoteException;
-
     boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException;
 
     Match getMatch(int matchId) throws RemoteException;
@@ -69,8 +62,6 @@ public interface ITier3RMIServer
     ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException;
 
     void updateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException;
-
-    int getNrOfOriginalParticipants(int tournamentID) throws RemoteException;
 
     void incrementWinLossDraw(String username, String type) throws RemoteException;
 

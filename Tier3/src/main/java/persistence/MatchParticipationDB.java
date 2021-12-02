@@ -32,20 +32,6 @@ public class MatchParticipationDB implements MatchParticipationPersistence{
     }
 
     @Override
-    public String getParticipationColor(String player, int matchId) throws SQLException {
-        try (Connection connection = ConnectionDB.getInstance().getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT COLOR from MATCH_PARTICIPATION WHERE username = ? AND MATCHID = ?");
-            statement.setString(1, player);
-            statement.setInt(2, matchId);
-            ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()){
-                return resultSet.getString("color");
-            }
-        }
-        return null;
-    }
-
-    @Override
     public ArrayList<Participant> getParticipants(int matchId)
         throws SQLException
     {

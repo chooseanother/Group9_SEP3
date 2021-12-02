@@ -28,7 +28,6 @@ public class ChessBoard {
         WhiteScore = 0;
         turnColor = "White";
 
-        //black
         String black = "Black";
         chessPieces[0][0] = new ChessPiece("Rook", black, new Position(0, 0));
         chessPieces[0][1] = new ChessPiece("Knight", black, new Position(0, 1));
@@ -43,7 +42,6 @@ public class ChessBoard {
             chessPieces[1][i] = new ChessPiece("Pawn", black, new Position(1, i));
         }
 
-        //white
         String white = "White";
         chessPieces[7][0] = new ChessPiece("Rook", white, new Position(7, 0));
         chessPieces[7][1] = new ChessPiece("Knight", white, new Position(7, 1));
@@ -70,8 +68,7 @@ public class ChessBoard {
      * @return chesspiece moved
      * @throws RemoteException
      */
-    public ChessPiece MoveAttackChessPiece(ChessPiece selected, ITier2RMIClient iTier2RMIClient, int matchID,String username) throws RemoteException {
-        String buildString = "";
+    public ChessPiece moveAttackChessPiece(ChessPiece selected, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
         if (selected != null && selected.getColor().equals(turnColor)) {
             if (selected.getColor().equals("Black")) {
                 turnColor = "White";
@@ -125,10 +122,9 @@ public class ChessBoard {
      * @param UpgradeSelected the type of upgrade
      */
 
-    public ChessPiece UpgradeChessPiece(String UpgradeSelected, ChessPiece toUpgrade, ITier2RMIClient iTier2RMIClient, int matchID,String username) throws RemoteException {
+    public ChessPiece upgradeChessPiece(String UpgradeSelected, ChessPiece toUpgrade, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
         if(toUpgrade!=null && UpgradeSelected!=null){
             toUpgrade.setType(UpgradeSelected);
-            // dont want to persist when recreating match from move history
             if (iTier2RMIClient != null) {
                 ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
                 for (Participant p:participants){
@@ -189,7 +185,7 @@ public class ChessBoard {
      *
      * @return returns the score for white
      */
-    public int GetScore(String color) {
+    public int getScore(String color) {
         int result = 0;
 
         for (ChessPiece removedChessPiece : RemovedChessPieces) {
