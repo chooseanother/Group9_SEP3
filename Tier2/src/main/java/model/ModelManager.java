@@ -267,6 +267,9 @@ public class ModelManager implements Model {
 
     @Override
     public Match checkTurnTime(Match match) {
+        if (match.getFinished()){
+            return match;
+        }
         Date moveDate = new Date(match.getLatestMove());
         Date currentDate = new Date();
         int difference = (int)(currentDate.getTime()-moveDate.getTime())/1000;
@@ -379,33 +382,29 @@ public class ModelManager implements Model {
 
                 Participant player1 = participants.get(0);
                 Participant player2 = participants.get(1);
+                Participant winner, looser;
 
                 if(player1.getOutcome() != null && player2.getOutcome() != null) {
                     switch (player1.getOutcome()) {
                         case "Draw":
                             if (player2.getOutcome().equals("Draw")) {
-                                // set match to finished
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
-                                // add 1 to drawn games for player 1 and player2
-                                // add 1 to total games played for player1 and player2
+                                iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "draws");
+                                iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "draws");
                             }
                             break;
                         case "Win":
                             if (player2.getOutcome().equals("Loss")) {
-                                // set match to finished
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
-                                // award win to player1
-                                // give loss to player2
-                                // update total games played for player1 and player2
+                                iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "wins");
+                                iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "losses");
                             }
                             break;
                         case "Loss":
                             if (player2.getOutcome().equals("Win")) {
-                                // set match to finished
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
-                                // award win to player2
-                                // give loss to player1
-                                // update total games played for player1 and player2
+                                iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "wins");
+                                iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "losses");
                             }
                             break;
                         default:
@@ -427,10 +426,9 @@ public class ModelManager implements Model {
                     switch (player1.getOutcome()) {
                         case "Draw":
                             if (player2.getOutcome().equals("Draw")) {
-                                // set match to finished
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
-                                // add 1 to drawn games for player 1 and player2
-                                // add 1 to total games played for player1 and player2
+                                iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "draws");
+                                iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "draws");
                                 if (player1.getColor().equals("White")) {
                                     if (getMatchScores(false, matchId) > getMatchScores(true, matchId)) {
                                         iTier2RMIClient.UpdateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
@@ -443,22 +441,18 @@ public class ModelManager implements Model {
                             break;
                         case "Win":
                             if (player2.getOutcome().equals("Loss")) {
-                                // set match to finished
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
-                                // award win to player1
-                                // give loss to player2
-                                // update total games played for player1 and player2
+                                iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "wins");
+                                iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "losses");
                                 iTier2RMIClient.UpdateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
                             }
                             StartTournamentMatches(TournamentID);
                             break;
                         case "Loss":
                             if (player2.getOutcome().equals("Win")) {
-                                // set match to finished
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
-                                // award win to player2
-                                // give loss to player1
-                                // update total games played for player1 and player2
+                                iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "wins");
+                                iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "losses");
                                 iTier2RMIClient.UpdateParticipantsPlacement(player1.getUsername(), Placement, TournamentID);
                             }
                             StartTournamentMatches(TournamentID);
