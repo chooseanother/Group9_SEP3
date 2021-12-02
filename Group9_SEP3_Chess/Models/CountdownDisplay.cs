@@ -26,9 +26,9 @@ namespace Group9_SEP3_Chess.Models
             var seconds = TimeLeft % 60;
             if (TimeLeft > 0)
             {
-                return $"Time left {(days > 0 ? (days > 1 ? $"{days} days" : $"{days} day") : "")} " +
-                       $"{(hours > 0 ? (hours > 1 ? $"{hours} hours" : $"{hours} hour") : "")} " +
-                       $"{(minutes > 0 ? (minutes > 1 ? $"{minutes} minutes" : $"{minutes} minute") : "")}" +
+                return $"Time left {(days > 0 ? (days > 1 ? $"{days} days " : $"{days} day ") : "")} " +
+                       $"{(hours > 0 ? (hours > 1 ? $"{hours} hours " : $"{hours} hour ") : "")} " +
+                       $"{(minutes > 0 ? (minutes > 1 ? $"{minutes} minutes " : $"{minutes} minute ") : "")}" +
                        $"{seconds} seconds";
             }
             return "";

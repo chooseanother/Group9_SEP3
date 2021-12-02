@@ -6,10 +6,12 @@
 @using System.Timers
 @inject IMatchService matchService
 @inject AuthenticationStateProvider authenticationStateProvider
-<div class="row" style="justify-content: center">
-    <p>@Counter.ToString()</p>
-    
-</div>
+@if (!IsDisabled)
+{
+    <div class="row" style="justify-content: center">
+        <p>@Counter.ToString()</p>
+    </div>
+}
 <div class="row">
     <div class="col">
         <div class="RemovedPiecesTable">
@@ -188,8 +190,11 @@
         WhiteScore = matchService.GetMatchScores(false);
         Match = await matchService.GetMatch(Id);
         IsDisabled = Match.Finished;
-        Counter = new CountdownDisplay(Match);
-        StartTimer();
+        if (!IsDisabled)
+        {
+            Counter = new CountdownDisplay(Match);
+            StartTimer();
+        }
     }
 
     private void StartTimer()
