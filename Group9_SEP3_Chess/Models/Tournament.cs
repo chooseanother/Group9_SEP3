@@ -9,7 +9,7 @@ namespace Group9_SEP3_Chess.Models
         [JsonPropertyName("creator")]
         public string Creator { get; set; }
         
-        [JsonPropertyName("NrOfParticipants")]
+        [JsonPropertyName("nrOfParticipants")]
         public int NrOfParticipants { get; set; }
         
         [JsonPropertyName("turnTime")]
