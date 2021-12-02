@@ -8,12 +8,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
+/**
+ * @author group9
+ * @version 1.0
+ */
+
 public class RabbitMQClientController implements RabbitMQClient {
     private static final String RPC_QUEUE_NAME = "rpc_queue";
     private Model model;
     private ConnectionFactory factory;
     private Gson gson;
 
+    /**
+     * Creates the controller
+     * @param model model
+     */
     public RabbitMQClientController(Model model) {
         this.model = model;
         factory = new ConnectionFactory();
@@ -21,6 +30,11 @@ public class RabbitMQClientController implements RabbitMQClient {
         gson = new Gson();
     }
 
+    /**
+     * Checks the queue
+     * @throws IOException Io exception
+     * @throws TimeoutException timeout
+     */
     @Override
     public void initRPCQueue() throws IOException, TimeoutException {
         try (Connection connection = factory.newConnection();

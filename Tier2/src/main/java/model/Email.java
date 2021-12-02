@@ -10,10 +10,18 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * @author group9
+ * @version 1.0
+ */
+
 public class Email {
     private String host = "smtp.gmail.com";
     Properties properties;
 
+    /**
+     * Creating the email
+     */
     public Email() {
         properties = System.getProperties();
         properties.put("mail.smtp.host", host);
@@ -22,6 +30,13 @@ public class Email {
         properties.put("mail.smtp.auth", "true");
     }
 
+    /**
+     * Sending the email
+     * @param source source
+     * @param to to
+     * @param username username
+     * @param matchId match id
+     */
     public void sendEmail(String source, String to, String username, int matchId){
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
 

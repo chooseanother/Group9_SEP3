@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
- * @author Nick/Rokas
+ * @author group9
  * @version 1.0
  */
 
