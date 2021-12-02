@@ -428,7 +428,6 @@ public class ModelManager implements Model {
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
                                 iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "wins");
                                 iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "losses");
-                                iTier2RMIClient.UpdateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
                                 iTier2RMIClient.updateParticipantsPlacement(player2.getUsername(), Placement, TournamentID);
                             }
                             StartTournamentMatches(TournamentID);
@@ -438,7 +437,6 @@ public class ModelManager implements Model {
                                 iTier2RMIClient.setMatchOutcome(matchId, true);
                                 iTier2RMIClient.incrementWinLossDraw(player2.getUsername(), "wins");
                                 iTier2RMIClient.incrementWinLossDraw(player1.getUsername(), "losses");
-                                iTier2RMIClient.UpdateParticipantsPlacement(player1.getUsername(), Placement, TournamentID);
                                 iTier2RMIClient.updateParticipantsPlacement(player1.getUsername(), Placement, TournamentID);
                             }
                             StartTournamentMatches(TournamentID);
