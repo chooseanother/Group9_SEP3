@@ -57,6 +57,9 @@ public class ModelManager implements Model {
     @Override
     public ChessPiece MoveChessPiece(ChessPiece selected, int matchID,String username) {
         try {
+            if (getMatch(matchID).getFinished()){
+                return null;
+            }
             ChessPiece toMove = getChessBoard(matchID).MoveAttackChessPiece(selected, iTier2RMIClient, matchID,username);
             if (toMove!=null) {
                 sendMail(matchID,username);
@@ -72,6 +75,9 @@ public class ModelManager implements Model {
     @Override
     public ChessPiece UpgradeChessPiece(String upgradeSelected,ChessPiece toUpgrade, int matchID,String username) {
         try {
+            if (getMatch(matchID).getFinished()){
+                return null;
+            }
             ChessPiece upgraded = getChessBoard(matchID).UpgradeChessPiece(upgradeSelected, toUpgrade, iTier2RMIClient, matchID,username);
             if (upgraded == null) {
                 System.out.println("Chess piece was not upgraded as it was not saved");
@@ -316,6 +322,7 @@ public class ModelManager implements Model {
         try{
             Match match = iTier2RMIClient.getMatch(matchId);
             match = addParticipantsToMatch(match);
+            match = checkTurnTime(match);
             return match;
         } catch (RemoteException e){
             e.printStackTrace();
@@ -327,10 +334,11 @@ public class ModelManager implements Model {
     {
         try{
             ArrayList<Match> matches = iTier2RMIClient.getMatches(username);
-            matches.removeIf(Match::getFinished);
             for (Match m : matches){
                 addParticipantsToMatch(m);
+                checkTurnTime(m);
             }
+            matches.removeIf(Match::getFinished);
             return matches;
 
         }catch (RemoteException e){
@@ -343,18 +351,11 @@ public class ModelManager implements Model {
     {
         try{
             ArrayList<Match> matches = iTier2RMIClient.getMatches(username);
-            matches.removeIf(m -> !m.getFinished());
             for (Match m : matches){
-                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(m.getMatchID());
-                for(Participant p: participants){
-                    if(p.getColor().equals("Black")){
-                        m.setBlackPlayer(p);
-                    }
-                    else{
-                        m.setWhitePlayer(p);
-                    }
-                }
+                addParticipantsToMatch(m);
+                checkTurnTime(m);
             }
+            matches.removeIf(m -> !m.getFinished());
             return matches;
 
         }catch (RemoteException e){
@@ -366,6 +367,9 @@ public class ModelManager implements Model {
     @Override
     public void updateOutcome(String player, String outcome, int matchId) {
         try {
+            if (getMatch(matchId).getFinished()){
+                return;
+            }
             if (iTier2RMIClient.getMatch(matchId).getTournamentID() == 0) {
                 iTier2RMIClient.updateOutcome(player, outcome, matchId);
 
