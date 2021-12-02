@@ -13,9 +13,9 @@ import java.util.ArrayList;
 
 public class ChessBoard {
     private ChessPiece[][] chessPieces;
-    private ArrayList<ChessPiece> RemovedChessPieces;
-    private int BlackScore;
-    private int WhiteScore;
+    private ArrayList<ChessPiece> removedChessPieces;
+    private int blackScore;
+    private int whiteScore;
     private String turnColor;
 
     /**
@@ -23,9 +23,9 @@ public class ChessBoard {
      */
     public ChessBoard() {
         chessPieces = new ChessPiece[8][8];
-        RemovedChessPieces = new ArrayList<>();
-        BlackScore = 0;
-        WhiteScore = 0;
+        removedChessPieces = new ArrayList<>();
+        blackScore = 0;
+        whiteScore = 0;
         turnColor = "White";
 
         String black = "Black";
@@ -90,7 +90,7 @@ public class ChessBoard {
             }
             if (testForNullRMI) {
                 if (chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()] != null) {
-                    RemovedChessPieces.add(chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()]);
+                    removedChessPieces.add(chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()]);
                 }
                 chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()] = selected.copy();
                 if (selected.getOldPosition().getVerticalAxis() != chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()].getNewPosition().getVerticalAxis()
@@ -119,12 +119,12 @@ public class ChessBoard {
     /**
      * A method to upgrade a chess piece
      *
-     * @param UpgradeSelected the type of upgrade
+     * @param upgradeSelected the type of upgrade
      */
 
-    public ChessPiece upgradeChessPiece(String UpgradeSelected, ChessPiece toUpgrade, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
-        if(toUpgrade!=null && UpgradeSelected!=null){
-            toUpgrade.setType(UpgradeSelected);
+    public ChessPiece upgradeChessPiece(String upgradeSelected, ChessPiece toUpgrade, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
+        if(toUpgrade!=null && upgradeSelected!=null){
+            toUpgrade.setType(upgradeSelected);
             if (iTier2RMIClient != null) {
                 ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
                 for (Participant p:participants){
@@ -177,7 +177,7 @@ public class ChessBoard {
      * @return list of removed chess pieces
      */
     public ArrayList<ChessPiece> getRemovedChessPieces() {
-        return RemovedChessPieces;
+        return removedChessPieces;
     }
 
     /**
@@ -188,7 +188,7 @@ public class ChessBoard {
     public int getScore(String color) {
         int result = 0;
 
-        for (ChessPiece removedChessPiece : RemovedChessPieces) {
+        for (ChessPiece removedChessPiece : removedChessPieces) {
 
             if (removedChessPiece.getColor().equals(color)) {
 

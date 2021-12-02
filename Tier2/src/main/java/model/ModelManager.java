@@ -16,7 +16,6 @@ public class ModelManager implements Model {
     public ModelManager() throws RemoteException {
         iTier2RMIClient = new Tier2RMIClient();
         rabbitMQClient = new RabbitMQClientController(this);
-
         try {
             rabbitMQClient.initRPCQueue();
         } catch (Exception e) {
@@ -131,9 +130,9 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public User validateLogin(String userName, String password) {
+    public User validateLogin(String username, String password) {
         try {
-            User userFromDB = iTier2RMIClient.validateLogin(userName, password);
+            User userFromDB = iTier2RMIClient.validateLogin(username, password);
             if (userFromDB == null) {
                 throw new IllegalArgumentException("Wrong username or password");
             }
@@ -208,8 +207,8 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public int getMatchScores(boolean Black,int matchID) {
-        if (Black){
+    public int getMatchScores(boolean black, int matchID) {
+        if (black){
             return getChessBoard(matchID).getScore("Black");
         } else {
             return getChessBoard(matchID).getScore("White");

@@ -13,7 +13,7 @@ public interface Model {
 
     String validateChallenge(Challenge challenge);
 
-    User validateLogin(String userName, String password);
+    User validateLogin(String username, String password);
 
     User updateUser(User user);
 
@@ -25,7 +25,7 @@ public interface Model {
 
     boolean rejectChallenge(Challenge challenge);
 
-    int getMatchScores(boolean Black, int matchID);
+    int getMatchScores(boolean black, int matchID);
 
     ArrayList<ChessPiece> getRemovedChessPieces(int matchID);
 
