@@ -351,7 +351,10 @@ public class ModelManager implements Model {
                     iTier2RMIClient.createParticipation(tournamentParticipations.get(i).getUsername(), "White", match.getMatchID());
                     iTier2RMIClient.createParticipation(tournamentParticipations.get(i + 1).getUsername(), "Black", match.getMatchID());
                 }
-                iTier2RMIClient.updateTournamentNrOfParticipants(tournamentID, tournamentParticipations.size() / 2);
+
+                if(tournamentParticipations.size() != 2){
+                    iTier2RMIClient.updateTournamentNrOfParticipants(tournamentID, tournamentParticipations.size() / 2);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -388,6 +391,18 @@ public class ModelManager implements Model {
                 iTier2RMIClient.updateOutcome(loser.getUsername(),"Loss", matchId);
                 iTier2RMIClient.updateOutcome(winner.getUsername(), "Win", matchId);
                 iTier2RMIClient.setMatchOutcome(matchId,true);
+
+                if(iTier2RMIClient.getMatch(match.getMatchID()).getTournamentID() != 0){
+                    int TournamentID = iTier2RMIClient.getMatch(matchId).getTournamentID();
+                    iTier2RMIClient.updateParticipantsPlacement(loser.getUsername(),
+                            iTier2RMIClient.getTournamentParticipationByTournamentID(TournamentID).size(), TournamentID);
+                    StartTournamentMatches(TournamentID);
+
+                    if (iTier2RMIClient.getTournamentParticipationByTournamentID(TournamentID).size() == 1) {
+                        iTier2RMIClient.updateParticipantsPlacement(winner.getUsername(), 1, TournamentID);
+                    }
+                }
+
                 iTier2RMIClient.incrementWinLossDraw(winner.getUsername(), "wins");// award win to winner
                 iTier2RMIClient.incrementWinLossDraw(loser.getUsername(), "losses");// give loss to loser
             }
