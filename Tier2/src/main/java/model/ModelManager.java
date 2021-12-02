@@ -177,7 +177,7 @@ public class ModelManager implements Model {
 
     /**
      * Validates the login
-     * @param userName username
+     * @param username username
      * @param password password
      * @return user
      */
@@ -289,7 +289,7 @@ public class ModelManager implements Model {
 
     /**
      * Returns the match scores
-     * @param Black for black or white
+     * @param black for black or white
      * @param matchID match id
      * @return scores
      */
@@ -365,6 +365,9 @@ public class ModelManager implements Model {
      */
     @Override
     public Match checkTurnTime(Match match) {
+        if (match.getFinished()){
+            return match;
+        }
         Date moveDate = new Date(match.getLatestMove());
         Date currentDate = new Date();
         int difference = (int)(currentDate.getTime()-moveDate.getTime())/1000;
