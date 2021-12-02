@@ -7,7 +7,7 @@ package model;
 
 public class ChessPiece {
     private String type;
-    private Boolean selected;
+    private boolean selected;
     private Position oldPosition;
     private Position newPosition;
     private String color;
@@ -58,7 +58,7 @@ public class ChessPiece {
      * Returns selected
      * @return selected
      */
-    public Boolean getSelected() {
+    public boolean getSelected() {
         return selected;
     }
 
@@ -66,7 +66,7 @@ public class ChessPiece {
      * Sets selected
      * @param selected selected
      */
-    public void setSelected(Boolean selected) {
+    public void setSelected(boolean selected) {
         this.selected = selected;
     }
 

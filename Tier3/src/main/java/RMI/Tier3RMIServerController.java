@@ -1,6 +1,4 @@
-package RMI;/*
- * 12.09.2018 Original version
- */
+package RMI;
 
 import model.Challenge;
 import model.Tournament;
@@ -23,12 +21,20 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * @author group9
+ * @version 1.0
+ */
 
 public class Tier3RMIServerController
         extends UnicastRemoteObject
         implements ITier3RMIServer {
     private Persistence persistence;
 
+    /**
+     * Creates the tier 3 rmi controller
+     * @throws RemoteException Remote Exception
+     */
     public Tier3RMIServerController()
             throws RemoteException {
         try {
@@ -42,6 +48,10 @@ public class Tier3RMIServerController
         persistence = new PersistenceDB();
     }
 
+    /**
+     * Starts the registry
+     * @throws RemoteException Remote exception
+     */
     private void startRegistry() throws RemoteException {
         try {
             Registry registry = LocateRegistry.createRegistry(1099);
@@ -52,16 +62,25 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Starts the server
+     * @throws MalformedURLException
+     * @throws RemoteException Remote exception
+     */
     private void startServer() throws MalformedURLException, RemoteException {
         Naming.rebind(T3_SERVICE_NAME, this);
-        System.out.println("Server ready");
     }
 
+    /**
+     * Registers the user
+     * @param user user
+     * @return if the registration is successful
+     * @throws RemoteException Remote exception
+     */
     @Override
     public boolean registerUser(User user) throws RemoteException {
         try {
             persistence.registerUser(user);
-            System.out.println(user.getUsername() + " was created.");
             return true;
         } catch (SQLException e){
             e.printStackTrace();
@@ -70,9 +89,19 @@ public class Tier3RMIServerController
     }
 
 
-    @Override public boolean MovePiece( int matchId, String piece, String color, String startPosition, String endPosition){
+    /**
+     * Moves the piece
+     * @param matchId match id
+     * @param piece piece
+     * @param color color
+     * @param startPosition start position
+     * @param endPosition end position
+     * @return if the move is successful
+     */
+    @Override
+    public boolean movePiece(int matchId, String piece, String color, String startPosition, String endPosition){
         try {
-            persistence.MovePiece( matchId, piece, color, startPosition, endPosition);
+            persistence.movePiece( matchId, piece, color, startPosition, endPosition);
             return true;
         } catch (SQLException e){
             e.printStackTrace();
@@ -80,11 +109,16 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Validates a challenge
+     * @param challenge challenge
+     * @return if the validation is successful
+     * @throws RemoteException Remote exception
+     */
     @Override
     public boolean validateChallenge(Challenge challenge) throws RemoteException {
         try {
             persistence.createChallenge(challenge);
-            System.out.println(challenge + " was created.");
             return true;
         } catch (SQLException e){
             e.printStackTrace();
@@ -92,10 +126,20 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Upgrades the piece
+     * @param matchId match id
+     * @param piece piece
+     * @param color color
+     * @param startPosition start position
+     * @param endPosition end position
+     * @return if the upgrade is successful
+     * @throws RemoteException Remote exception
+     */
     @Override
-    public boolean UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException {
+    public boolean upgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException {
         try {
-            persistence.UpgradePiece( matchId,  piece,  color,  startPosition, endPosition);
+            persistence.upgradePiece( matchId,  piece,  color,  startPosition, endPosition);
             return true;
         } catch (SQLException e){
             e.printStackTrace();
@@ -103,6 +147,12 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Returns all of moves of a player
+     * @param matchID match id
+     * @return moves
+     * @throws RemoteException Remote exception
+     */
     @Override
     public ArrayList<Move> getMoves(int matchID) throws RemoteException {
         try {
@@ -113,7 +163,14 @@ public class Tier3RMIServerController
         }
     }
 
-    @Override public ArrayList<Match> getMatches(String username)
+    /**
+     * Returns all matches of a player
+     * @param username username
+     * @return matches of a player
+     * @throws RemoteException Remote exception
+     */
+    @Override
+    public ArrayList<Match> getMatches(String username)
         throws RemoteException
     {
         try
@@ -127,7 +184,14 @@ public class Tier3RMIServerController
         }
     }
 
-    @Override public ArrayList<Participant> getParticipants(int matchId)
+    /**
+     * Returns the participants by match id
+     * @param matchId match id
+     * @return participants by match id
+     * @throws RemoteException Remote exception
+     */
+    @Override
+    public ArrayList<Participant> getParticipants(int matchId)
         throws RemoteException
     {
         try
@@ -141,6 +205,13 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Updates the outcome of a match
+     * @param player player
+     * @param outcome outcome
+     * @param matchId match id
+     * @throws RemoteException Remote exception
+     */
     @Override
     public void updateOutcome(String player, String outcome, int matchId) throws RemoteException {
         try {
@@ -150,16 +221,13 @@ public class Tier3RMIServerController
         }
     }
 
-    @Override
-    public String getParticipationColor(String player, int matchId) throws RemoteException {
-        try{
-            return persistence.getParticipationColor(player,matchId);
-        }catch (SQLException e){
-            e.printStackTrace();
-            return "";
-        }
-    }
-
+    /**
+     * Sets the match outcome
+     * @param matchId match id
+     * @param finished status
+     * @return if the outcome is successful
+     * @throws RemoteException Remote exception
+     */
     @Override
     public boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException {
         try {
@@ -171,6 +239,12 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Loads all the challenges
+     * @return all the challenges
+     * @throws RemoteException Remote exception
+     */
+    @Override
     public ArrayList<Challenge> loadChallenges() throws RemoteException {
         try {
             ArrayList<Challenge> challenges = persistence.loadChallenges();
@@ -181,6 +255,12 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * loads all the challenges of a user
+     * @param username username
+     * @return all the challenges of a user
+     * @throws RemoteException Remote exception
+     */
     @Override
     public ArrayList<Challenge> loadChallenges(String username) throws RemoteException {
         try {
@@ -192,20 +272,12 @@ public class Tier3RMIServerController
         }
     }
 
-//    @Override
-//    public boolean acceptChallenge(Challenge challenge) throws RemoteException {
-//        try {
-//            int matchId = persistence.createMatch(challenge.getTurnTime(), "Friendly");
-//            persistence.createMatchParticipation(challenge.getChallenger(),"White",matchId);
-//            persistence.createMatchParticipation(challenge.getChallenged(),"Black",matchId);
-//            return persistence.deleteChallenge(challenge);
-//        } catch (SQLException e){
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-
-
+    /**
+     * Rejects the challenge
+     * @param challenge challenge
+     * @return if rejections is successful
+     * @throws RemoteException Remote exception
+     */
     @Override
     public boolean rejectChallenge(Challenge challenge) throws RemoteException {
         try {
@@ -216,6 +288,13 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Validates the login
+     * @param username username
+     * @param password password
+     * @return user
+     * @throws RemoteException Remote exception
+     */
     @Override public User validateLogin(String username, String password)
         throws RemoteException
     {
@@ -229,6 +308,12 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Returns the match
+     * @param matchId match id
+     * @return match
+     * @throws RemoteException Remote exception
+     */
     @Override
     public Match getMatch(int matchId) throws RemoteException {
         try{
@@ -239,26 +324,29 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Updates the match user turn
+     * @param matchID match id
+     * @param color color
+     * @return if update is successful
+     * @throws RemoteException Remote exception
+     */
     @Override
-    public int getNrofOriginalParticipants(int tournamentID) throws RemoteException {
-        try {
-            return persistence.getNrofOriginalParticipants(tournamentID);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    @Override
-    public boolean UpdateMatchUserTurn(int matchID, String color) throws RemoteException{
+    public boolean updateMatchUsersTurn(int matchID, String color) throws RemoteException{
         try{
-            persistence.UpdateMatchUserTurn(matchID,color);
+            persistence.updateMatchUserTurn(matchID,color);
             return true;
         }catch (SQLException e){
             return false;
         }
     }
 
+    /**
+     * Creates the match by turn time
+     * @param turnTime turn time
+     * @return match
+     * @throws RemoteException Remote exception
+     */
     @Override
     public Match createMatch(int turnTime) throws RemoteException {
         try {
@@ -269,6 +357,13 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Creates a tournament match
+     * @param turnTime turn time
+     * @param tournamentID match id
+     * @return match
+     * @throws RemoteException Remote exception
+     */
     @Override
     public Match createMatch(int turnTime, int tournamentID) throws RemoteException {
         try {
@@ -279,6 +374,14 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Creates a participation for a match
+     * @param username username
+     * @param color color
+     * @param matchId match id
+     * @return if creation is successful
+     * @throws RemoteException Remote exception
+     */
     @Override
     public boolean createParticipation(String username, String color, int matchId) throws RemoteException {
         try{
@@ -290,11 +393,23 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Removes the challenge
+     * @param challenge challenge
+     * @return if removal is successful
+     * @throws RemoteException Remote exception
+     */
     @Override
     public boolean removeChallenge(Challenge challenge) throws RemoteException {
         return rejectChallenge(challenge);
     }
 
+    /**
+     * Updates the user
+     * @param user user
+     * @return if update is successful
+     * @throws RemoteException Remote exception
+     */
     @Override
     public boolean updateUser(User user) throws RemoteException {
         try{
@@ -306,6 +421,12 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Returns user
+     * @param username username
+     * @return user
+     * @throws RemoteException Remote exception
+     */
     @Override
     public User getUser(String username) throws RemoteException {
         try{
@@ -317,11 +438,16 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Validates the tournament
+     * @param tournament tournament
+     * @return tournament id
+     * @throws RemoteException Remote exception
+     */
     @Override
     public int validateTournament(Tournament tournament) throws RemoteException{
         try {
             int id = persistence.createTournament(tournament.getCreator(), tournament.getTurnTime(), tournament.getNrOfParticipants());
-            System.out.println("Tournament was created by " + tournament.getCreator());
             return id;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -329,10 +455,18 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Join a tournament
+     * @param username username
+     * @param tournamentID tournament id
+     * @param placement placement
+     * @return if join is successful
+     * @throws RemoteException Remote exception
+     */
     @Override
     public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException {
         try {
-            persistence.CreateTournamentParticipation(username, tournamentID, placement);
+            persistence.createTournamentParticipation(username, tournamentID, placement);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -340,8 +474,14 @@ public class Tier3RMIServerController
         }
     }
 
+    /**
+     * Returns a tournament by id
+     * @param id id
+     * @return tournament
+     * @throws RemoteException Remote exception
+     */
     @Override
-    public Tournament GetTournamentById(int id) throws RemoteException{
+    public Tournament getTournamentById(int id) throws RemoteException{
         try {
             ArrayList<Tournament> tournaments = persistence.loadTournaments();
             for (Tournament i : tournaments) {
@@ -355,6 +495,12 @@ public class Tier3RMIServerController
         return null;
     }
 
+    /**
+     * Returns all tournaments for a user
+     * @param username username
+     * @return tournaments for a user
+     * @throws RemoteException Remote exception
+     */
     @Override
     public ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen(String username) throws RemoteException{
         try {
@@ -365,6 +511,12 @@ public class Tier3RMIServerController
         return null;
     }
 
+    /**
+     * Returns the top players of a tournament
+     * @param tournamentID tournament id
+     * @return top players of a tournament
+     * @throws RemoteException Remote exception
+     */
     @Override
     public ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws RemoteException {
         try {
@@ -376,6 +528,12 @@ public class Tier3RMIServerController
     }
 
 
+    /**
+     * Returns the tournament participants
+     * @param id id
+     * @return tournament participants
+     * @throws RemoteException Remote exception
+     */
     @Override
     public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException{
         try {
@@ -386,26 +544,43 @@ public class Tier3RMIServerController
         return null;
     }
 
+    /**
+     * Updates the nr of tournament participants
+     * @param ID id
+     * @param newSize new size
+     * @throws RemoteException Remote exception
+     */
     @Override
-    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException {
+    public void updateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException {
         try {
-            persistence.UpdateTournamentNrOfParticipants(ID, newSize);
+            persistence.updateTournamentNrOfParticipants(ID, newSize);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Updates the participants placement
+     * @param username username
+     * @param placement placement
+     * @param tournamentId id
+     * @throws RemoteException Remote exception
+     */
     @Override
-    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException {
+    public void updateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException {
         try {
-            persistence.UpdateParticipantsPlacement(username, placement, tournamentId);
+            persistence.updateParticipantsPlacement(username, placement, tournamentId);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-
-
+    /**
+     * Increments the win loss or draw attributes
+     * @param username username
+     * @param type type
+     * @throws RemoteException Remote exception
+     */
     @Override
     public void incrementWinLossDraw(String username, String type) throws RemoteException {
         try {

@@ -1,22 +1,17 @@
-package RMI;/*
- * 12.09.2018 Original version
- */
+package RMI;
 
 import model.*;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.List;
-
 
 public interface ITier3RMIServer
 	extends Remote
 {
+	boolean updateMatchUsersTurn(int matchID, String color) throws RemoteException;
 
-	boolean UpdateMatchUserTurn(int matchID,String color) throws RemoteException;
-
-    public boolean registerUser(User user) throws RemoteException;
+    boolean registerUser(User user) throws RemoteException;
 
     boolean validateChallenge(Challenge challenge) throws RemoteException;
 
@@ -32,9 +27,9 @@ public interface ITier3RMIServer
 
     User getUser(String username) throws RemoteException;
 
-    public boolean MovePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
+    boolean movePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
 
-    public boolean UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
+    boolean upgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws RemoteException;
 
     ArrayList<Move> getMoves(int matchID) throws RemoteException;
 
@@ -44,9 +39,9 @@ public interface ITier3RMIServer
 
     Match createMatch(int turnTime) throws RemoteException;
 
-    public Match createMatch(int turnTime, int tournamentID) throws RemoteException;
+    Match createMatch(int turnTime, int tournamentID) throws RemoteException;
 
-    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException;
+    void updateTournamentNrOfParticipants(int ID, int newSize) throws RemoteException;
 
     boolean createParticipation(String username, String color, int matchId) throws RemoteException;
 
@@ -54,29 +49,25 @@ public interface ITier3RMIServer
 
     void updateOutcome(String player, String outcome, int matchId) throws RemoteException;
 
-    String getParticipationColor(String player, int matchId) throws RemoteException;
-
     boolean setMatchOutcome(int matchId, boolean finished) throws RemoteException;
 
     Match getMatch(int matchId) throws RemoteException;
 
-    public int validateTournament(Tournament tournament) throws RemoteException;
+    int validateTournament(Tournament tournament) throws RemoteException;
 
-    public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException;
+    boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException;
 
-    public Tournament GetTournamentById(int id) throws RemoteException;
+    Tournament getTournamentById(int id) throws RemoteException;
 
-    public ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException;
+    ArrayList<TournamentParticipation> getTournamentParticipationByTournamentID(int id) throws RemoteException;
 
-    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException;
-
-    public int getNrofOriginalParticipants(int tournamentID) throws RemoteException;
+    void updateParticipantsPlacement(String username, int placement, int tournamentId) throws RemoteException;
 
     void incrementWinLossDraw(String username, String type) throws RemoteException;
 
-    public ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen(String username) throws RemoteException;
+    ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen(String username) throws RemoteException;
 
-    public ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws RemoteException;
+    ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws RemoteException;
 
-    public static final String T3_SERVICE_NAME = "rmi://localhost/T3";
+    static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }

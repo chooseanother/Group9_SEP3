@@ -7,7 +7,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * @author group9
+ * @version 1.0
+ */
+
 public class UserDB implements UserPersistence {
+    /**
+     * Registers a user in the database
+     * @param user user
+     * @throws SQLException SQLException
+     */
     @Override
     public void registerUser(User user) throws SQLException{
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
@@ -19,6 +29,13 @@ public class UserDB implements UserPersistence {
         }
     }
 
+    /**
+     * Validates the login in the database
+     * @param username username
+     * @param password password
+     * @return user
+     * @throws SQLException SQLException
+     */
     @Override public User validateLogin(String username, String password)
         throws SQLException
     {
@@ -48,6 +65,11 @@ public class UserDB implements UserPersistence {
         }
     }
 
+    /**
+     * Updates the user in the database
+     * @param user user
+     * @throws SQLException SQLException
+     */
     @Override
     public void updateUser(User user) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
@@ -59,6 +81,12 @@ public class UserDB implements UserPersistence {
         }
     }
 
+    /**
+     * Returns teh user from the database
+     * @param username username
+     * @return user
+     * @throws SQLException SQLException
+     */
     @Override
     public User getUser(String username) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
@@ -83,6 +111,12 @@ public class UserDB implements UserPersistence {
         }
     }
 
+    /**
+     * Increments win loss or draw in the database
+     * @param username username
+     * @param type type
+     * @throws SQLException SQLException
+     */
     @Override
     public void incrementWinLossDraw(String username, String type) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {

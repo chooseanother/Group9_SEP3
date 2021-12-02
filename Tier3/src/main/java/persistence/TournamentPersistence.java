@@ -6,11 +6,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface TournamentPersistence {
-    public int createTournament(String username, int turnTime, int participants) throws SQLException;
+    int createTournament(String username, int turnTime, int participants) throws SQLException;
 
-    public ArrayList<Tournament> loadTournaments() throws SQLException;
+    ArrayList<Tournament> loadTournaments() throws SQLException;
 
-    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws SQLException;
+    void updateTournamentNrOfParticipants(int ID, int newSize) throws SQLException;
 
-    public ArrayList<Tournament> loadTournamentsForASpecificUser(String username) throws SQLException;
+    ArrayList<Tournament> loadTournamentsForASpecificUser(String username) throws SQLException;
 }

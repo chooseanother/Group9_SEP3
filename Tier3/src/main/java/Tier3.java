@@ -1,12 +1,16 @@
-/*
- * 12.09.2018 Original version
- */
-
-
 import RMI.Tier3RMIServerController;
+
+/**
+ * @author group9
+ * @version 1.0
+ */
 
 public class Tier3
 {
+	/**
+	 * Main
+	 * @param args args
+	 */
 	public static void main( String[] args )
 	{
 

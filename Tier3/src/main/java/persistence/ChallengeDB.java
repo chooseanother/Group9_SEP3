@@ -7,9 +7,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+
+
+/**
+ * @author group9
+ * @version 1.0
+ */
 
 public class ChallengeDB implements ChallengePersistence{
+
+    /**
+     * Creates a challenge in the database
+     * @param challenge challenge
+     * @throws SQLException sql exception
+     */
     @Override
     public void createChallenge(Challenge challenge) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
@@ -21,6 +32,11 @@ public class ChallengeDB implements ChallengePersistence{
         }
     }
 
+    /**
+     * Loads challenges from the database
+     * @return Challenges
+     * @throws SQLException sql exception
+     */
     public ArrayList<Challenge> loadChallenges() throws SQLException{
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("select * from OPPONENT");
@@ -38,6 +54,12 @@ public class ChallengeDB implements ChallengePersistence{
         }
     }
 
+    /**
+     * Loads challenges from the database by username
+     * @param username username
+     * @return challenge
+     * @throws SQLException sql exception
+     */
     public ArrayList<Challenge> loadChallenges(String username) throws SQLException{
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("select * from OPPONENT where USERNAME_OPPONENT = ?");
@@ -56,6 +78,12 @@ public class ChallengeDB implements ChallengePersistence{
         }
     }
 
+    /**
+     * Deletes a challenge in the database
+     * @param challenge challenge
+     * @return if delete is successful
+     * @throws SQLException sql exception
+     */
     public boolean deleteChallenge(Challenge challenge) throws SQLException{
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("delete from OPPONENT where USERNAME = ? and USERNAME_OPPONENT = ?");

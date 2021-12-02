@@ -12,9 +12,23 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * @author group9
+ * @version 1.0
+ */
+
 public class TournamentParticipationDb implements TournamentParticipationPersistence{
+
+    /**
+     * Create a tournament participation in the database
+     * @param username username
+     * @param tournamentID tournament id
+     * @param placement placement
+     * @return id
+     * @throws SQLException SQLException
+     */
     @Override
-    public int CreateTournamentParticipation(String username, int tournamentID, int placement) throws SQLException {
+    public int createTournamentParticipation(String username, int tournamentID, int placement) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement2 = connection.prepareStatement("INSERT INTO TOURNAMENT_PARTICIPATION (USERNAME, TOURNAMENTID, PLACEMENT) VALUES (?,?,?)");
             statement2.setString(1, username);
@@ -25,6 +39,12 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
         return 1;
     }
 
+    /**
+     * Loads tournaments from the database
+     * @param tournamentID id
+     * @return tournaments
+     * @throws SQLException SQLException
+     */
     @Override
     public ArrayList<TournamentParticipation> loadTournamentParticipants(int tournamentID) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
@@ -43,8 +63,15 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
         }
     }
 
+    /**
+     * Updates the participants placement in the database
+     * @param username username
+     * @param placement placement
+     * @param tournamentId id
+     * @throws SQLException  SQLException
+     */
     @Override
-    public void UpdateParticipantsPlacement(String username, int placement, int tournamentId) throws SQLException {
+    public void updateParticipantsPlacement(String username, int placement, int tournamentId) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("UPDATE TOURNAMENT_PARTICIPATION SET PLACEMENT = ? WHERE USERNAME = ? AND TOURNAMENTID = ?");
             statement.setInt(1, placement);
@@ -54,20 +81,12 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
         }
     }
 
-    @Override
-    public int getNrofOriginalParticipants(int tournamentID) throws SQLException{
-        try (Connection connection = ConnectionDB.getInstance().getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("select count(TOURNAMENT_PARTICIPATION) from tournament_participation where TOURNAMENTID = ?;");
-            statement.setInt(1, tournamentID);
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-              return resultSet.getInt("count");
-            }
-        }
-        return 0;
-    }
-
+    /**
+     * Returns the top 3 players from the database
+     * @param tournamentID id
+     * @return top 3 players
+     * @throws SQLException SQLException
+     */
     @Override
     public ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {

@@ -2,22 +2,29 @@ package persistence;
 
 import model.Match;
 import model.Move;
-import model.Participant;
-import model.User;
-
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+/**
+ * @author group9
+ * @version 1.0
+ */
+
 public class MatchDB implements MatchPersistence{
+
+    /**
+     * Creates match in the database
+     * @param turnTime turn time
+     * @param type type
+     * @return match
+     * @throws SQLException SQLException
+     */
     @Override
     public Match createMatch(int turnTime, String type) throws SQLException {
-        // should set latest move to current time
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO MATCH (TURNTIME,TYPE,LATESTMOVE) VALUES(?, ?, ?)",PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setInt(1, turnTime);
@@ -35,9 +42,16 @@ public class MatchDB implements MatchPersistence{
         }
     }
 
+    /**
+     * Creates tournament match in the database
+     * @param turnTime turn time
+     * @param type type
+     * @param tournamentId id
+     * @return match
+     * @throws SQLException SQLException
+     */
     @Override
     public Match createMatch(int turnTime, String type, int tournamentId) throws SQLException {
-        // should set latest move to current time
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO MATCH (TURNTIME,TYPE,TOURNAMENTID,LATESTMOVE) VALUES(?, ?, ?, ?)",PreparedStatement.RETURN_GENERATED_KEYS);
             statement.setInt(1, turnTime);
@@ -55,6 +69,12 @@ public class MatchDB implements MatchPersistence{
         }
     }
 
+    /**
+     * Returns the moves from the database
+     * @param matchID match id
+     * @return moves
+     * @throws SQLException SQLException
+     */
     @Override
     public ArrayList<Move> getMoves(int matchID) throws SQLException {
         ArrayList<Move> moves = new ArrayList<>();
@@ -80,6 +100,12 @@ public class MatchDB implements MatchPersistence{
         return moves;
     }
 
+    /**
+     * Returns the matches from the database
+     * @param username username
+     * @return matches
+     * @throws SQLException SQLException
+     */
     @Override public ArrayList<Match> getMatches(String username)
         throws SQLException
     {
@@ -116,8 +142,14 @@ public class MatchDB implements MatchPersistence{
         return matches;
     }
 
+    /**
+     * Updates the match user turn in the database
+     * @param matchId match id
+     * @param color color
+     * @throws SQLException SQLException
+     */
     @Override
-    public void UpdateMatchUserTurn(int matchId, String color) throws SQLException {
+    public void updateMatchUserTurn(int matchId, String color) throws SQLException {
         try(Connection connection = ConnectionDB.getInstance().getConnection()){
             PreparedStatement statement = connection.prepareStatement("UPDATE MATCH SET USERSTURN = ?, LATESTMOVE = ? WHERE MATCHID = ?");
             statement.setString(1,color);
@@ -127,6 +159,12 @@ public class MatchDB implements MatchPersistence{
         }
     }
 
+    /**
+     * Sets the match outcome
+     * @param matchId match id
+     * @param finished finished or not
+     * @throws SQLException SQLException
+     */
     @Override
     public void setMatchOutcome(int matchId, boolean finished) throws SQLException {
         try(Connection connection = ConnectionDB.getInstance().getConnection()){
@@ -137,8 +175,17 @@ public class MatchDB implements MatchPersistence{
         }
     }
 
+    /**
+     * Moves the piece in the database
+     * @param matchId match id
+     * @param piece piece
+     * @param color color
+     * @param startPosition start position
+     * @param endPosition end position
+     * @throws SQLException SQLException
+     */
     @Override
-    public void MovePiece( int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
+    public void movePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO MOVE ( MATCHID, PIECE, COLOR, STARTPOSITION, ENDPOSITION) " +
                     "VALUES(?, ?, ?, ?, ?)");
@@ -151,8 +198,17 @@ public class MatchDB implements MatchPersistence{
         }
     }
 
+    /**
+     * Upgrade piece in the database
+     * @param matchId match id
+     * @param piece piece
+     * @param color color
+     * @param startPosition start position
+     * @param endPosition end position
+     * @throws SQLException SQLException
+     */
     @Override
-    public void UpgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
+    public void upgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
         try(Connection connection = ConnectionDB.getInstance().getConnection()){
             PreparedStatement statement = connection.prepareStatement("INSERT INTO MOVE ( MATCHID, PIECE, COLOR, STARTPOSITION, ENDPOSITION) " +
                     "VALUES(?, ?, ?, ?, ?)");
@@ -165,6 +221,11 @@ public class MatchDB implements MatchPersistence{
         }
     }
 
+    /** Returns the match id from the database
+     * @param matchId id
+     * @return match id
+     * @throws SQLException SQLException
+     */
     @Override
     public Match getMatch(int matchId) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {

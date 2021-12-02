@@ -6,10 +6,23 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * @author group9
+ * @version 1.0
+ */
+
 public class TournamentDB implements TournamentPersistence {
+
+    /**
+     * Creates a tournament in the  database
+     * @param username username
+     * @param turnTime username
+     * @param participants participants
+     * @return id
+     * @throws SQLException SQLException
+     */
     @Override
     public int createTournament(String username, int turnTime, int participants) throws SQLException{
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
@@ -26,13 +39,17 @@ public class TournamentDB implements TournamentPersistence {
             if (keys.next()) {
                 tournamentID = keys.getInt(1);
                 return tournamentID;
-                // return new Match(Id, and all the other stuff)
             } else {
                 throw new SQLException("No keys generated");
             }
         }
     }
 
+    /**
+     * Loads tournaments from the database
+     * @return tournaments
+     * @throws SQLException SQLException
+     */
     @Override
     public ArrayList<Tournament> loadTournaments() throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
@@ -53,6 +70,12 @@ public class TournamentDB implements TournamentPersistence {
         }
     }
 
+    /**
+     * Loads Tournaments for a user  in the  database
+     * @param username username
+     * @return tournaments
+     * @throws SQLException SQLException
+     */
     @Override
     public ArrayList<Tournament> loadTournamentsForASpecificUser(String username) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
@@ -74,8 +97,14 @@ public class TournamentDB implements TournamentPersistence {
         }
     }
 
+    /**
+     * Updates the number of participants in the  database
+     * @param ID id
+     * @param newSize new size
+     * @throws SQLException SQLException
+     */
     @Override
-    public void UpdateTournamentNrOfParticipants(int ID, int newSize) throws SQLException {
+    public void updateTournamentNrOfParticipants(int ID, int newSize) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("UPDATE TOURNAMENT SET PARTICIPANTS = ? WHERE TOURNAMENTID = ?");
             statement.setInt(1, newSize);

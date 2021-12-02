@@ -2,7 +2,6 @@ package model;
 
 
 import RMI.ITier2RMIClient;
-import com.google.gson.Gson;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -14,9 +13,9 @@ import java.util.ArrayList;
 
 public class ChessBoard {
     private ChessPiece[][] chessPieces;
-    private ArrayList<ChessPiece> RemovedChessPieces;
-    private int BlackScore;
-    private int WhiteScore;
+    private ArrayList<ChessPiece> removedChessPieces;
+    private int blackScore;
+    private int whiteScore;
     private String turnColor;
 
     /**
@@ -24,12 +23,11 @@ public class ChessBoard {
      */
     public ChessBoard() {
         chessPieces = new ChessPiece[8][8];
-        RemovedChessPieces = new ArrayList<>();
-        BlackScore = 0;
-        WhiteScore = 0;
+        removedChessPieces = new ArrayList<>();
+        blackScore = 0;
+        whiteScore = 0;
         turnColor = "White";
 
-        //black
         String black = "Black";
         chessPieces[0][0] = new ChessPiece("Rook", black, new Position(0, 0));
         chessPieces[0][1] = new ChessPiece("Knight", black, new Position(0, 1));
@@ -44,7 +42,6 @@ public class ChessBoard {
             chessPieces[1][i] = new ChessPiece("Pawn", black, new Position(1, i));
         }
 
-        //white
         String white = "White";
         chessPieces[7][0] = new ChessPiece("Rook", white, new Position(7, 0));
         chessPieces[7][1] = new ChessPiece("Knight", white, new Position(7, 1));
@@ -71,8 +68,7 @@ public class ChessBoard {
      * @return chesspiece moved
      * @throws RemoteException
      */
-    public ChessPiece MoveAttackChessPiece(ChessPiece selected, ITier2RMIClient iTier2RMIClient, int matchID,String username) throws RemoteException {
-        String buildString = "";
+    public ChessPiece moveAttackChessPiece(ChessPiece selected, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
         if (selected != null && selected.getColor().equals(turnColor)) {
             if (selected.getColor().equals("Black")) {
                 turnColor = "White";
@@ -86,7 +82,7 @@ public class ChessBoard {
                 ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
                 for(int i=0;i<participants.size();i++){
                     if(participants.get(i).getUsername().equals(username) && participants.get(i).getColor().equals(selected.getColor())) {
-                        if (iTier2RMIClient.MovePiece(selected, matchID) && iTier2RMIClient.UpdateMatchUserTurn(matchID, turnColor)) {
+                        if (iTier2RMIClient.movePiece(selected, matchID) && iTier2RMIClient.updateMatchUsersTurn(matchID, turnColor)) {
                             testForNullRMI = true;
                         }
                     }
@@ -94,7 +90,7 @@ public class ChessBoard {
             }
             if (testForNullRMI) {
                 if (chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()] != null) {
-                    RemovedChessPieces.add(chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()]);
+                    removedChessPieces.add(chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()]);
                 }
                 chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()] = selected.copy();
                 if (selected.getOldPosition().getVerticalAxis() != chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()].getNewPosition().getVerticalAxis()
@@ -123,18 +119,17 @@ public class ChessBoard {
     /**
      * A method to upgrade a chess piece
      *
-     * @param UpgradeSelected the type of upgrade
+     * @param upgradeSelected the type of upgrade
      */
 
-    public ChessPiece UpgradeChessPiece(String UpgradeSelected, ChessPiece toUpgrade, ITier2RMIClient iTier2RMIClient, int matchID,String username) throws RemoteException {
-        if(toUpgrade!=null && UpgradeSelected!=null){
-            toUpgrade.setType(UpgradeSelected);
-            // dont want to persist when recreating match from move history
+    public ChessPiece upgradeChessPiece(String upgradeSelected, ChessPiece toUpgrade, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
+        if(toUpgrade!=null && upgradeSelected!=null){
+            toUpgrade.setType(upgradeSelected);
             if (iTier2RMIClient != null) {
                 ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
                 for (Participant p:participants){
                     if(p.getColor().equals(toUpgrade.getColor()) && p.getUsername().equals(username)){
-                        if (iTier2RMIClient.UpgradePiece(toUpgrade, matchID)) {
+                        if (iTier2RMIClient.upgradePiece(toUpgrade, matchID)) {
                             chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()] = toUpgrade.copy();
                             return chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()];
                         }
@@ -182,7 +177,7 @@ public class ChessBoard {
      * @return list of removed chess pieces
      */
     public ArrayList<ChessPiece> getRemovedChessPieces() {
-        return RemovedChessPieces;
+        return removedChessPieces;
     }
 
     /**
@@ -190,10 +185,10 @@ public class ChessBoard {
      *
      * @return returns the score for white
      */
-    public int GetScore(String color) {
+    public int getScore(String color) {
         int result = 0;
 
-        for (ChessPiece removedChessPiece : RemovedChessPieces) {
+        for (ChessPiece removedChessPiece : removedChessPieces) {
 
             if (removedChessPiece.getColor().equals(color)) {
 
