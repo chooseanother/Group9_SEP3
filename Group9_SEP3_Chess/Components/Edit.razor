@@ -15,47 +15,74 @@ else
     <EditForm Model="@UserToEdit" OnValidSubmit="@Save">
         <DataAnnotationsValidator/> <ValidationSummary/>
         <div> Username: <br/> @UserToEdit.Username</div>
-        <div class="form-group" > New password:<br/> <InputText class="input" type="password" disabled="@IsDisabled" @bind-Value="@NewPassword" @oninput="ConfirmationSetterPassword"></InputText></div>
-        <InputText class="input" type="password" hidden="true" disabled="@IsDisabled" @bind-Value="UserToEdit.ConfirmPassword" ></InputText>
-        <div class="form-group" > New email:<br/> <InputText class="input" disabled="@IsDisabled" @bind-Value="UserToEdit.Email" @oninput="ConfirmationSetterEmail" ></InputText></div>
+        <div class="form-group"> New password:<br/> <InputText class="input" type="password" disabled="@IsDisabled" @bind-Value="@NewPassword" @oninput="ConfirmationSetterPassword"></InputText></div>
+        <InputText class="input" type="password" hidden="true" disabled="@IsDisabled" @bind-Value="UserToEdit.ConfirmPassword"></InputText>
+        <div class="form-group"> New email:<br/> <InputText class="input" disabled="@IsDisabled" @bind-Value="UserToEdit.Email" @oninput="ConfirmationSetterEmail"></InputText></div>
         <InputText class="input" hidden="true" @bind-Value="UserToEdit.ConfirmEmail"></InputText>
-        <div><button class="btn btn-outline-dark" type="button" @onclick="@OnDisabled">Edit </button>
+        <div>
+            <button class="btn btn-outline-dark" type="button" @onclick="@OnDisabled">Edit </button>
             <p class="actions">
                 <button class="btn btn-outline-dark" type="submit">Save</button>
-            </p></div>
+            </p>
+        </div>
         <div id="scorePoints"> Score points: <br/> @UserToEdit.ScorePoints</div>
         <div> Wins: <br/> @UserToEdit.Wins</div>
         <div> Losses: <br/> @UserToEdit.Losses</div>
         <div> Draws: <br/> @UserToEdit.Draws</div>
         <div> Games played: <br/> @UserToEdit.GamesPlayed</div>
     </EditForm>
+    <em>@ErrorMessage</em>
 }
 
 @code {
     private User UserToEdit { get; set; }
     private string NewPassword { get; set; }
+    private string OriginalPassword { get; set; }
     private bool IsDisabled { get; set; }
     private string ErrorMessage { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         UserToEdit = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
+        OriginalPassword = UserToEdit.Password;
         UserToEdit.ConfirmPassword = UserToEdit.Password;
         UserToEdit.ConfirmEmail = UserToEdit.Email;
         IsDisabled = true;
     }
-    
+
     private async Task Save()
     {
+        if (NewPassword == null || NewPassword.Equals(""))
+        {
+            ErrorMessage = "";
+            return;
+        }
+        if (NewPassword.Length < 5)
+        {
+            ErrorMessage = "Please insert password with 5 or more characters";
+            return;
+        }
         await userService.UpdateUser(UserToEdit);
+        if (UserToEdit != null)
+        {
+            ErrorMessage = "User was updated successfully";
+        }
     }
-    
+
     private void ConfirmationSetterPassword(ChangeEventArgs args)
     {
-        UserToEdit.Password = args.Value.ToString();
-        UserToEdit.ConfirmPassword = args.Value.ToString();
+        if (args.Value.ToString().Length < 5)
+        {
+            UserToEdit.Password = OriginalPassword;
+            UserToEdit.ConfirmPassword = OriginalPassword;
+        }
+        else
+        {
+            UserToEdit.Password = args.Value.ToString();
+            UserToEdit.ConfirmPassword = args.Value.ToString();
+        }
     }
-    
+
     private void ConfirmationSetterEmail(ChangeEventArgs args)
     {
         UserToEdit.ConfirmEmail = args.Value.ToString();

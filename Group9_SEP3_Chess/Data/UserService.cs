@@ -55,12 +55,12 @@ namespace Group9_SEP3_Chess.Data
                 Action = "UpdateUser",
                 Data = JsonSerializer.Serialize(user)
                 });
-            if (response.Action.Equals("UserUpdated"))
+            if (response.Action.Equals("User updated"))
             {
                 return JsonSerializer.Deserialize<User>(response.Data, new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                }); 
+                });
             }
             throw new Exception($"{response.Action}");
         }

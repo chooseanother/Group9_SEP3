@@ -9,6 +9,5 @@ namespace Group9_SEP3_Chess.Data
         Task<string> RegisterUserAsync(User user);
         Task<User> ValidateLogin(string username, string password);
         Task<User> UpdateUser(User user);
-
     }
 }
