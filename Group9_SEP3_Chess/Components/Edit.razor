@@ -14,25 +14,41 @@ else
 {
     <EditForm Model="@UserToEdit" OnValidSubmit="@Save">
         <DataAnnotationsValidator/> <ValidationSummary/>
-        <div> Username: <br/> @UserToEdit.Username</div>
-        <div class="form-group"> New password:<br/> <InputText class="input" type="password" disabled="@IsDisabled" @bind-Value="@NewPassword" @oninput="ConfirmationSetterPassword"></InputText></div>
-        <InputText class="input" type="password" hidden="true" disabled="@IsDisabled" @bind-Value="UserToEdit.ConfirmPassword"></InputText>
-        <div class="form-group"> New email:<br/> <InputText class="input" disabled="@IsDisabled" @bind-Value="UserToEdit.Email" @oninput="ConfirmationSetterEmail"></InputText></div>
-        <InputText class="input" hidden="true" @bind-Value="UserToEdit.ConfirmEmail"></InputText>
+
         <div>
-            <button class="btn btn-outline-dark" type="button" @onclick="@OnDisabled">Edit </button>
-            <p class="actions">
-                <button class="btn btn-outline-dark" type="submit">Save</button>
-            </p>
+            Username: <br/>
+            <h3 style="color: #007bff">@UserToEdit.Username</h3>
         </div>
-        <div id="scorePoints"> Score points: <br/> @UserToEdit.ScorePoints</div>
-        <div> Wins: <br/> @UserToEdit.Wins</div>
-        <div> Losses: <br/> @UserToEdit.Losses</div>
-        <div> Draws: <br/> @UserToEdit.Draws</div>
-        <div> Games played: <br/> @UserToEdit.GamesPlayed</div>
+            
+        <div class="EditAccount">    
+            <div class="form-group"> New password:<br/> <InputText class="input" type="password" disabled="@IsDisabled" @bind-Value="@NewPassword" @oninput="ConfirmationSetterPassword"></InputText></div>
+            <InputText class="input" type="password" hidden="true" disabled="@IsDisabled" @bind-Value="UserToEdit.ConfirmPassword"></InputText>
+            <div class="form-group"> New email:<br/> <InputText class="input" disabled="@IsDisabled" @bind-Value="UserToEdit.Email" @oninput="ConfirmationSetterEmail"></InputText></div>
+            <InputText class="input" hidden="true" @bind-Value="UserToEdit.ConfirmEmail"></InputText>
+            <div>
+                <button class="btn btn-outline-dark" type="button" @onclick="@OnDisabled">Edit </button>
+                <p class="actions">
+                    <button class="btn btn-outline-dark" type="submit">Save</button>
+                </p>
+            </div>
+        </div>
+
+        <div class="StatsDisplay">
+            <div id="scorePoints"> Score points: <br/> @UserToEdit.ScorePoints</div>
+            <div> Wins: <br/> @UserToEdit.Wins</div>
+            <div> Losses: <br/> @UserToEdit.Losses</div>
+            <div> Draws: <br/> @UserToEdit.Draws</div>
+            <div> Games played: <br/> @UserToEdit.GamesPlayed</div>
+        </div>
+
     </EditForm>
     <em>@ErrorMessage</em>
 }
+
+<style>
+    .StatsDisplay{margin-top: 5rem}
+    .EditAccount{margin-top: 1rem;}
+</style>
 
 @code {
     private User UserToEdit { get; set; }
