@@ -64,7 +64,7 @@ else
                     ErrorMessage = "";
                     return;
                 }
-                await userService.UpdateUser(UserToEdit);
+                await userService.UpdateUserAsync(UserToEdit);
                 if (UserToEdit != null)
                 {
                     OriginalEmail = UserToEdit.Email;

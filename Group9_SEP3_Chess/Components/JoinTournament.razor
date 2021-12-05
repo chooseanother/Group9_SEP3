@@ -81,7 +81,7 @@
     {
         newTournament.Creator = CurrentUser;
         
-        var result = await tournament.CreateTournament(newTournament);
+        var result = await tournament.CreateTournamentAsync(newTournament);
         if (!result.Equals("0"))
         {
             Notification = "Tournament created, Id: " + result;
@@ -95,7 +95,7 @@
 
     private async Task JoinATournament()
     {
-        var result = await tournament.JoinATournament(CurrentUser, TournamentsIdInserted, 0);
+        var result = await tournament.JoinATournamentAsync(CurrentUser, TournamentsIdInserted);
 
         if (result)
         {
