@@ -156,7 +156,7 @@ public class RabbitMQClientController implements RabbitMQClient {
                             try {
                                 User updatedUser = model.updateUser(user);
                                 String userToJson = gson.toJson(updatedUser);
-                                response = gson.toJson(new Message("UserUpdated", userToJson));
+                                response = gson.toJson(new Message("User updated", userToJson));
                             } catch (Exception e) {
                                 response = gson.toJson(new Message(e.getMessage()));
                             }
