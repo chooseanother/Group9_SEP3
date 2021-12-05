@@ -6,9 +6,9 @@ namespace Group9_SEP3_Chess.Data
 {
     public interface IChallenge
     {
-        Task<string> ChallengeUser(Challenge challenge);
-        Task<IList<Challenge>> GetChallenges(string username);
-        Task<bool> AcceptChallenge(Challenge challenge);
-        Task<bool> DeclineChallenge(Challenge challenge);
+        Task<string> ChallengeUserAsync(Challenge challenge);
+        Task<IList<Challenge>> GetChallengesAsync(string username);
+        Task<bool> AcceptChallengeAsync(Challenge challenge);
+        Task<bool> DeclineChallengeAsync(Challenge challenge);
     }
 }

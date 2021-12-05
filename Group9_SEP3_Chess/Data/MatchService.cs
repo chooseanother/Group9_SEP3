@@ -9,19 +9,19 @@ namespace Group9_SEP3_Chess.Data
 {
     public class MatchService : IMatchService
     {
-        private readonly IRabbitMQ rabbitMq;
+        private readonly IRabbitMq rabbitMq;
         private List<ChessPiece> removedChessPieces;
         private string matchScores;
         private readonly JsonSerializerOptions jsonOptions;
 
-        public MatchService(IRabbitMQ rabbitMq)
+        public MatchService(IRabbitMq rabbitMq)
         {
             this.rabbitMq = rabbitMq;
             removedChessPieces = new List<ChessPiece>();
             jsonOptions = new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase};
         }
 
-        public async Task<ChessPiece> MoveChessPiece(Message message)
+        public async Task<ChessPiece> MoveChessPieceAsync(Message message)
         {
             Message response = await rabbitMq.SendRequestAsync(message);
             if (response.Action.Equals("Sending A chess Piece"))
@@ -29,10 +29,6 @@ namespace Group9_SEP3_Chess.Data
                 removedChessPieces = JsonSerializer.Deserialize<List<ChessPiece>>(response.DataSlot2);
                 matchScores = response.DataSlot3;
                 ChessPiece chessPiece = JsonSerializer.Deserialize<ChessPiece>(response.Data);
-                /*Console.WriteLine(response.Data);
-                Console.WriteLine("Old position" + chessPiece.OldPosition.ToString());
-                Console.WriteLine(chessPiece.Selected);
-                Console.WriteLine(chessPiece.NewPosition.ToString());*/
                 return chessPiece;
             }
 
@@ -40,7 +36,7 @@ namespace Group9_SEP3_Chess.Data
 
         }
 
-        public async Task<ChessPiece> UpgradeChessPiece(Message message)
+        public async Task<ChessPiece> UpgradeChessPieceAsync(Message message)
         {
             Message response = await rabbitMq.SendRequestAsync(message);
             if (response.Action.Equals("Upgrade Chess Piece"))
@@ -52,7 +48,7 @@ namespace Group9_SEP3_Chess.Data
             return null;
         }
 
-        public async Task<ChessPiece[,]> LoadChessPieces(Message message)
+        public async Task<ChessPiece[,]> LoadChessPiecesAsync(Message message)
         {
             Message response = await rabbitMq.SendRequestAsync(message);
             if (response.Action.Equals("Load ChessBoard"))
@@ -107,7 +103,7 @@ namespace Group9_SEP3_Chess.Data
             return black ? words[1] : words[0];
         }
 
-        public async Task<IList<Match>> GetMatches(string loggedInUser)
+        public async Task<IList<Match>> GetMatchesAsync(string loggedInUser)
         {
             Message response = await rabbitMq.SendRequestAsync(new Message
             {
@@ -126,7 +122,7 @@ namespace Group9_SEP3_Chess.Data
             }
         }
 
-        public async Task UpdateOutcome(string username, string outcome, int matchId)
+        public async Task UpdateOutcomeAsync(string username, string outcome, int matchId)
         {
             var response = await rabbitMq.SendRequestAsync(new Message
             {
@@ -137,7 +133,7 @@ namespace Group9_SEP3_Chess.Data
             });
         }
 
-        public async Task<IList<Match>> GetFinishedMatches(string loggedInUser)
+        public async Task<IList<Match>> GetFinishedMatchesAsync(string loggedInUser)
         {
             Message response = await rabbitMq.SendRequestAsync(new Message
             {
@@ -155,7 +151,7 @@ namespace Group9_SEP3_Chess.Data
             }
         }
 
-        public async Task<Match> GetMatch(int matchId)
+        public async Task<Match> GetMatchAsync(int matchId)
         {
             var response = await rabbitMq.SendRequestAsync(new Message
             {
@@ -173,7 +169,7 @@ namespace Group9_SEP3_Chess.Data
             
         }
 
-        public async Task<IList<Move>> GetMoves(int matchId)
+        public async Task<IList<Move>> GetMovesAsync(int matchId)
         {
             Message response = await rabbitMq.SendRequestAsync(new Message
             {
