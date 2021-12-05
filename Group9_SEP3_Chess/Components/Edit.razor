@@ -38,6 +38,7 @@ else
     private User UserToEdit { get; set; }
     private string NewPassword { get; set; }
     private string OriginalPassword { get; set; }
+    private string OriginalEmail { get; set; }
     private bool IsDisabled { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -45,6 +46,7 @@ else
     {
         UserToEdit = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
         OriginalPassword = UserToEdit.Password;
+        OriginalEmail = UserToEdit.Email;
         UserToEdit.ConfirmPassword = UserToEdit.Password;
         UserToEdit.ConfirmEmail = UserToEdit.Email;
         IsDisabled = true;
@@ -52,26 +54,52 @@ else
 
     private async Task SaveAsync()
     {
-        if (NewPassword == null || NewPassword.Equals(""))
+        ErrorMessage = "";
+        try
         {
-            ErrorMessage = "";
-            return;
+            if (NewPassword == null || NewPassword.Equals(""))
+            {
+                if (UserToEdit.ConfirmEmail.Equals(OriginalEmail))
+                {
+                    ErrorMessage = "";
+                    return;
+                }
+                await userService.UpdateUser(UserToEdit);
+                if (UserToEdit != null)
+                {
+                    OriginalEmail = UserToEdit.Email;
+                    ErrorMessage = "User was updated successfully";
+                }
+                return;
+            }
+            if (NewPassword != null && NewPassword.Length < 5)
+            {
+                ErrorMessage = "Please insert password with 5 or more characters";
+                return;
+            }
+            if (NewPassword != null && NewPassword.Length > 255)
+            {
+                ErrorMessage = "Please insert password with 255 or less characters";
+                return;
+            }
+            await userService.UpdateUserAsync(UserToEdit);
+            if (UserToEdit != null)
+            {
+                ErrorMessage = "User was updated successfully";
+            }
+
         }
-        if (NewPassword.Length < 5)
+
+        catch (Exception e)
         {
-            ErrorMessage = "Please insert password with 5 or more characters";
-            return;
+            ErrorMessage = e.Message;
         }
-        await userService.UpdateUserAsync(UserToEdit);
-        if (UserToEdit != null)
-        {
-            ErrorMessage = "User was updated successfully";
-        }
+     
     }
 
     private void ConfirmationSetterPassword(ChangeEventArgs args)
     {
-        if (args.Value.ToString().Length < 5)
+        if (args.Value != null && args.Value.ToString().Length < 5)
         {
             UserToEdit.Password = OriginalPassword;
             UserToEdit.ConfirmPassword = OriginalPassword;
