@@ -326,10 +326,16 @@ public class ModelManager implements Model {
     @Override
     public boolean joinATournament(String username, int tournamentID) {
         try {
-            if (iTier2RMIClient.joinATournament(username, tournamentID)) {
-                StartTournamentMatches(tournamentID);
-                return true;
+            Tournament toCheck = iTier2RMIClient.getTournamentById(tournamentID);
+            int size = iTier2RMIClient.getTournamentParticipationByTournamentID(tournamentID).size();
+            if(size < toCheck.getNrOfParticipants() && size != 0){
+                if (iTier2RMIClient.joinATournament(username, tournamentID)) {
+
+                    StartTournamentMatches(tournamentID);
+                    return true;
+                }
             }
+            return false;
         } catch (Exception e) {
             e.printStackTrace();
         }
