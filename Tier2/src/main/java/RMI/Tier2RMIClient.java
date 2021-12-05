@@ -231,14 +231,13 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
      * join a tournament
      * @param username username
      * @param tournamentID tournament id
-     * @param placement palcement
      * @return join status
      * @throws RemoteException RemoteException
      */
     @Override
-    public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException {
+    public boolean joinATournament(String username, int tournamentID) throws RemoteException {
         try {
-            return tier3.joinATournament(username, tournamentID, placement);
+            return tier3.joinATournament(username, tournamentID);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

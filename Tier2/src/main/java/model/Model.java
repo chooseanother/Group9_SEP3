@@ -31,7 +31,7 @@ public interface Model {
 
     int createTournament(Tournament tournament);
 
-    boolean joinATournament(String username, int tournamentID, int placement);
+    boolean joinATournament(String username, int tournamentID);
 
     ArrayList<Match> getMatches(String username);
 

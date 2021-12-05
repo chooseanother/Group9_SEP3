@@ -55,7 +55,7 @@ public interface ITier3RMIServer
 
     int validateTournament(Tournament tournament) throws RemoteException;
 
-    boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException;
+    boolean joinATournament(String username, int tournamentID) throws RemoteException;
 
     Tournament getTournamentById(int id) throws RemoteException;
 

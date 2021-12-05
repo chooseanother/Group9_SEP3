@@ -321,13 +321,12 @@ public class ModelManager implements Model {
      * Joins a tournament
      * @param username username
      * @param tournamentID id
-     * @param placement placement
      * @return join status
      */
     @Override
-    public boolean joinATournament(String username, int tournamentID, int placement) {
+    public boolean joinATournament(String username, int tournamentID) {
         try {
-            if (iTier2RMIClient.joinATournament(username, tournamentID, placement)) {
+            if (iTier2RMIClient.joinATournament(username, tournamentID)) {
                 StartTournamentMatches(tournamentID);
                 return true;
             }
