@@ -70,11 +70,11 @@ else
         loggedInUser = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
         if (ActiveMatches)
         {
-            matches = await matchService.GetMatches(loggedInUser.Username);
+            matches = await matchService.GetMatchesAsync(loggedInUser.Username);
         }
         else
         {
-            matches = await matchService.GetFinishedMatches(loggedInUser.Username);
+            matches = await matchService.GetFinishedMatchesAsync(loggedInUser.Username);
         }
     }
       

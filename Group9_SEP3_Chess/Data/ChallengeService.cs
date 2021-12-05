@@ -8,14 +8,14 @@ namespace Group9_SEP3_Chess.Data
 {
     public class ChallengeService : IChallenge
     {
-        private readonly IRabbitMQ rabbitMq;
+        private readonly IRabbitMq rabbitMq;
 
-        public ChallengeService(IRabbitMQ rabbitMq)
+        public ChallengeService(IRabbitMq rabbitMq)
         {
             this.rabbitMq = rabbitMq;
         }
 
-        public async Task<string> ChallengeUser(Challenge challenge)
+        public async Task<string> ChallengeUserAsync(Challenge challenge)
         {
             var jsonChallenge = JsonSerializer.Serialize(challenge);
             var message = new Message {Action = "Create challenge",Data=jsonChallenge};
@@ -26,7 +26,7 @@ namespace Group9_SEP3_Chess.Data
             return response.Action;
         }
 
-        public async Task<IList<Challenge>> GetChallenges(string username)
+        public async Task<IList<Challenge>> GetChallengesAsync(string username)
         {
             var response = await rabbitMq.SendRequestAsync(new Message {Action = "Get challenges", Data = username});
 
@@ -37,7 +37,7 @@ namespace Group9_SEP3_Chess.Data
             });
         }
 
-        public async Task<bool> AcceptChallenge(Challenge challenge)
+        public async Task<bool> AcceptChallengeAsync(Challenge challenge)
         {
             var jsonChallenge = JsonSerializer.Serialize(challenge);
             var response =
@@ -45,7 +45,7 @@ namespace Group9_SEP3_Chess.Data
             return response.Action.Equals("Success");
         }
 
-        public async Task<bool> DeclineChallenge(Challenge challenge)
+        public async Task<bool> DeclineChallengeAsync(Challenge challenge)
         {
             var jsonChallenge = JsonSerializer.Serialize(challenge);
             var response =

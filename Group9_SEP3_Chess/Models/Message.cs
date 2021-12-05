@@ -22,8 +22,9 @@ namespace Group9_SEP3_Chess.Models
         {
             return $"Action: {Action} " +
                    $"{(Data == null ? "": "Data: "+Data)}"+
-                   $"{(DataSlot2 == null ? "": "Data2: "+DataSlot2)}"+
-                   $"{(DataSlot3 == null ? "": "Data3: "+DataSlot3)}";
+                   $"{(DataSlot2 == null ? "": $"Data2: {DataSlot2}")}"+
+                   $"{(DataSlot3 == null ? "": $"Data3: {DataSlot3}")}"+
+                   $"{(DataSlot4 == null ? "": $"Data4: {DataSlot4}")}";
         }
     }
 }

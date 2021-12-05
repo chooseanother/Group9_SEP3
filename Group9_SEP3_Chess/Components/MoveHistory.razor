@@ -45,7 +45,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        moves = await matchService.GetMoves(Id);
+        moves = await matchService.GetMovesAsync(Id);
     }
 
 }

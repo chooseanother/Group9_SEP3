@@ -9,14 +9,14 @@ namespace Group9_SEP3_Chess.Data
     public class TournamentService : ITournament
 
     {
-        private readonly IRabbitMQ rabbitMq;
+        private readonly IRabbitMq rabbitMq;
 
-        public TournamentService(IRabbitMQ rabbitMq)
+        public TournamentService(IRabbitMq rabbitMq)
         {
             this.rabbitMq = rabbitMq;
         }
 
-        public async Task<string> CreateTournament(Tournament tournament)
+        public async Task<string> CreateTournamentAsync(Tournament tournament)
         {
             var jsonTournament = JsonSerializer.Serialize(tournament);
             var message = new Message {Action = "CreateTournament", Data = jsonTournament};
@@ -26,19 +26,19 @@ namespace Group9_SEP3_Chess.Data
             return response.Data;
         }
 
-        public async Task<bool> JoinATournament(string username, int tournamentId, int placement)
+        public async Task<bool> JoinATournamentAsync(string username, int tournamentId)
         {
             var response = await rabbitMq.SendRequestAsync(new Message
             {
                 Action = "JoinTournament",
                 Data = username,
                 DataSlot2 = tournamentId + "",
-                DataSlot3 = placement + ""
+                DataSlot3 = "0"
             });
             return response.Action.Equals("Success");
         }
 
-        public async Task<IList<Tournament>> GetTournamentsByUser(string loggedInUser)
+        public async Task<IList<Tournament>> GetTournamentsByUserAsync(string loggedInUser)
         {
             var response = await rabbitMq.SendRequestAsync(new Message
             {

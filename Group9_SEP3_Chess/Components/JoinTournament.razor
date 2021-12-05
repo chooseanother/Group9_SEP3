@@ -7,7 +7,7 @@
 
 <div>
     <div class="HostTournament">
-        <EditForm Model="@newTournament" OnValidSubmit="@CreateTournament">
+        <EditForm Model="@newTournament" OnValidSubmit="@CreateTournamentAsync">
             <DataAnnotationsValidator/>
             <ValidationSummary/>
             <div class="form-group">
@@ -48,7 +48,7 @@
     </div>
     
     
-    <button class="btn btn-outline-dark" style="margin-top: 10px" @onclick="JoinATournament">Join</button>
+    <button class="btn btn-outline-dark" style="margin-top: 10px" @onclick="JoinATournamentAsync">Join</button>
     
     <h4>@Notification</h4>
     
@@ -72,17 +72,15 @@
         CurrentUser = ((CustomAuthenticationStateProvider) customAuthenticationStateProvider).GetCachedUser().Username;
     }
 
-    private async Task CreateTournament()
+    private async Task CreateTournamentAsync()
     {
         newTournament.Creator = CurrentUser;
-        
-        Notification = "Tournament ID Generated: " + await tournament.CreateTournament(newTournament);
-        
+        Notification = "Tournament ID Generated: " + await tournament.CreateTournamentAsync(newTournament);
     }
 
-    private async Task JoinATournament()
+    private async Task JoinATournamentAsync()
     {
-        var result = await tournament.JoinATournament(CurrentUser, TournamentsIdInserted, 0);
+        var result = await tournament.JoinATournamentAsync(CurrentUser, TournamentsIdInserted);
 
         if (result)
         {

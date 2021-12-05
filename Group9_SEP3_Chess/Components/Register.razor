@@ -5,7 +5,7 @@
 @inject IUserService userService
 
 <h3>Register</h3>
-<EditForm Model="@newUserItem" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+<EditForm Model="@newUserItem" OnValidSubmit="@HandleValidSubmitAsync" OnInvalidSubmit="@HandleInvalidSubmit">
     <div class="row">
         <div class="col-9">
             <DataAnnotationsValidator/>
@@ -47,7 +47,7 @@
     private User newUserItem = new ();
     private string result;
 
-    private async Task HandleValidSubmit()
+    private async Task HandleValidSubmitAsync()
     {
         Console.WriteLine(newUserItem);
         try

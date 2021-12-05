@@ -43,7 +43,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         loggedInUser = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
-        tournaments = await tournamentService.GetTournamentsByUser(loggedInUser.Username);
+        tournaments = await tournamentService.GetTournamentsByUserAsync(loggedInUser.Username);
     }
 
 }}

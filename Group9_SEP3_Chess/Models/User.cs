@@ -46,10 +46,5 @@ namespace Group9_SEP3_Chess.Models
         [JsonPropertyName("gamesPlayed")]
 
         public int GamesPlayed { get; set; }
-      
-        public override string ToString()
-        {
-            return $"Username: {Username} Email: {Email} Password: {Password}";
-        }
     }
 }

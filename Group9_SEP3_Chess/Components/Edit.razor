@@ -12,7 +12,7 @@
 }
 else
 {
-    <EditForm Model="@UserToEdit" OnValidSubmit="@Save">
+    <EditForm Model="@UserToEdit" OnValidSubmit="@SaveAsync">
         <DataAnnotationsValidator/> <ValidationSummary/>
         <div> Username: <br/> @UserToEdit.Username</div>
         <div class="form-group"> New password:<br/> <InputText class="input" type="password" disabled="@IsDisabled" @bind-Value="@NewPassword" @oninput="ConfirmationSetterPassword"></InputText></div>
@@ -42,7 +42,7 @@ else
     private bool IsDisabled { get; set; }
     private string ErrorMessage { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         UserToEdit = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
         OriginalPassword = UserToEdit.Password;
@@ -52,7 +52,7 @@ else
         IsDisabled = true;
     }
 
-    private async Task Save()
+    private async Task SaveAsync()
     {
         ErrorMessage = "";
         try
@@ -82,13 +82,14 @@ else
                 ErrorMessage = "Please insert password with 255 or less characters";
                 return;
             }
-            await userService.UpdateUser(UserToEdit);
+            await userService.UpdateUserAsync(UserToEdit);
             if (UserToEdit != null)
             {
                 ErrorMessage = "User was updated successfully";
             }
 
         }
+
         catch (Exception e)
         {
             ErrorMessage = e.Message;
@@ -115,7 +116,7 @@ else
         UserToEdit.ConfirmEmail = args.Value.ToString();
     }
 
-    private async Task OnDisabled()
+    private void OnDisabled()
     {
         IsDisabled = !IsDisabled;
     }

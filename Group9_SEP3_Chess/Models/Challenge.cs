@@ -13,10 +13,6 @@ namespace Group9_SEP3_Chess.Models
         [Required(ErrorMessage = "Choose turn length")]
         [JsonPropertyName("turnTime")]
         public int TurnLength { get; set; }
-
-        public override string ToString()
-        {
-            return $"Challenge. Username: {Username} Challenger: {Challenger} Turn length {TurnLength}";
-        }
+        
     }
 }

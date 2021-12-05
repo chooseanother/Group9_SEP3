@@ -37,12 +37,12 @@ else
                 @* <td>@c.Username</td> *@
                 <td>@turnLengths[c.TurnLength]</td>
                 <td>
-                    <button class="btn btn-outline-dark" @onclick='() => AcceptChallenge(c)'>
+                    <button class="btn btn-outline-dark" @onclick='() => AcceptChallengeAsync(c)'>
                         <i class="oi oi-check" style="color:green;"></i>
                     </button>
                 </td>
                 <td>
-                    <button class="btn btn-outline-dark" @onclick='() => RejectChallenge(c)'>
+                    <button class="btn btn-outline-dark" @onclick='() => RejectChallengeAsync(c)'>
                         <i class="oi oi-trash" style="color:red;"></i>
                     </button>
                 </td>
@@ -66,31 +66,24 @@ else
     protected override async Task OnInitializedAsync()
     {
         Username = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser().Username;
-        challenges = await challenge.GetChallenges(Username);
-        // await Task.Delay(100);
+        challenges = await challenge.GetChallengesAsync(Username);
     }
 
-    private async Task AcceptChallenge(Challenge challenge)
+    private async Task AcceptChallengeAsync(Challenge challenge)
     {
-        var result = await this.challenge.AcceptChallenge(challenge);
+        var result = await this.challenge.AcceptChallengeAsync(challenge);
         if (result)
         {
             challenges.Remove(challenge);
         }
-        
-    // await OnInitializedAsync();
-    // go to match created from accepting the challenge
     }
 
-    private async Task RejectChallenge(Challenge challenge)
+    private async Task RejectChallengeAsync(Challenge challenge)
     {
-        var result = await this.challenge.DeclineChallenge(challenge);
+        var result = await this.challenge.DeclineChallengeAsync(challenge);
         if (result)
         {
             challenges.Remove(challenge);
         }
-        
-            // StateHasChanged.Invoke();
-            // await OnInitializedAsync();
     }
 }
