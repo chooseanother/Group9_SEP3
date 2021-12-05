@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface TournamentParticipationPersistence {
-    int createTournamentParticipation(String username, int tournamentID, int placement) throws SQLException;
+    int createTournamentParticipation(String username, int tournamentID) throws SQLException;
 
     ArrayList<TournamentParticipation> loadTournamentParticipants(int tournamentID) throws SQLException;
 

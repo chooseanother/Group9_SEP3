@@ -306,12 +306,11 @@ public class PersistenceDB implements Persistence{
      *
      * @param username     username
      * @param tournamentID tournament id
-     * @param placement    placement
      * @return id
      */
     @Override
-    public int createTournamentParticipation(String username, int tournamentID, int placement) throws SQLException {
-        return tournamentParticipationPersistence.createTournamentParticipation(username, tournamentID, placement);
+    public int createTournamentParticipation(String username, int tournamentID) throws SQLException {
+        return tournamentParticipationPersistence.createTournamentParticipation(username, tournamentID);
     }
 
     /**

@@ -459,14 +459,13 @@ public class Tier3RMIServerController
      * Join a tournament
      * @param username username
      * @param tournamentID tournament id
-     * @param placement placement
      * @return if join is successful
      * @throws RemoteException Remote exception
      */
     @Override
-    public boolean joinATournament(String username, int tournamentID, int placement) throws RemoteException {
+    public boolean joinATournament(String username, int tournamentID) throws RemoteException {
         try {
-            persistence.createTournamentParticipation(username, tournamentID, placement);
+            persistence.createTournamentParticipation(username, tournamentID);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

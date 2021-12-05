@@ -1,15 +1,11 @@
 package persistence;
 
-import model.Challenge;
-import model.Tournament;
 import model.TournamentParticipation;
-import model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
@@ -23,17 +19,15 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
      * Create a tournament participation in the database
      * @param username username
      * @param tournamentID tournament id
-     * @param placement placement
      * @return id
      * @throws SQLException SQLException
      */
     @Override
-    public int createTournamentParticipation(String username, int tournamentID, int placement) throws SQLException {
+    public int createTournamentParticipation(String username, int tournamentID) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
-            PreparedStatement statement2 = connection.prepareStatement("INSERT INTO TOURNAMENT_PARTICIPATION (USERNAME, TOURNAMENTID, PLACEMENT) VALUES (?,?,?)");
+            PreparedStatement statement2 = connection.prepareStatement("INSERT INTO TOURNAMENT_PARTICIPATION (USERNAME, TOURNAMENTID) VALUES (?,?)");
             statement2.setString(1, username);
             statement2.setInt(2, tournamentID);
-            statement2.setInt(3, placement);
             statement2.executeUpdate();
         }
         return 1;
