@@ -7,7 +7,7 @@
 
 <h3>Challenge User</h3>
 <div>
-    <EditForm Model="@newChallenge" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+    <EditForm Model="@newChallenge" OnValidSubmit="@HandleValidSubmitAsync" OnInvalidSubmit="@HandleInvalidSubmit">
         <DataAnnotationsValidator/>
         <ValidationSummary/>
         <div class="form-group">
@@ -54,16 +54,15 @@
     protected override void OnInitialized()
     {
         // load username from currently logged in user
-        // Username = loggedInUser.Username
         Username = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser().Username;
     }
     
-    private async Task HandleValidSubmit()
+    private async Task HandleValidSubmitAsync()
     {
         showError = false;
         newChallenge.Challenger = Username;
 
-        var result = await challenge.ChallengeUser(newChallenge);
+        var result = await challenge.ChallengeUserAsync(newChallenge);
 
         ErrorColor = result.Contains("Failed") ? "red" : "green";
         showError = true;

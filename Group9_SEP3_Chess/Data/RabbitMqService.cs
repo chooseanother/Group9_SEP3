@@ -10,7 +10,7 @@ using RabbitMQ.Client.Events;
 
 namespace Group9_SEP3_Chess.Data
 {
-    public class RabbitMQService : IRabbitMQ
+    public class RabbitMqService : IRabbitMq
     {
         private const string QueueName = "rpc_queue";
 
@@ -21,7 +21,7 @@ namespace Group9_SEP3_Chess.Data
         private readonly ConcurrentDictionary<string, TaskCompletionSource<string>> callbackMapper =
             new ConcurrentDictionary<string, TaskCompletionSource<string>>();
 
-        public RabbitMQService()
+        public RabbitMqService()
         {
             var factory = new ConnectionFactory()
             {
