@@ -12,9 +12,9 @@ public class Position {
     /**
      * Creating a Position and setting the x and z axis to 0
      */
-    public Position(int VerticalAxis, int HorizontalAxis){
-        this.verticalAxis = VerticalAxis;
-        this.horizontalAxis = HorizontalAxis;
+    public Position(int verticalAxis, int horizontalAxis){
+        this.verticalAxis = verticalAxis;
+        this.horizontalAxis = horizontalAxis;
     }
 
     /**
