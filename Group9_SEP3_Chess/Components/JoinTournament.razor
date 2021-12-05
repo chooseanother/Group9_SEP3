@@ -1,6 +1,7 @@
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
 @using Group9_SEP3_Chess.Authentication
+@using Microsoft.VisualBasic.CompilerServices
 @inject AuthenticationStateProvider customAuthenticationStateProvider;
 @inject ITournament tournament;
 
@@ -56,7 +57,11 @@
 
 
 @code {
-    private Tournament newTournament = new();
+    private Tournament newTournament = new()
+    {
+        NrOfParticipants = 4,
+        TurnTime = 120
+    };
 
     private string Notification { get; set; }
     private int TournamentsIdInserted { get; set; }
@@ -76,8 +81,16 @@
     {
         newTournament.Creator = CurrentUser;
         
-        Notification = "Tournament ID Generated: " + await tournament.CreateTournament(newTournament);
-        
+        var result = await tournament.CreateTournament(newTournament);
+        if (!result.Equals("0"))
+        {
+            Notification = "Tournament created, Id: " + result;
+        }
+        else
+        {
+            Notification = "Tournament can not be created";
+        }
+
     }
 
     private async Task JoinATournament()
@@ -86,7 +99,11 @@
 
         if (result)
         {
-            Notification = "U successfully joined tournament " + TournamentsIdInserted;
+            Notification = $"The tournament with ID: {TournamentsIdInserted}, was joined successfully";
+        }
+        else
+        {
+            Notification = $"The tournament with ID: {TournamentsIdInserted} can not be joined";
         }
     }
 
