@@ -81,7 +81,7 @@ public class TournamentDB implements TournamentPersistence {
     @Override
     public ArrayList<Tournament> loadTournamentsForASpecificUser(String username) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("select TOURNAMENT.TOURNAMENTID,TOURNAMENT.USERNAME,TURNTIME,PARTICIPANTS from TOURNAMENT join TOURNAMENT_PARTICIPATION TP on TOURNAMENT.TOURNAMENTID = TP.TOURNAMENTID where TP.USERNAME = ?;");
+            PreparedStatement statement = connection.prepareStatement("select TOURNAMENT.TOURNAMENTID,TOURNAMENT.USERNAME,TURNTIME,PARTICIPANTS,FINISHED from TOURNAMENT join TOURNAMENT_PARTICIPATION TP on TOURNAMENT.TOURNAMENTID = TP.TOURNAMENTID where TP.USERNAME = ?;");
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
             ArrayList<Tournament> tournaments = new ArrayList<>();
