@@ -24,6 +24,7 @@ public class PersistenceDB implements Persistence{
     MatchPersistence matchDB;
     MatchParticipationPersistence matchParticipationDB;
     TournamentPersistence tournamentPersistence;
+    MovePersistence movePersistence;
     TournamentParticipationPersistence tournamentParticipationPersistence;
 
     /**
@@ -35,6 +36,7 @@ public class PersistenceDB implements Persistence{
         matchDB = new MatchDB();
         matchParticipationDB = new MatchParticipationDB();
         tournamentPersistence = new TournamentDB();
+        movePersistence = new MoveDB();
         tournamentParticipationPersistence = new TournamentParticipationDb();
     }
 
