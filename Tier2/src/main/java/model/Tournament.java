@@ -13,6 +13,7 @@ public class Tournament implements Serializable {
     private int nrOfParticipants;
     private int tournamentId;
     private String top3Players;
+    private boolean status;
 
     /**
      * Creates a Tournament
@@ -113,5 +114,21 @@ public class Tournament implements Serializable {
      */
     public void setTop3Players(String top3Players) {
         this.top3Players = top3Players;
+    }
+
+    /**
+     * Returns the status of the tournament
+     * @return status
+     */
+    public boolean getStatus() {
+        return status;
+    }
+
+    /**
+     * Sets the status of the tournament
+     * @param status status
+     */
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

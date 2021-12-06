@@ -475,6 +475,17 @@ public class Tier2RMIClient extends UnicastRemoteObject implements ITier2RMIClie
     }
 
     /**
+     * Sets the tournament outcome
+     * @param tournamentId id
+     * @param finished status
+     * @throws RemoteException RemoteException
+     */
+    @Override
+    public void setTournamentOutcome(int tournamentId, boolean finished) throws RemoteException {
+        tier3.setTournamentOutcome(tournamentId, finished);
+    }
+
+    /**
      * Method to increment win loss or draw
      * @param username username
      * @param type type

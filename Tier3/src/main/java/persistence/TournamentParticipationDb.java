@@ -25,7 +25,7 @@ public class TournamentParticipationDb implements TournamentParticipationPersist
     @Override
     public int createTournamentParticipation(String username, int tournamentID) throws SQLException {
         try (Connection connection = ConnectionDB.getInstance().getConnection()) {
-            PreparedStatement statement2 = connection.prepareStatement("INSERT INTO TOURNAMENT_PARTICIPATION (USERNAME, TOURNAMENTID) VALUES (?,?)");
+            PreparedStatement statement2 = connection.prepareStatement("INSERT INTO TOURNAMENT_PARTICIPATION (USERNAME, TOURNAMENTID,PLACEMENT) VALUES (?,?,0)");
             statement2.setString(1, username);
             statement2.setInt(2, tournamentID);
             statement2.executeUpdate();

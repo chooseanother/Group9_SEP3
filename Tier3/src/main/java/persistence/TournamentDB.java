@@ -62,7 +62,9 @@ public class TournamentDB implements TournamentPersistence {
                 int id = resultSet.getInt("TOURNAMENTID");
                 int turnTime = resultSet.getInt("TURNTIME");
                 int participants = resultSet.getInt("PARTICIPANTS");
+                boolean status = resultSet.getBoolean("FINISHED");
                 Tournament tournament = new Tournament(username, turnTime, participants);
+                tournament.setStatus(status);
                 tournament.setTournamentId(id);
                 tournaments.add(tournament);
             }
@@ -89,7 +91,9 @@ public class TournamentDB implements TournamentPersistence {
                 int id = resultSet.getInt("TOURNAMENTID");
                 int turnTime = resultSet.getInt("TURNTIME");
                 int participants = resultSet.getInt("PARTICIPANTS");
+                boolean status = resultSet.getBoolean("FINISHED");
                 Tournament tournament = new Tournament(creator, turnTime, participants);
+                tournament.setStatus(status);
                 tournament.setTournamentId(id);
                 tournaments.add(tournament);
             }
@@ -109,6 +113,22 @@ public class TournamentDB implements TournamentPersistence {
             PreparedStatement statement = connection.prepareStatement("UPDATE TOURNAMENT SET PARTICIPANTS = ? WHERE TOURNAMENTID = ?");
             statement.setInt(1, newSize);
             statement.setInt(2, ID);
+            statement.executeUpdate();
+        }
+    }
+
+    /**
+     * Sets the tournament outcome
+     * @param tournamentId tournamentID
+     * @param finished finished or not
+     * @throws SQLException SQLException
+     */
+    @Override
+    public void setTournamentOutcome(int tournamentId, boolean finished) throws SQLException {
+        try (Connection connection = ConnectionDB.getInstance().getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE TOURNAMENT SET FINISHED = ? WHERE TOURNAMENTID = ?");
+            statement.setBoolean(1, finished);
+            statement.setInt(2, tournamentId);
             statement.executeUpdate();
         }
     }

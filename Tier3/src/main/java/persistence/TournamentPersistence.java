@@ -13,4 +13,6 @@ public interface TournamentPersistence {
     void updateTournamentNrOfParticipants(int ID, int newSize) throws SQLException;
 
     ArrayList<Tournament> loadTournamentsForASpecificUser(String username) throws SQLException;
+
+    public void setTournamentOutcome(int tournamentId, boolean finished) throws SQLException;
 }
