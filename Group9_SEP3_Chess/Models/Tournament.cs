@@ -20,6 +20,9 @@ namespace Group9_SEP3_Chess.Models
         
         [JsonPropertyName("top3Players")]
         public string Top3Players { get; set; }
+        
+        [JsonPropertyName("status")]
+        public bool status { get; set; }
 
        
         
