@@ -327,7 +327,8 @@ public class ModelManager implements Model {
         try {
             Tournament toCheck = iTier2RMIClient.getTournamentById(tournamentID);
             int size = iTier2RMIClient.getTournamentParticipationByTournamentID(tournamentID).size();
-            if(size < toCheck.getNrOfParticipants() && size != 0){
+
+            if(size < toCheck.getNrOfParticipants() && !toCheck.getStatus()){
                 if (iTier2RMIClient.joinATournament(username, tournamentID)) {
 
                     StartTournamentMatches(tournamentID);
@@ -598,6 +599,7 @@ public class ModelManager implements Model {
                     }
                     if( iTier2RMIClient.getTournamentParticipationByTournamentID(TournamentID).size() == 1){
                         iTier2RMIClient.updateParticipantsPlacement(currentParticipants.get(0).getUsername(), 1, TournamentID);
+                        iTier2RMIClient.setTournamentOutcome(TournamentID, true);
                     }
                 }
             }

@@ -74,5 +74,7 @@ public interface ITier3RMIServer
 
     ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws RemoteException;
 
+    public void setTournamentOutcome(int tournamentId, boolean finished) throws RemoteException;
+
     static final String T3_SERVICE_NAME = "rmi://localhost/T3";
 }

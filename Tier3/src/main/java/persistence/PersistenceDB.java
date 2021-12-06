@@ -355,6 +355,17 @@ public class PersistenceDB implements Persistence{
     }
 
     /**
+     * Sets the tournament outcome
+     * @param tournamentId id
+     * @param finished status
+     * @throws SQLException SQLException
+     */
+    @Override
+    public void setTournamentOutcome(int tournamentId, boolean finished) throws SQLException {
+        tournamentPersistence.setTournamentOutcome(tournamentId, finished);
+    }
+
+    /**
      * Increments the win loss or draw attributes
      *
      * @param username username

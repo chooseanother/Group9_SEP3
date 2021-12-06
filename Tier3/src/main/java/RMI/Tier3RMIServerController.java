@@ -526,6 +526,21 @@ public class Tier3RMIServerController
         return null;
     }
 
+    /**
+     * Sets the tournament outcome
+     * @param tournamentId tournament id
+     * @param finished status
+     * @throws RemoteException Remote exception
+     */
+    @Override
+    public void setTournamentOutcome(int tournamentId, boolean finished) throws RemoteException {
+        try {
+            persistence.setTournamentOutcome(tournamentId, finished);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Returns the tournament participants
