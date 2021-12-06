@@ -20,7 +20,7 @@ public class ModelManager implements Model {
 
     /**
      * Creating a model manager
-     * @throws RemoteException
+     * @throws RemoteException shows an exception which occurs in data server
      */
     public ModelManager() throws RemoteException {
         iTier2RMIClient = new Tier2RMIClient();
@@ -204,8 +204,7 @@ public class ModelManager implements Model {
     public User updateUser(User user) {
         try {
             if (iTier2RMIClient.updateUser(user)) {
-                User userFromDB = iTier2RMIClient.getUser(user.getUsername());
-                return userFromDB;
+                return iTier2RMIClient.getUser(user.getUsername());
             }
             throw new IllegalArgumentException("User details were not updated successfully. Please try different password and/or email");
         } catch (RemoteException e) {

@@ -50,7 +50,7 @@ public class Participant implements Serializable {
     /**
      * Gets the match id
      *
-     * @return
+     * @return match id
      */
     public int getMatchId() {
         return matchId;
