@@ -68,11 +68,7 @@ public class ChessBoard {
      */
     public ChessPiece moveAttackChessPiece(ChessPiece selected, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
         if (selected != null && selected.getColor().equals(turnColor) && chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()]!=null && chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()].getColor().equals(selected.getColor())) {
-            if (selected.getColor().equals("Black")) {
-                turnColor = "White";
-            } else {
-                turnColor = "Black";
-            }
+            turnColor = updateColor(selected.getColor());
             boolean testForNullRMI = false;
             if (iTier2RMIClient == null) {
                 testForNullRMI = true;
@@ -87,31 +83,62 @@ public class ChessBoard {
                 }
             }
             if (testForNullRMI) {
-                if (chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()] != null) {
-                    removedChessPieces.add(chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()]);
-                }
-                chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()] = selected.copy();
-                if (selected.getOldPosition().getVerticalAxis() != chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()].getNewPosition().getVerticalAxis()
-                        || selected.getOldPosition().getHorizontalAxis() != chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()].getNewPosition().getHorizontalAxis()) {
-                    chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()] = null;
-                }
-
-                for (int i = 0; i < 8; i++) {
-
-                    for (int j = 0; j < 8; j++) {
-
-                        if (chessPieces[i][j] != null) {
-                            chessPieces[i][j].setSelected(false);
-                        }
-                    }
-                }
-                return chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()];
+                addRemovedChessPieces(chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()]);
+                return performMove(selected);
 
             }
      
           
         }
         return null;
+    }
+
+    /**
+     * Moves chess pieces from old position to new position
+     * @param chessPiece moved chesspiece
+     */
+    public ChessPiece performMove(ChessPiece chessPiece){
+        chessPieces[chessPiece.getNewPosition().getVerticalAxis()][chessPiece.getNewPosition().getHorizontalAxis()] = chessPiece.copy();
+        chessPieces[chessPiece.getOldPosition().getVerticalAxis()][chessPiece.getOldPosition().getHorizontalAxis()] = null;
+        unselectAllPieces();
+        return chessPieces[chessPiece.getNewPosition().getVerticalAxis()][chessPiece.getNewPosition().getHorizontalAxis()];
+    }
+
+    /**
+     * Unselects all pieces on the chessboard
+     */
+    public void unselectAllPieces(){
+        for (int i = 0; i < 8; i++) {
+
+            for (int j = 0; j < 8; j++) {
+
+                if (chessPieces[i][j] != null) {
+                    chessPieces[i][j].setSelected(false);
+                }
+            }
+        }
+    }
+    /**
+     * Updates which color should move after this move.
+     * @param turnColor which color moved
+     * @return which color should move after
+     */
+    public String updateColor(String turnColor){
+        if (turnColor.equals("Black")) {
+            return "White";
+        } else {
+            return  "Black";
+        }
+    }
+
+    /**
+     * Updates the list of removed chess pieces
+     * @param chessPiece the piece which was removed
+     */
+    public void addRemovedChessPieces(ChessPiece chessPiece){
+        if (chessPiece!=null) {
+            removedChessPieces.add(chessPiece);
+        }
     }
 
     /**
