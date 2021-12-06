@@ -5,7 +5,7 @@ using Group9_SEP3_Chess.Models;
 
 namespace Group9_SEP3_Chess.Data
 {
-    public interface IRabbitMQ
+    public interface IRabbitMq
     {
         Task<Message> SendRequestAsync(Message message, CancellationToken cancellationToken = default(CancellationToken));
         void Close();

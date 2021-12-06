@@ -8,9 +8,9 @@ namespace Group9_SEP3_Chess.Data
 {
     public class UserService : IUserService
     {
-        private readonly IRabbitMQ rabbitMq;
+        private readonly IRabbitMq rabbitMq;
 
-        public UserService(IRabbitMQ rabbitMq)
+        public UserService(IRabbitMq rabbitMq)
         {
             this.rabbitMq = rabbitMq;
         }
@@ -26,7 +26,7 @@ namespace Group9_SEP3_Chess.Data
             return response.Action;
         }
 
-        public async Task<User> ValidateLogin(string username, string password)
+        public async Task<User> ValidateLoginAsync(string username, string password)
         {
             var user = new User
             {
@@ -48,7 +48,7 @@ namespace Group9_SEP3_Chess.Data
             throw new Exception($"{response.Action}");
         }
 
-        public async Task<User> UpdateUser(User user)
+        public async Task<User> UpdateUserAsync(User user)
         {
             var response = await rabbitMq.SendRequestAsync(new Message
             {

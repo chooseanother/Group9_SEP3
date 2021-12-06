@@ -1,6 +1,7 @@
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
 @using Group9_SEP3_Chess.Authentication
+@using Microsoft.VisualBasic.CompilerServices
 @inject AuthenticationStateProvider customAuthenticationStateProvider;
 @inject ITournament tournament;
 
@@ -60,7 +61,11 @@
 
 
 @code {
-    private Tournament newTournament = new();
+    private Tournament newTournament = new()
+    {
+        NrOfParticipants = 4,
+        TurnTime = 120
+    };
 
     private string Notification { get; set; }
     private int TournamentsIdInserted { get; set; }
@@ -70,7 +75,7 @@
     {
         {120, "2 Minutes"}, {1800, "30 Minutes"}, {3600, "1 Hour"}, {7200, "2 Hours"}, {36000, "10 Hours"}, {86400, "1 Day"}, {259200, "3 Days"}, {604800, "7 Days"}
     };
-
+    
     protected override void OnInitialized()
     {
         CurrentUser = ((CustomAuthenticationStateProvider) customAuthenticationStateProvider).GetCachedUser().Username;
@@ -79,17 +84,30 @@
     private async Task CreateTournament()
     {
         newTournament.Creator = CurrentUser;
+        
+        var result = await tournament.CreateTournamentAsync(newTournament);
+        if (!result.Equals("0"))
+        {
+            Notification = "Tournament created, Id: " + result;
+        }
+        else
+        {
+            Notification = "Tournament can not be created";
+        }
 
-        Notification = "Tournament ID Generated: " + await tournament.CreateTournament(newTournament);
     }
 
     private async Task JoinATournament()
     {
-        var result = await tournament.JoinATournament(CurrentUser, TournamentsIdInserted, 0);
+        var result = await tournament.JoinATournamentAsync(CurrentUser, TournamentsIdInserted);
 
         if (result)
         {
-            Notification = "U successfully joined tournament " + TournamentsIdInserted;
+            Notification = $"The tournament with ID: {TournamentsIdInserted}, was joined successfully";
+        }
+        else
+        {
+            Notification = $"The tournament with ID: {TournamentsIdInserted} can not be joined";
         }
     }
 

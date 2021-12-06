@@ -16,11 +16,11 @@
             <input type="password" placeholder="password" @bind-value="password"/>
         </div>
         <div style="color:red">@errorMessage</div>
-        <button id="btn1"class="btn btn-outline-dark" type="submit" @onclick="PerformLogin">Login</button>
+        <button id="btn1"class="btn btn-outline-dark" type="submit" @onclick="PerformLoginAsync">Login</button>
     </NotAuthorized>
     <Authorized>
         <button id="btn1"class="btn btn-outline-dark" type="submit" @onclick="EnterAccount">Account</button>
-        <button id="btn1"class="btn btn-outline-dark" type="submit" @onclick="PerformLogout">Logout</button>
+        <button id="btn1"class="btn btn-outline-dark" type="submit" @onclick="PerformLogoutAsync">Logout</button>
     </Authorized>
 </AuthorizeView>
 
@@ -34,7 +34,7 @@
     private string password;
     private string errorMessage;
 
-    public async Task PerformLogin()
+    private async Task PerformLoginAsync()
     {
         errorMessage = "";
         try
@@ -48,7 +48,7 @@
         }
     }
 
-    public async Task PerformLogout()
+    private void PerformLogoutAsync()
     {
         errorMessage = "";
         userName = "";
@@ -63,7 +63,7 @@
         }
     }
 
-    public async Task EnterAccount()
+    private void EnterAccount()
     {
         nvgManager.NavigateTo("/");
     }
