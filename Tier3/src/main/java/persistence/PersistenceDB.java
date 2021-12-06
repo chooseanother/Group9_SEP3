@@ -7,8 +7,6 @@ import model.Match;
 import model.Move;
 import model.User;
 import model.*;
-
-import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -62,7 +60,7 @@ public class PersistenceDB implements Persistence{
      */
     @Override
     public void movePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException {
-        matchDB.movePiece( matchId, piece, color, startPosition, endPosition);
+        movePersistence.movePiece( matchId, piece, color, startPosition, endPosition);
     }
 
     /**
@@ -76,7 +74,7 @@ public class PersistenceDB implements Persistence{
      */
     @Override
     public void upgradePiece(int matchId, String piece, String color, String startPosition, String endPosition) throws SQLException{
-        matchDB.upgradePiece(matchId,piece, color,startPosition, endPosition);
+        movePersistence.upgradePiece(matchId,piece, color,startPosition, endPosition);
     }
 
     /**
@@ -159,7 +157,6 @@ public class PersistenceDB implements Persistence{
      * Updates the outcome of a match
      *
      * @param matchId match id
-     * @throws RemoteException Remote exception
      */
     @Override
     public void setMatchOutcome(int matchId, boolean finished) throws SQLException {
@@ -167,14 +164,14 @@ public class PersistenceDB implements Persistence{
     }
 
     /**
-     * Returns all of moves of a player
+     * Returns all moves of a player
      *
      * @param matchID match id
      * @return moves
      */
     @Override
     public ArrayList<Move> getMoves(int matchID) throws SQLException {
-        return matchDB.getMoves(matchID);
+        return movePersistence.getMoves(matchID);
     }
 
     /**
