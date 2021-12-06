@@ -167,12 +167,12 @@ public class ChessBoard {
             if (iTier2RMIClient != null) {
                     if (validateUserColor(iTier2RMIClient,matchID,username,toUpgrade)) {
                         if (iTier2RMIClient.upgradePiece(toUpgrade, matchID)) {
-                            return upgradeChessPiece(toUpgrade,upgradeSelected);
+                            return upgradeChessPiece(toUpgrade);
 
                     }
                 }
             } else {
-                return upgradeChessPiece(toUpgrade,upgradeSelected);
+                return upgradeChessPiece(toUpgrade);
             }
         }
 
@@ -199,11 +199,11 @@ public class ChessBoard {
     }
 
     /**
-     * Upgrades
-     * @param toUpgrade
-     * @return
+     * Upgrades a chess piece
+     * @param toUpgrade which piece should be upgraded
+     * @return returns an upgraded chess piece
      */
-    private ChessPiece upgradeChessPiece(ChessPiece toUpgrade,String upgradeSelected){
+    private ChessPiece upgradeChessPiece(ChessPiece toUpgrade){
 
         chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()] = toUpgrade.copy();
         unselectAllPieces();
