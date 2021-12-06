@@ -87,7 +87,7 @@ public class ModelManager implements Model {
             if (getMatch(matchID).getFinished()){
                 return null;
             }
-            ChessPiece toMove = getChessBoard(matchID).moveAttackChessPiece(selected, iTier2RMIClient, matchID,username);
+            ChessPiece toMove = getChessBoard(matchID).handleMoveAttack(selected, iTier2RMIClient, matchID,username);
             if (toMove!=null) {
                 sendMail(matchID,username);
             }
@@ -113,7 +113,7 @@ public class ModelManager implements Model {
             if (getMatch(matchID).getFinished()){
                 return null;
             }
-            ChessPiece upgraded = getChessBoard(matchID).upgradeChessPiece(upgradeSelected, toUpgrade, iTier2RMIClient, matchID,username);
+            ChessPiece upgraded = getChessBoard(matchID).handleUpgradeChessPiece(upgradeSelected, toUpgrade, iTier2RMIClient, matchID,username);
             if (upgraded == null) {
                 System.out.println("Chess piece was not upgraded as it was not saved");
             }
@@ -142,11 +142,11 @@ public class ModelManager implements Model {
                     Position newPosition = new Position(Integer.parseInt(end[0]), Integer.parseInt(end[1]));
                     ChessPiece toMove = new ChessPiece(m.getPiece(), m.getColor(), oldPosition, newPosition);
                     if (m.getStartPosition().equals(m.getEndPosition())) {
-                        chessBoard.moveAttackChessPiece(toMove, null, matchID,null);
-                        chessBoard.upgradeChessPiece(m.getPiece(),toMove, null, matchID,null);
+                        chessBoard.handleMoveAttack(toMove, null, matchID,null);
+                        chessBoard.handleUpgradeChessPiece(m.getPiece(),toMove, null, matchID,null);
 
                     } else {
-                        chessBoard.moveAttackChessPiece(toMove, null, matchID,null);
+                        chessBoard.handleMoveAttack(toMove, null, matchID,null);
                     }
                 }
             }
