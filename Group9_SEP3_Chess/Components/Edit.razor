@@ -17,7 +17,7 @@ else
 
         <div>
             Username: <br/>
-            <h3 style="color: #007bff">@UserToEdit.Username</h3>
+            <p class="UsernameDisplay">@UserToEdit.Username</p>
         </div>
             
         <div class="EditAccount">    
@@ -48,6 +48,13 @@ else
 <style>
     .StatsDisplay{margin-top: 5rem}
     .EditAccount{margin-top: 1rem;}
+    .UsernameDisplay{
+    font-size:160%;
+    word-wrap: break-word;
+    color: #007bff;
+    }
+    em{word-wrap: break-word;}
+    
 </style>
 
 @code {
