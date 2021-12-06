@@ -69,7 +69,7 @@ public class ChessBoard {
      * @throws RemoteException
      */
     public ChessPiece moveAttackChessPiece(ChessPiece selected, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
-        if (selected != null && selected.getColor().equals(turnColor)) {
+        if (selected != null && selected.getColor().equals(turnColor) && chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()]!=null && chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()].getColor().equals(selected.getColor())) {
             if (selected.getColor().equals("Black")) {
                 turnColor = "White";
             } else {
