@@ -234,6 +234,16 @@ public class RabbitMQClientController implements RabbitMQClient {
                             response = gson.toJson(new Message("TournamentHistory", tournamentsToSend));
                             break;
                         default:
+                        case "GetParticipants":
+                            matchId = gson.fromJson(message.getData(), Integer.class);
+                            try {
+                                ArrayList<Participant> participants = model.getParticipants(matchId);
+                                String movesToJson = gson.toJson(participants);
+                                response = gson.toJson(new Message("ReturningParticipants", movesToJson));
+                                System.out.println(response);
+                            } catch (Exception e) {
+                                response = gson.toJson(new Message(e.getMessage()));
+                            }
                             break;
                     }
                     System.out.println("Response " + response);

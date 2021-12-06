@@ -52,4 +52,6 @@ public interface Model {
     void loadTop3PlayersInTournament(ArrayList<Tournament> tournamentsToLoad);
 
     void sendMail(int matchId, String username);
+
+    ArrayList<Participant> getParticipants(int matchId);
 }

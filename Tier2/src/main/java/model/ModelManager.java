@@ -74,6 +74,16 @@ public class ModelManager implements Model {
         }).start();
     }
 
+    @Override
+    public ArrayList<Participant> getParticipants(int matchId) {
+        try {
+            return iTier2RMIClient.getParticipants(matchId);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * Moves the chess piece
      * @param selected selected
