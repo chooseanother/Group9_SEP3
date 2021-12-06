@@ -54,11 +54,14 @@ else
 
     private async Task SaveAsync()
     {
+        Console.WriteLine("CALLED SAVEASYNC");
         ErrorMessage = "";
         try
         {
+            Console.WriteLine(NewPassword.Length + "0");
             if (NewPassword == null || NewPassword.Equals(""))
             {
+                Console.WriteLine(NewPassword.Length + "1");
                 if (UserToEdit.ConfirmEmail.Equals(OriginalEmail))
                 {
                     ErrorMessage = "";
@@ -69,22 +72,26 @@ else
                 {
                     OriginalEmail = UserToEdit.Email;
                     ErrorMessage = "User was updated successfully";
+                    return;
                 }
-                return;
             }
             if (NewPassword != null && NewPassword.Length < 5)
-            {
+            { 
+                Console.WriteLine(NewPassword.Length + "2");
                 ErrorMessage = "Please insert password with 5 or more characters";
                 return;
             }
+            
             if (NewPassword != null && NewPassword.Length > 255)
-            {
+            { 
+                Console.WriteLine(NewPassword.Length + "3");
                 ErrorMessage = "Please insert password with 255 or less characters";
                 return;
             }
             await userService.UpdateUserAsync(UserToEdit);
             if (UserToEdit != null)
             {
+                Console.WriteLine(NewPassword.Length+ " 4");
                 ErrorMessage = "User was updated successfully";
             }
 
@@ -99,7 +106,7 @@ else
 
     private void ConfirmationSetterPassword(ChangeEventArgs args)
     {
-        if (args.Value != null && args.Value.ToString().Length < 5)
+        if (args.Value != null && args.Value.ToString().Length < 5 || args.Value != null && args.Value.ToString().Length > 255)
         {
             UserToEdit.Password = OriginalPassword;
             UserToEdit.ConfirmPassword = OriginalPassword;
