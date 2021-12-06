@@ -8,8 +8,8 @@ import java.io.Serializable;
  */
 
 public class Challenge implements Serializable {
-    private String challenger;
-    private String challenged;
+    private final String challenger;
+    private final String challenged;
     private int turnTime;
 
 
@@ -24,24 +24,6 @@ public class Challenge implements Serializable {
         this.challenger = challenger;
         this.challenged = challenged;
         this.turnTime = turnTime;
-    }
-
-    /**
-     * setts the challenger
-     *
-     * @param challenger challenger
-     */
-    public void setChallenger(String challenger) {
-        this.challenger = challenger;
-    }
-
-    /**
-     * setts the challenged
-     *
-     * @param challenged challenger
-     */
-    public void setChallenged(String challenged) {
-        this.challenged = challenged;
     }
 
     /**
