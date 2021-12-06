@@ -208,6 +208,24 @@ namespace Group9_SEP3_Chess.Data
                 throw new Exception($"{response.Action}");
             }
         }
+
+        public async Task<IList<Participant>> GetParticipants(int matchId)
+        {
+            Message response = await rabbitMq.SendRequestAsync(new Message
+            {
+                Action = "GetParticipants",
+                Data = JsonSerializer.Serialize(matchId)
+            });
+            if (response.Action.Equals("ReturningParticipants"))
+            {
+                IList<Participant> rm = JsonSerializer.Deserialize<IList<Participant>>(response.Data, jsonOptions);
+                return rm;
+            }
+            else
+            {
+                throw new Exception($"{response.Action}");
+            }
+        }
     }
 }
     
