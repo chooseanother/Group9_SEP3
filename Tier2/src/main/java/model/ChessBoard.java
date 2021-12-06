@@ -54,7 +54,6 @@ public class ChessBoard {
 
         for (int i = 0; i < 8; i++) {
             chessPieces[6][i] = new ChessPiece("Pawn", white, new Position(6, i));
-            ;
         }
 
     }
@@ -65,8 +64,7 @@ public class ChessBoard {
      * @param selected        a chess piece which should be moved
      * @param iTier2RMIClient rmi connection to move a piece in t3
      * @param matchID         match id in which the move is made
-     * @return chesspiece moved
-     * @throws RemoteException
+     * @return a chess piece that is moved or null
      */
     public ChessPiece moveAttackChessPiece(ChessPiece selected, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
         if (selected != null && selected.getColor().equals(turnColor) && chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()]!=null && chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()].getColor().equals(selected.getColor())) {
@@ -156,7 +154,7 @@ public class ChessBoard {
     /**
      * Returns a color, of the chess piece which should be making the next turn
      *
-     * @return turnColor
+     * @return turnColor color of the user that should move next
      */
     public String getTurnColor() {
         return turnColor;
@@ -165,7 +163,7 @@ public class ChessBoard {
     /**
      * Sets a color, of the chess piece which should be making the next turn, for loading.
      *
-     * @param turnColor
+     * @param turnColor color of the user that should move next
      */
     public void setTurnColor(String turnColor) {
         this.turnColor = turnColor;
