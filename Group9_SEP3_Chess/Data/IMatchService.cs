@@ -21,7 +21,6 @@ namespace Group9_SEP3_Chess.Data
         Task UpdateOutcomeAsync(string username, string outcome, int matchId);
         Task<IList<Match>> GetFinishedMatchesAsync(string loggedInUser);
         Task<IList<Move>> GetMovesAsync(int matchId);
-        Task<IList<Participant>> GetParticipants(int matchId);
 
     }
 }

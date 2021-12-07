@@ -217,7 +217,6 @@ else if (IsDisabled)
     {
         loggedIn = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
         chessPieces = await matchService.LoadChessPiecesAsync(new Message {Action = "Load", DataSlot2 = "" + Id});
-        participants = await matchService.GetParticipants(Id);
         whiteRemovedChessPieces = matchService.GetWhiteRemovedChessPieces();
         blackRemovedChessPieces = matchService.GetBlackRemovedChessPieces();
         BlackScore = matchService.GetMatchScores(true);
