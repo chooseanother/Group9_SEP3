@@ -22,7 +22,7 @@ namespace Group9_SEP3_Chess.Models
         public string Top3Players { get; set; }
         
         [JsonPropertyName("status")]
-        public bool status { get; set; }
+        public bool Status { get; set; }
 
        
         
