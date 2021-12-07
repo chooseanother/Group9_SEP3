@@ -181,7 +181,10 @@ else if (IsDisabled)
         <option value="">Clear</option>
         <option>Win</option>
         <option>Loss</option>
-        <option>Draw</option>
+        @if (Match.TournamentId == 0)
+        {
+            <option>Draw</option>
+        }
     </select>
     <button class="btn btn-outline-dark" @onclick="UpdateOutcomeAsync" disabled="@IsDisabled">Submit</button>
 </div>
