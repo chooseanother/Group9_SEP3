@@ -12,10 +12,31 @@
     <div class="row" style="justify-content: center">
         <p>@Counter.ToString()</p>
     </div>
+    <div class="row" style="justify-content: center">
+        <p>The user with color @Match.UsersTurn can make a move</p>
+    </div>
+}
+else if (IsDisabled)
+{
+    <div class="row" style="justify-content: center">
+        <p>@Status</p>
+    </div>
 }
 <div class="row">
     <div class="col">
         <div class="RemovedPiecesTable">
+            @if (Match.Finished)
+            {
+                <h4>Outcome: @Match.BlackPlayer.Outcome</h4>
+            }
+            @if (Match.UsersTurn.Equals("Black"))
+            {
+                <h4 class="participant">@Match.BlackPlayer.Username</h4>
+            }
+            else
+            {
+                <h4>@Match.BlackPlayer.Username</h4>
+            }
             <h4>Black Score: @BlackScore</h4>
             <h4>White removed: </h4>
             <div class="row">
@@ -31,12 +52,12 @@
     <div class="col">
 
         <div class="board">
-        <Coordinate Type="corner" TextToDisplay=" "/>
+            <Coordinate Type="corner" TextToDisplay=" "/>
             @for (var i = 0; i < coordinatesLetters.GetLength(0); i++)
             {
                 <Coordinate Type="ends" TextToDisplay="@coordinatesLetters[i]"/>
             }
-        <Coordinate Type="corner" TextToDisplay=" "/>
+            <Coordinate Type="corner" TextToDisplay=" "/>
             @for (var i = 0; i < chessPieces.GetLength(0); i++)
             {
                 <Coordinate Type="side" TextToDisplay="@coordinatesNumbers[7 - i]"/>
@@ -116,6 +137,18 @@
     <div class="col">
 
         <div class="RemovedPiecesTable">
+            @if (Match.Finished)
+            {
+                <h4>Outcome: @Match.WhitePlayer.Outcome</h4>
+            }
+            @if (Match.UsersTurn.Equals("White"))
+            {
+                <h4 class="participant">@Match.WhitePlayer.Username</h4>
+            }
+            else
+            {
+                <h4>@Match.WhitePlayer.Username</h4>
+            }
             <h4>White Score: @WhiteScore</h4>
             <h4>Black removed: </h4>
             <div class="row">
@@ -166,13 +199,14 @@
     private string WhiteScore { get; set; }
     private string BlackScore { get; set; }
     private string Outcome { get; set; }
+    private string Status { get; set; }
     private Match Match { get; set; }
     private readonly string[] coordinatesLetters = {"A", "B", "C", "D", "E", "F", "G", "H"};
     private readonly string[] coordinatesNumbers = {"1", "2", "3", "4", "5", "6", "7", "8"};
     private bool IsDisabled { get; set; }
     private CountdownDisplay Counter { get; set; }
     private static Timer _aTimer;
-    
+
     [Parameter]
     public int Id { get; set; }
 
@@ -188,6 +222,11 @@
         WhiteScore = matchService.GetMatchScores(false);
         Match = await matchService.GetMatchAsync(Id);
         IsDisabled = Match.Finished;
+        Status = "";
+        if (IsDisabled)
+        {
+            Status = "Match is finished";
+        }
         Counter = new CountdownDisplay(Match);
         if (!IsDisabled)
         {
@@ -370,4 +409,5 @@
             chessPieces[toUpdate.OldPosition.VerticalAxis, toUpdate.OldPosition.HorizontalAxis] = toUpdate;
         }
     }
+
 }

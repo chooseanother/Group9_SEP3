@@ -14,30 +14,54 @@ else
 {
     <EditForm Model="@UserToEdit" OnValidSubmit="@SaveAsync">
         <DataAnnotationsValidator/> <ValidationSummary/>
-        <div> Username: <br/> @UserToEdit.Username</div>
-        <div class="form-group"> New password:<br/> <InputText class="input" type="password" disabled="@IsDisabled" @bind-Value="@NewPassword" @oninput="ConfirmationSetterPassword"></InputText></div>
-        <InputText class="input" type="password" hidden="true" disabled="@IsDisabled" @bind-Value="UserToEdit.ConfirmPassword"></InputText>
-        <div class="form-group"> New email:<br/> <InputText class="input" disabled="@IsDisabled" @bind-Value="UserToEdit.Email" @oninput="ConfirmationSetterEmail"></InputText></div>
-        <InputText class="input" hidden="true" @bind-Value="UserToEdit.ConfirmEmail"></InputText>
+
         <div>
-            <button class="btn btn-outline-dark" type="button" @onclick="@OnDisabled">Edit </button>
-            <p class="actions">
-                <button class="btn btn-outline-dark" type="submit">Save</button>
-            </p>
+            Username: <br/>
+            <p class="UsernameDisplay">@UserToEdit.Username</p>
         </div>
-        <div id="scorePoints"> Score points: <br/> @UserToEdit.ScorePoints</div>
-        <div> Wins: <br/> @UserToEdit.Wins</div>
-        <div> Losses: <br/> @UserToEdit.Losses</div>
-        <div> Draws: <br/> @UserToEdit.Draws</div>
-        <div> Games played: <br/> @UserToEdit.GamesPlayed</div>
+            
+        <div class="EditAccount">    
+            <div class="form-group"> New password:<br/> <InputText class="input" type="password" disabled="@IsDisabled" @bind-Value="@NewPassword" @oninput="ConfirmationSetterPassword"></InputText></div>
+            <InputText class="input" type="password" hidden="true" disabled="@IsDisabled" @bind-Value="UserToEdit.ConfirmPassword"></InputText>
+            <div class="form-group"> New email:<br/> <InputText class="input" disabled="@IsDisabled" @bind-Value="UserToEdit.Email" @oninput="ConfirmationSetterEmail"></InputText></div>
+            <InputText class="input" hidden="true" @bind-Value="UserToEdit.ConfirmEmail"></InputText>
+            <div>
+                <button class="btn btn-outline-dark" type="button" @onclick="@OnDisabled">Edit </button>
+                <p class="actions">
+                    <button class="btn btn-outline-dark" type="submit">Save</button>
+                </p>
+            </div>
+        </div>
+
+        <div class="StatsDisplay">
+            <div id="scorePoints"> Score points: <br/> @UserToEdit.ScorePoints</div>
+            <div> Wins: <br/> @UserToEdit.Wins</div>
+            <div> Losses: <br/> @UserToEdit.Losses</div>
+            <div> Draws: <br/> @UserToEdit.Draws</div>
+            <div> Games played: <br/> @UserToEdit.GamesPlayed</div>
+        </div>
+
     </EditForm>
     <em>@ErrorMessage</em>
 }
+
+<style>
+    .StatsDisplay{margin-top: 5rem}
+    .EditAccount{margin-top: 1rem;}
+    .UsernameDisplay{
+    font-size:160%;
+    word-wrap: break-word;
+    color: #007bff;
+    }
+    em{word-wrap: break-word;}
+    
+</style>
 
 @code {
     private User UserToEdit { get; set; }
     private string NewPassword { get; set; }
     private string OriginalPassword { get; set; }
+    private string OriginalEmail { get; set; }
     private bool IsDisabled { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -45,6 +69,7 @@ else
     {
         UserToEdit = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
         OriginalPassword = UserToEdit.Password;
+        OriginalEmail = UserToEdit.Email;
         UserToEdit.ConfirmPassword = UserToEdit.Password;
         UserToEdit.ConfirmEmail = UserToEdit.Email;
         IsDisabled = true;
@@ -52,26 +77,53 @@ else
 
     private async Task SaveAsync()
     {
-        if (NewPassword == null || NewPassword.Equals(""))
+        ErrorMessage = "";
+        try
         {
-            ErrorMessage = "";
-            return;
+            if (NewPassword == null || NewPassword.Equals(""))
+            {
+                if (UserToEdit.ConfirmEmail.Equals(OriginalEmail))
+                {
+                    ErrorMessage = "";
+                    return;
+                }
+                await userService.UpdateUserAsync(UserToEdit);
+                if (UserToEdit != null)
+                {
+                    OriginalEmail = UserToEdit.Email;
+                    ErrorMessage = "User was updated successfully";
+                    return;
+                }
+            }
+            if (NewPassword != null && NewPassword.Length < 5)
+            {
+                ErrorMessage = "Please insert password with 5 or more characters";
+                return;
+            }
+            
+            if (NewPassword != null && NewPassword.Length > 255)
+            {
+                ErrorMessage = "Please insert password with 255 or less characters";
+                return;
+            }
+            await userService.UpdateUserAsync(UserToEdit);
+            if (UserToEdit != null)
+            {
+                ErrorMessage = "User was updated successfully";
+            }
+
         }
-        if (NewPassword.Length < 5)
+
+        catch (Exception e)
         {
-            ErrorMessage = "Please insert password with 5 or more characters";
-            return;
+            ErrorMessage = e.Message;
         }
-        await userService.UpdateUserAsync(UserToEdit);
-        if (UserToEdit != null)
-        {
-            ErrorMessage = "User was updated successfully";
-        }
+     
     }
 
     private void ConfirmationSetterPassword(ChangeEventArgs args)
     {
-        if (args.Value.ToString().Length < 5)
+        if (args.Value != null && args.Value.ToString().Length < 5 || args.Value != null && args.Value.ToString().Length > 255)
         {
             UserToEdit.Password = OriginalPassword;
             UserToEdit.ConfirmPassword = OriginalPassword;

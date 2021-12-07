@@ -1,6 +1,7 @@
 @using Group9_SEP3_Chess.Models
 @using Group9_SEP3_Chess.Data
 @using Group9_SEP3_Chess.Authentication
+@using Microsoft.VisualBasic.CompilerServices
 @inject AuthenticationStateProvider customAuthenticationStateProvider;
 @inject ITournamentService tournamentService;
 
@@ -39,24 +40,32 @@
 
     <div class="JoinTournament">
         <form>
-            
+
             <h4>Join Tournament</h4>
             Tournament ID:
             <br/>
             <input type="number" @bind-value="TournamentsIdInserted" required>
         </form>
+        <button class="btn btn-outline-dark" style="margin-top: 0.5rem" @onclick="JoinATournament">Join</button>
     </div>
     
-    
-    <button class="btn btn-outline-dark" style="margin-top: 10px" @onclick="JoinATournamentAsync">Join</button>
-    
-    <h4>@Notification</h4>
-    
+    <em>@Notification</em>
+
 </div>
 
 
+<style>
+.HostTournament{margin-top: 5rem; margin-bottom: 5rem;}
+    
+</style>
+
+
 @code {
-    private Tournament newTournament = new();
+    private Tournament newTournament = new()
+    {
+        NrOfParticipants = 4,
+        TurnTime = 120
+    };
 
     private string Notification { get; set; }
     private int TournamentsIdInserted { get; set; }
@@ -72,7 +81,17 @@
     private async Task CreateTournamentAsync()
     {
         newTournament.Creator = CurrentUser;
-        Notification = "Tournament ID Generated: " + await tournamentService.CreateTournamentAsync(newTournament);
+        
+        var result = await tournamentService.CreateTournamentAsync(newTournament);
+        if (!result.Equals("0"))
+        {
+            Notification = "Tournament created, Id: " + result;
+        }
+        else
+        {
+            Notification = "Tournament can not be created";
+        }
+
     }
 
     private async Task JoinATournamentAsync()
@@ -81,7 +100,11 @@
 
         if (result)
         {
-            Notification = "U successfully joined tournament " + TournamentsIdInserted;
+            Notification = $"The tournament with ID: {TournamentsIdInserted}, was joined successfully";
+        }
+        else
+        {
+            Notification = $"The tournament with ID: {TournamentsIdInserted} can not be joined";
         }
     }
 

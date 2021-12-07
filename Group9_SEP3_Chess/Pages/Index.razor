@@ -1,39 +1,46 @@
 @page "/"
 @using Group9_SEP3_Chess.Components
 
-<link href="Index.css" rel="stylesheet">
 <AuthorizeView>
     <Authorized>
-        <div id="editComponent">
-            <Edit></Edit>
-        </div>
-        <div id="component">
-            <div id="challengeComponent">
-                <CreateChallenge/>
+        <div class="row">
+            <div class="col-3">
+                <div id="editComponent">
+                    <Edit></Edit>
+                </div>
             </div>
-            <div id="TournamentComponent">
-                <JoinTournament/>
+            <div class="col-3">
+                <div id="component">
+                    <div id="challengeComponent">
+                        <CreateChallenge/>
+                    </div>
+                    <div id="TournamentComponent">
+                        <JoinTournament/>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div id="listComponent">
-            <TabControl>
-                <TabPage Text="Matches">
-                    <MatchList ActiveMatches="true"/>
-                </TabPage>
-                <TabPage Text="History">
-                    <MatchList ActiveMatches="false"/>
-                </TabPage>
-                <TabPage Text="Challenges">
-                    <Challenges/>
-                </TabPage>
-                <TabPage Text="Tournament History">
-                    <TournamentHistory/>
-                </TabPage>
-            </TabControl>
+            <div class="col-6">
+                <div id="listComponent">
+                    <TabControl>
+                        <TabPage Text="Matches">
+                            <MatchList ActiveMatches="true"/>
+                        </TabPage>
+                        <TabPage Text="History">
+                            <MatchList ActiveMatches="false"/>
+                        </TabPage>
+                        <TabPage Text="Challenges">
+                            <Challenges/>
+                        </TabPage>
+                        <TabPage Text="Tournament History">
+                            <TournamentHistory/>
+                        </TabPage>
+                    </TabControl>
+                </div>
+            </div>
         </div>
     </Authorized>
     <NotAuthorized>
-        <h1>Hello!</h1>
+        <h1>Welcome!</h1>
         <Register/>
     </NotAuthorized>
 </AuthorizeView>
