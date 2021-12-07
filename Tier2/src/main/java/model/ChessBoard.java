@@ -54,66 +54,105 @@ public class ChessBoard {
 
         for (int i = 0; i < 8; i++) {
             chessPieces[6][i] = new ChessPiece("Pawn", white, new Position(6, i));
-            ;
         }
 
     }
 
     /**
-     * A method to move a chess piece from t1 to t2 and then save it in t3 database server
+     * A method to handle chess piece moving methods.
      *
      * @param selected        a chess piece which should be moved
      * @param iTier2RMIClient rmi connection to move a piece in t3
      * @param matchID         match id in which the move is made
-     * @return chesspiece moved
-     * @throws RemoteException
+     * @return a chess piece that is moved or null
+     * @throws RemoteException rmi exception to be shown
      */
-    public ChessPiece moveAttackChessPiece(ChessPiece selected, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
-        if (selected != null && selected.getColor().equals(turnColor)) {
-            if (selected.getColor().equals("Black")) {
-                turnColor = "White";
-            } else {
-                turnColor = "Black";
+    public ChessPiece handleMoveAttack(ChessPiece selected, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
+        if (selected != null && selected.getColor().equals(turnColor) && chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()] != null && chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()].getColor().equals(selected.getColor())) {
+            turnColor = updateColor(selected.getColor());
+            if (loadingOrPlayerMove(iTier2RMIClient, matchID, username, selected)) {
+                addRemovedChessPieces(chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()]);
+                return performMove(selected);
             }
-            boolean testForNullRMI = false;
-            if (iTier2RMIClient == null) {
-                testForNullRMI = true;
-            } else {
-                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
-                for(int i=0;i<participants.size();i++){
-                    if(participants.get(i).getUsername().equals(username) && participants.get(i).getColor().equals(selected.getColor())) {
-                        if (iTier2RMIClient.movePiece(selected, matchID) && iTier2RMIClient.updateMatchUsersTurn(matchID, turnColor)) {
-                            testForNullRMI = true;
-                        }
-                    }
-                }
-            }
-            if (testForNullRMI) {
-                if (chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()] != null) {
-                    removedChessPieces.add(chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()]);
-                }
-                chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()] = selected.copy();
-                if (selected.getOldPosition().getVerticalAxis() != chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()].getNewPosition().getVerticalAxis()
-                        || selected.getOldPosition().getHorizontalAxis() != chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()].getNewPosition().getHorizontalAxis()) {
-                    chessPieces[selected.getOldPosition().getVerticalAxis()][selected.getOldPosition().getHorizontalAxis()] = null;
-                }
-
-                for (int i = 0; i < 8; i++) {
-
-                    for (int j = 0; j < 8; j++) {
-
-                        if (chessPieces[i][j] != null) {
-                            chessPieces[i][j].setSelected(false);
-                        }
-                    }
-                }
-                return chessPieces[selected.getNewPosition().getVerticalAxis()][selected.getNewPosition().getHorizontalAxis()];
-
-            }
-     
-          
         }
         return null;
+    }
+
+    /**
+     * Returns a boolean which indicates if the move should be made
+     *
+     * @param iTier2RMIClient rmi connection to data server
+     * @param matchID         indicates in which match the move was made
+     * @param username        indicates by whom the move was made
+     * @param chessPieceMoved indicates which piece was moved
+     * @return a boolean which shows if the move is legal
+     * @throws RemoteException rmi exception to be shown
+     */
+    private boolean loadingOrPlayerMove(ITier2RMIClient iTier2RMIClient, int matchID, String username, ChessPiece chessPieceMoved) throws RemoteException {
+        boolean testForNullRMI = false;
+        if (iTier2RMIClient == null) {
+            testForNullRMI = true;
+        } else {
+                if (validateUserColor(iTier2RMIClient,matchID,username,chessPieceMoved)) {
+                    if (iTier2RMIClient.movePiece(chessPieceMoved, matchID) && iTier2RMIClient.updateMatchUsersTurn(matchID, turnColor)) {
+                        testForNullRMI = true;
+
+                }
+            }
+        }
+        return testForNullRMI;
+    }
+
+    /**
+     * Moves chess pieces from old position to new position
+     *
+     * @param chessPiece moved chesspiece
+     */
+    private ChessPiece performMove(ChessPiece chessPiece) {
+        chessPieces[chessPiece.getNewPosition().getVerticalAxis()][chessPiece.getNewPosition().getHorizontalAxis()] = chessPiece.copy();
+        chessPieces[chessPiece.getOldPosition().getVerticalAxis()][chessPiece.getOldPosition().getHorizontalAxis()] = null;
+        unselectAllPieces();
+        return chessPieces[chessPiece.getNewPosition().getVerticalAxis()][chessPiece.getNewPosition().getHorizontalAxis()];
+    }
+
+    /**
+     * Unselects all pieces on the chessboard
+     */
+    private void unselectAllPieces() {
+        for (int i = 0; i < 8; i++) {
+
+            for (int j = 0; j < 8; j++) {
+
+                if (chessPieces[i][j] != null) {
+                    chessPieces[i][j].setSelected(false);
+                }
+            }
+        }
+    }
+
+    /**
+     * Updates which color should move after this move.
+     *
+     * @param turnColor which color moved
+     * @return which color should move after
+     */
+    private String updateColor(String turnColor) {
+        if (turnColor.equals("Black")) {
+            return "White";
+        } else {
+            return "Black";
+        }
+    }
+
+    /**
+     * Updates the list of removed chess pieces
+     *
+     * @param chessPiece the piece which was removed
+     */
+    private void addRemovedChessPieces(ChessPiece chessPiece) {
+        if (chessPiece != null) {
+            removedChessPieces.add(chessPiece);
+        }
     }
 
     /**
@@ -122,26 +161,53 @@ public class ChessBoard {
      * @param upgradeSelected the type of upgrade
      */
 
-    public ChessPiece upgradeChessPiece(String upgradeSelected, ChessPiece toUpgrade, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
-        if(toUpgrade!=null && upgradeSelected!=null){
+    public ChessPiece handleUpgradeChessPiece(String upgradeSelected, ChessPiece toUpgrade, ITier2RMIClient iTier2RMIClient, int matchID, String username) throws RemoteException {
+        if (toUpgrade != null && upgradeSelected != null) {
             toUpgrade.setType(upgradeSelected);
             if (iTier2RMIClient != null) {
-                ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
-                for (Participant p:participants){
-                    if(p.getColor().equals(toUpgrade.getColor()) && p.getUsername().equals(username)){
+                    if (validateUserColor(iTier2RMIClient,matchID,username,toUpgrade)) {
                         if (iTier2RMIClient.upgradePiece(toUpgrade, matchID)) {
-                            chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()] = toUpgrade.copy();
-                            return chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()];
-                        }
+                            return upgradeChessPiece(toUpgrade);
+
                     }
                 }
             } else {
-                chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()] = toUpgrade.copy();
-                return chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()];
+                return upgradeChessPiece(toUpgrade);
             }
         }
 
         return null;
+    }
+
+    /**
+     * Checks if the piece selected belongs to the user
+     * @param iTier2RMIClient rmi connection to data server
+     * @param matchID         indicates in which match the move was made
+     * @param username        indicates by whom the move was made
+     * @param chessPiece indicates which piece was moved
+     * @return a boolean which indicates if the color is valid
+     * @throws RemoteException rmi exception to be shown
+     */
+    private boolean validateUserColor(ITier2RMIClient iTier2RMIClient, int matchID, String username, ChessPiece chessPiece) throws RemoteException{
+        ArrayList<Participant> participants = iTier2RMIClient.getParticipants(matchID);
+        for (Participant p : participants) {
+            if (p.getColor().equals(chessPiece.getColor()) && p.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Upgrades a chess piece
+     * @param toUpgrade which piece should be upgraded
+     * @return returns an upgraded chess piece
+     */
+    private ChessPiece upgradeChessPiece(ChessPiece toUpgrade){
+
+        chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()] = toUpgrade.copy();
+        unselectAllPieces();
+        return chessPieces[toUpgrade.getNewPosition().getVerticalAxis()][toUpgrade.getNewPosition().getHorizontalAxis()];
     }
 
     /**
@@ -156,7 +222,7 @@ public class ChessBoard {
     /**
      * Returns a color, of the chess piece which should be making the next turn
      *
-     * @return turnColor
+     * @return turnColor color of the user that should move next
      */
     public String getTurnColor() {
         return turnColor;
@@ -165,7 +231,7 @@ public class ChessBoard {
     /**
      * Sets a color, of the chess piece which should be making the next turn, for loading.
      *
-     * @param turnColor
+     * @param turnColor color of the user that should move next
      */
     public void setTurnColor(String turnColor) {
         this.turnColor = turnColor;

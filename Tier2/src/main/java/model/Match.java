@@ -202,7 +202,7 @@ public class Match implements Serializable {
     /**
      * Returns the White Player
      *
-     * @return
+     * @return a white player
      */
     public Participant getWhitePlayer() {
         return whitePlayer;

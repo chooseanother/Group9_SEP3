@@ -504,7 +504,7 @@ public class Tier3RMIServerController
     public ArrayList<Tournament> getAllTournamentsWhereAUserHasBeen(String username) throws RemoteException{
         try {
             return persistence.loadTournamentsForASpecificUser(username);
-        } catch (Exception e){
+        } catch (SQLException e){
             e.printStackTrace();
         }
         return null;
@@ -520,7 +520,7 @@ public class Tier3RMIServerController
     public ArrayList<TournamentParticipation> getTopPlayersInATournament(int tournamentID) throws RemoteException {
         try {
             return persistence.getTopPlayersInATournament(tournamentID);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
