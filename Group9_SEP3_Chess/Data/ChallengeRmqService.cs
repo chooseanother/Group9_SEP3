@@ -6,13 +6,13 @@ using Group9_SEP3_Chess.Models;
 
 namespace Group9_SEP3_Chess.Data
 {
-    public class ChallengeService : IChallenge
+    public class ChallengeRmqService : IChallengeService
     {
-        private readonly IRabbitMq rabbitMq;
+        private readonly IRabbitMqService rabbitMqService;
 
-        public ChallengeService(IRabbitMq rabbitMq)
+        public ChallengeRmqService(IRabbitMqService rabbitMqService)
         {
-            this.rabbitMq = rabbitMq;
+            this.rabbitMqService = rabbitMqService;
         }
 
         public async Task<string> ChallengeUserAsync(Challenge challenge)
@@ -21,14 +21,14 @@ namespace Group9_SEP3_Chess.Data
             var message = new Message {Action = "Create challenge",Data=jsonChallenge};
             Console.WriteLine(message);
 
-            var response = await rabbitMq.SendRequestAsync(message);
+            var response = await rabbitMqService.SendRequestAsync(message);
             
             return response.Action;
         }
 
         public async Task<IList<Challenge>> GetChallengesAsync(string username)
         {
-            var response = await rabbitMq.SendRequestAsync(new Message {Action = "Get challenges", Data = username});
+            var response = await rabbitMqService.SendRequestAsync(new Message {Action = "Get challenges", Data = username});
 
             Console.WriteLine($"{response.Action} {response.Data}");
             return JsonSerializer.Deserialize<List<Challenge>>(response.Data, new JsonSerializerOptions
@@ -41,7 +41,7 @@ namespace Group9_SEP3_Chess.Data
         {
             var jsonChallenge = JsonSerializer.Serialize(challenge);
             var response =
-                await rabbitMq.SendRequestAsync(new Message {Action = "Accept challenge", Data = jsonChallenge});
+                await rabbitMqService.SendRequestAsync(new Message {Action = "Accept challenge", Data = jsonChallenge});
             return response.Action.Equals("Success");
         }
 
@@ -49,7 +49,7 @@ namespace Group9_SEP3_Chess.Data
         {
             var jsonChallenge = JsonSerializer.Serialize(challenge);
             var response =
-                await rabbitMq.SendRequestAsync(new Message {Action = "Reject challenge", Data = jsonChallenge});
+                await rabbitMqService.SendRequestAsync(new Message {Action = "Reject challenge", Data = jsonChallenge});
             return response.Action.Equals("Success");
         }
     }

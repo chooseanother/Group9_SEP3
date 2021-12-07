@@ -2,7 +2,7 @@
 @using Group9_SEP3_Chess.Data
 @using Group9_SEP3_Chess.Authentication
 @inject AuthenticationStateProvider customAuthenticationStateProvider;
-@inject ITournament tournament;
+@inject ITournamentService tournamentService;
 
 
 <div>
@@ -15,7 +15,7 @@
                 Select turn length:
                 <br/>
                 <InputSelect @bind-Value="newTournament.TurnTime">
-                    @foreach (var (key, value) in turnLengths)
+                    @foreach (var (key, value) in turnLengths.TurnTimes)
                     {
                         <option value="@key">@value</option>
                     }
@@ -62,10 +62,7 @@
     private int TournamentsIdInserted { get; set; }
     private string CurrentUser { get; set; }
 
-    private readonly IDictionary<int, string> turnLengths = new Dictionary<int, string>
-    {
-        {120, "2 Minutes"}, {1800, "30 Minutes"}, {3600, "1 Hour"}, {7200, "2 Hours"}, {36000, "10 Hours"}, {86400, "1 Day"}, {259200, "3 Days"}, {604800, "7 Days"}
-    };
+    private TurnLengths turnLengths = new TurnLengths();
     
     protected override void OnInitialized()
     {
@@ -75,12 +72,12 @@
     private async Task CreateTournamentAsync()
     {
         newTournament.Creator = CurrentUser;
-        Notification = "Tournament ID Generated: " + await tournament.CreateTournamentAsync(newTournament);
+        Notification = "Tournament ID Generated: " + await tournamentService.CreateTournamentAsync(newTournament);
     }
 
     private async Task JoinATournamentAsync()
     {
-        var result = await tournament.JoinATournamentAsync(CurrentUser, TournamentsIdInserted);
+        var result = await tournamentService.JoinATournamentAsync(CurrentUser, TournamentsIdInserted);
 
         if (result)
         {

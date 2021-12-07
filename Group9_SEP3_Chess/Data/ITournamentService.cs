@@ -5,7 +5,7 @@ using Group9_SEP3_Chess.Models;
 
 namespace Group9_SEP3_Chess.Data
 {
-    public interface ITournament
+    public interface ITournamentService
     {
         Task<string> CreateTournamentAsync(Tournament tournament);
         Task<bool> JoinATournamentAsync(string username, int tournamentId);

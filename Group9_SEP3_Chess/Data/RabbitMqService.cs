@@ -10,7 +10,7 @@ using RabbitMQ.Client.Events;
 
 namespace Group9_SEP3_Chess.Data
 {
-    public class RabbitMqService : IRabbitMq
+    public class RabbitMqService : IRabbitMqService
     {
         private const string QueueName = "rpc_queue";
 

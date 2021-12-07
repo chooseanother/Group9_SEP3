@@ -2,7 +2,7 @@
 @using Group9_SEP3_Chess.Data
 @using Group9_SEP3_Chess.Authentication
 @inject AuthenticationStateProvider authenticationStateProvider;
-@inject IChallenge challenge
+@inject IChallengeService challengeService
 
 
 @if (challenges == null)
@@ -35,7 +35,7 @@ else
             <tr>
                 <td>@c.Challenger</td>
                 @* <td>@c.Username</td> *@
-                <td>@turnLengths[c.TurnLength]</td>
+                <td>@turnLengths.TurnTimes[c.TurnLength]</td>
                 <td>
                     <button class="btn btn-outline-dark" @onclick='() => AcceptChallengeAsync(c)'>
                         <i class="oi oi-check" style="color:green;"></i>
@@ -56,22 +56,19 @@ else
     [Parameter]
     public string? Username { get; set; }
     
-    private readonly IDictionary<int, string> turnLengths = new Dictionary<int, string>
-    {
-        {120,"2 Minutes"}, {1800,"30 Minutes"}, {3600,"1 Hour"}, {7200,"2 Hours"}, {36000,"10 Hours"}, {86400,"1 Day"}, {259200,"3 Days"}, {604800,"7 Days"}
-    };
-    
+    private TurnLengths turnLengths = new TurnLengths();
+
     private IList<Challenge> challenges;
 
     protected override async Task OnInitializedAsync()
     {
         Username = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser().Username;
-        challenges = await challenge.GetChallengesAsync(Username);
+        challenges = await challengeService.GetChallengesAsync(Username);
     }
 
     private async Task AcceptChallengeAsync(Challenge challenge)
     {
-        var result = await this.challenge.AcceptChallengeAsync(challenge);
+        var result = await this.challengeService.AcceptChallengeAsync(challenge);
         if (result)
         {
             challenges.Remove(challenge);
@@ -80,7 +77,7 @@ else
 
     private async Task RejectChallengeAsync(Challenge challenge)
     {
-        var result = await this.challenge.DeclineChallengeAsync(challenge);
+        var result = await this.challengeService.DeclineChallengeAsync(challenge);
         if (result)
         {
             challenges.Remove(challenge);

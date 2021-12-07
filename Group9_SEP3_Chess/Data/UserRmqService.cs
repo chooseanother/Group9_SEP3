@@ -6,19 +6,19 @@ using Group9_SEP3_Chess.Models;
 
 namespace Group9_SEP3_Chess.Data
 {
-    public class UserService : IUserService
+    public class UserRmqService : IUserService
     {
-        private readonly IRabbitMq rabbitMq;
+        private readonly IRabbitMqService rabbitMqService;
 
-        public UserService(IRabbitMq rabbitMq)
+        public UserRmqService(IRabbitMqService rabbitMqService)
         {
-            this.rabbitMq = rabbitMq;
+            this.rabbitMqService = rabbitMqService;
         }
 
         public async Task<string> RegisterUserAsync(User user)
         {
             var userJson = JsonSerializer.Serialize(user);
-            var response = await rabbitMq.SendRequestAsync(new Message
+            var response = await rabbitMqService.SendRequestAsync(new Message
             {
                 Action = "Register",
                 Data = userJson
@@ -33,7 +33,7 @@ namespace Group9_SEP3_Chess.Data
                 Username = username,
                 Password = password
             };
-            var response = await rabbitMq.SendRequestAsync(new Message
+            var response = await rabbitMqService.SendRequestAsync(new Message
             {
                 Action = "Login",
                 Data = JsonSerializer.Serialize(user)
@@ -50,7 +50,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<User> UpdateUserAsync(User user)
         {
-            var response = await rabbitMq.SendRequestAsync(new Message
+            var response = await rabbitMqService.SendRequestAsync(new Message
             {
                 Action = "UpdateUser",
                 Data = JsonSerializer.Serialize(user)

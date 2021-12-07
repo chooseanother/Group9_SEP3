@@ -3,7 +3,7 @@
 @using Group9_SEP3_Chess.Authentication
 @inject AuthenticationStateProvider authenticationStateProvider;
 
-@inject IChallenge challenge
+@inject IChallengeService challengeService
 
 <h3>Challenge User</h3>
 <div>
@@ -14,7 +14,7 @@
             Select turn length:<br/>
             <InputSelect @bind-Value="newChallenge.TurnLength">
                 <option></option>
-                @foreach (var (key, value) in turnLengths)
+                @foreach (var (key, value) in turnLengths.TurnTimes)
                 {
                     <option value="@key">@value</option>
                 }
@@ -38,17 +38,10 @@
 
 @code {
     private string Username { get; set; }
-
     private string ErrorMessage { get; set; }
     private string ErrorColor { get; set; }
-    
-    private readonly IDictionary<int, string> turnLengths = new Dictionary<int, string>
-    {
-        {120,"2 Minutes"}, {1800,"30 Minutes"}, {3600,"1 Hour"}, {7200,"2 Hours"}, {36000,"10 Hours"}, {86400,"1 Day"}, {259200,"3 Days"}, {604800,"7 Days"}
-    };
-    
+    private TurnLengths turnLengths = new TurnLengths();
     private Challenge newChallenge = new();
-
     private bool showError;
 
     protected override void OnInitialized()
@@ -62,7 +55,7 @@
         showError = false;
         newChallenge.Challenger = Username;
 
-        var result = await challenge.ChallengeUserAsync(newChallenge);
+        var result = await challengeService.ChallengeUserAsync(newChallenge);
 
         ErrorColor = result.Contains("Failed") ? "red" : "green";
         showError = true;
