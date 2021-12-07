@@ -40,20 +40,24 @@
 
     <div class="JoinTournament">
         <form>
-            
+
             <h4>Join Tournament</h4>
             Tournament ID:
             <br/>
             <input type="number" @bind-value="TournamentsIdInserted" required>
         </form>
+        <button class="btn btn-outline-dark" style="margin-top: 0.5rem" @onclick="JoinATournament">Join</button>
     </div>
     
-    
-    <button class="btn btn-outline-dark" style="margin-top: 10px" @onclick="JoinATournament">Join</button>
-    
-    <h4>@Notification</h4>
-    
+    <em>@Notification</em>
+
 </div>
+
+
+<style>
+.HostTournament{margin-top: 5rem; margin-bottom: 5rem;}
+    
+</style>
 
 
 @code {
