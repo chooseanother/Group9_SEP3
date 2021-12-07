@@ -41,7 +41,10 @@
     private string ErrorMessage { get; set; }
     private string ErrorColor { get; set; }
     private TurnLengths turnLengths = new TurnLengths();
-    private Challenge newChallenge = new();
+    private Challenge newChallenge = new Challenge
+    {
+        TurnLength = 120
+    };
     private bool showError;
 
     protected override void OnInitialized()
