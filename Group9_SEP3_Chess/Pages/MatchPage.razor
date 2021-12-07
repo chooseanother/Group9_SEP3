@@ -13,7 +13,7 @@
         <p>@Counter.ToString()</p>
     </div>
     <div class="row" style="justify-content: center">
-        <p>The user with color @UsersTurn can make a move</p>
+        <p>The user with color @Match.UsersTurn can make a move</p>
     </div>
 }
 else if (IsDisabled)
@@ -27,15 +27,15 @@ else if (IsDisabled)
         <div class="RemovedPiecesTable">
             @if (Match.Finished)
             {
-                <h4>Outcome: @BlackOutcome</h4>
+                <h4>Outcome: @Match.BlackPlayer.Outcome</h4>
             }
             @if (Match.UsersTurn.Equals("Black"))
             {
-                <h4 class="participant">@BlackParticipant</h4>
+                <h4 class="participant">@Match.BlackPlayer.Username</h4>
             }
             else
             {
-                <h4>@BlackParticipant</h4>
+                <h4>@Match.BlackPlayer.Username</h4>
             }
             <h4>Black Score: @BlackScore</h4>
             <h4>White removed: </h4>
@@ -139,15 +139,15 @@ else if (IsDisabled)
         <div class="RemovedPiecesTable">
             @if (Match.Finished)
             {
-                <h4>Outcome: @WhiteOutcome</h4>
+                <h4>Outcome: @Match.WhitePlayer.Outcome</h4>
             }
             @if (Match.UsersTurn.Equals("White"))
             {
-                <h4 class="participant">@WhiteParticipant</h4>
+                <h4 class="participant">@Match.WhitePlayer.Username</h4>
             }
             else
             {
-                <h4>@WhiteParticipant</h4>
+                <h4>@Match.WhitePlayer.Username</h4>
             }
             <h4>White Score: @WhiteScore</h4>
             <h4>Black removed: </h4>
@@ -196,11 +196,6 @@ else if (IsDisabled)
     private IList<ChessPiece> blackRemovedChessPieces;
     private IList<ChessPiece> whiteRemovedChessPieces;
     private IList<Participant> participants { get; set; }
-    private string BlackParticipant { get; set; }
-    private string WhiteParticipant { get; set; }
-    private string BlackOutcome { get; set; }
-    private string WhiteOutcome { get; set; }
-    private string UsersTurn { get; set; }
     private string UpgradeSelected { get; set; }
     private string WhiteScore { get; set; }
     private string BlackScore { get; set; }
@@ -223,25 +218,11 @@ else if (IsDisabled)
         loggedIn = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
         chessPieces = await matchService.LoadChessPiecesAsync(new Message {Action = "Load", DataSlot2 = "" + Id});
         participants = await matchService.GetParticipants(Id);
-        foreach (Participant p in participants)
-        {
-            if (p.Color.Equals("Black"))
-            {
-                BlackParticipant = p.Username;
-                BlackOutcome = p.Outcome;
-            }
-            else
-            {
-                WhiteParticipant = p.Username;
-                WhiteOutcome = p.Outcome;
-            }
-        }
         whiteRemovedChessPieces = matchService.GetWhiteRemovedChessPieces();
         blackRemovedChessPieces = matchService.GetBlackRemovedChessPieces();
         BlackScore = matchService.GetMatchScores(true);
         WhiteScore = matchService.GetMatchScores(false);
         Match = await matchService.GetMatchAsync(Id);
-        UsersTurn = Match.UsersTurn;
         IsDisabled = Match.Finished;
         Status = "";
         if (IsDisabled)
