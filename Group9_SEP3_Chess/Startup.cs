@@ -30,11 +30,11 @@ namespace Group9_SEP3_Chess
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<IRabbitMq, RabbitMqService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IMatchService, MatchService>();
-            services.AddScoped<IChallenge, ChallengeService>();
-            services.AddScoped<ITournament, TournamentService>();
+            services.AddSingleton<IRabbitMqService, RabbitMqService>();
+            services.AddScoped<IUserService, UserRmqService>();
+            services.AddScoped<IMatchService, MatchRmqService>();
+            services.AddScoped<IChallengeService, ChallengeRmqService>();
+            services.AddScoped<ITournamentService, TournamentRmqService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
         }
 

@@ -44,8 +44,13 @@
 <p id="result" style="color:red">@result</p>
 
 @code {
-    private User newUserItem = new ();
+    private User newUserItem;
     private string result;
+
+    protected override void OnInitialized()
+    {
+        newUserItem = new User();
+    }
 
     private async Task HandleValidSubmitAsync()
     {

@@ -7,23 +7,23 @@ using Group9_SEP3_Chess.Models;
 
 namespace Group9_SEP3_Chess.Data
 {
-    public class MatchService : IMatchService
+    public class MatchRmqService : IMatchService
     {
-        private readonly IRabbitMq rabbitMq;
+        private readonly IRabbitMqService rabbitMqService;
         private List<ChessPiece> removedChessPieces;
         private string matchScores;
         private readonly JsonSerializerOptions jsonOptions;
 
-        public MatchService(IRabbitMq rabbitMq)
+        public MatchRmqService(IRabbitMqService rabbitMqService)
         {
-            this.rabbitMq = rabbitMq;
+            this.rabbitMqService = rabbitMqService;
             removedChessPieces = new List<ChessPiece>();
             jsonOptions = new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase};
         }
 
         public async Task<ChessPiece> MoveChessPieceAsync(Message message)
         {
-            Message response = await rabbitMq.SendRequestAsync(message);
+            Message response = await rabbitMqService.SendRequestAsync(message);
             if (response.Action.Equals("Sending A chess Piece"))
             {
                 removedChessPieces = JsonSerializer.Deserialize<List<ChessPiece>>(response.DataSlot2);
@@ -38,7 +38,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<ChessPiece> UpgradeChessPieceAsync(Message message)
         {
-            Message response = await rabbitMq.SendRequestAsync(message);
+            Message response = await rabbitMqService.SendRequestAsync(message);
             if (response.Action.Equals("Upgrade Chess Piece"))
             {
                 ChessPiece chessPiece = JsonSerializer.Deserialize<ChessPiece>(response.Data);
@@ -50,7 +50,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<ChessPiece[,]> LoadChessPiecesAsync(Message message)
         {
-            Message response = await rabbitMq.SendRequestAsync(message);
+            Message response = await rabbitMqService.SendRequestAsync(message);
             if (response.Action.Equals("Load ChessBoard"))
             {
                 removedChessPieces = JsonSerializer.Deserialize<List<ChessPiece>>(response.DataSlot2);
@@ -105,7 +105,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<IList<Match>> GetMatchesAsync(string loggedInUser)
         {
-            Message response = await rabbitMq.SendRequestAsync(new Message
+            Message response = await rabbitMqService.SendRequestAsync(new Message
             {
                 Action = "GetMatches",
                 Data = JsonSerializer.Serialize(loggedInUser)
@@ -124,7 +124,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task UpdateOutcomeAsync(string username, string outcome, int matchId)
         {
-            var response = await rabbitMq.SendRequestAsync(new Message
+            var response = await rabbitMqService.SendRequestAsync(new Message
             {
                 Action = "UpdateOutcome",
                 Data = username,
@@ -135,7 +135,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<IList<Match>> GetFinishedMatchesAsync(string loggedInUser)
         {
-            Message response = await rabbitMq.SendRequestAsync(new Message
+            Message response = await rabbitMqService.SendRequestAsync(new Message
             {
                 Action = "GetMatchHistory",
                 Data = JsonSerializer.Serialize(loggedInUser)
@@ -153,7 +153,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<Match> GetMatchAsync(int matchId)
         {
-            var response = await rabbitMq.SendRequestAsync(new Message
+            var response = await rabbitMqService.SendRequestAsync(new Message
             {
                 Action = "GetMatch",
                 Data = ""+matchId
@@ -171,7 +171,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<IList<Move>> GetMovesAsync(int matchId)
         {
-            Message response = await rabbitMq.SendRequestAsync(new Message
+            Message response = await rabbitMqService.SendRequestAsync(new Message
             {
                 Action = "MoveHistory",
                 Data = JsonSerializer.Serialize(matchId)

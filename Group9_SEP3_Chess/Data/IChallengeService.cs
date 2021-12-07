@@ -4,7 +4,7 @@ using Group9_SEP3_Chess.Models;
 
 namespace Group9_SEP3_Chess.Data
 {
-    public interface IChallenge
+    public interface IChallengeService
     {
         Task<string> ChallengeUserAsync(Challenge challenge);
         Task<IList<Challenge>> GetChallengesAsync(string username);

@@ -3,12 +3,12 @@
 @using Group9_SEP3_Chess.Authentication
 @using Microsoft.VisualBasic.CompilerServices
 @inject AuthenticationStateProvider customAuthenticationStateProvider;
-@inject ITournament tournament;
+@inject ITournamentService tournamentService;
 
 
 <div>
     <div class="HostTournament">
-        <EditForm Model="@newTournament" OnValidSubmit="@CreateTournament">
+        <EditForm Model="@newTournament" OnValidSubmit="@CreateTournamentAsync">
             <DataAnnotationsValidator/>
             <ValidationSummary/>
             <div class="form-group">
@@ -16,7 +16,7 @@
                 Select turn length:
                 <br/>
                 <InputSelect @bind-Value="newTournament.TurnTime">
-                    @foreach (var (key, value) in turnLengths)
+                    @foreach (var (key, value) in turnLengths.TurnTimes)
                     {
                         <option value="@key">@value</option>
                     }
@@ -46,7 +46,7 @@
             <br/>
             <input type="number" @bind-value="TournamentsIdInserted" required>
         </form>
-        <button class="btn btn-outline-dark" style="margin-top: 0.5rem" @onclick="JoinATournament">Join</button>
+        <button class="btn btn-outline-dark" style="margin-top: 0.5rem" @onclick="JoinATournamentAsync">Join</button>
     </div>
     
     <em>@Notification</em>
@@ -71,21 +71,18 @@
     private int TournamentsIdInserted { get; set; }
     private string CurrentUser { get; set; }
 
-    private readonly IDictionary<int, string> turnLengths = new Dictionary<int, string>
-    {
-        {120, "2 Minutes"}, {1800, "30 Minutes"}, {3600, "1 Hour"}, {7200, "2 Hours"}, {36000, "10 Hours"}, {86400, "1 Day"}, {259200, "3 Days"}, {604800, "7 Days"}
-    };
+    private TurnLengths turnLengths = new TurnLengths();
     
     protected override void OnInitialized()
     {
         CurrentUser = ((CustomAuthenticationStateProvider) customAuthenticationStateProvider).GetCachedUser().Username;
     }
 
-    private async Task CreateTournament()
+    private async Task CreateTournamentAsync()
     {
         newTournament.Creator = CurrentUser;
         
-        var result = await tournament.CreateTournamentAsync(newTournament);
+        var result = await tournamentService.CreateTournamentAsync(newTournament);
         if (!result.Equals("0"))
         {
             Notification = "Tournament created, Id: " + result;
@@ -97,9 +94,9 @@
 
     }
 
-    private async Task JoinATournament()
+    private async Task JoinATournamentAsync()
     {
-        var result = await tournament.JoinATournamentAsync(CurrentUser, TournamentsIdInserted);
+        var result = await tournamentService.JoinATournamentAsync(CurrentUser, TournamentsIdInserted);
 
         if (result)
         {

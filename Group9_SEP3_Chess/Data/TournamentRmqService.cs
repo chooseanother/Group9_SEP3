@@ -6,14 +6,14 @@ using Group9_SEP3_Chess.Models;
 
 namespace Group9_SEP3_Chess.Data
 {
-    public class TournamentService : ITournament
+    public class TournamentRmqService : ITournamentService
 
     {
-        private readonly IRabbitMq rabbitMq;
+        private readonly IRabbitMqService rabbitMqService;
 
-        public TournamentService(IRabbitMq rabbitMq)
+        public TournamentRmqService(IRabbitMqService rabbitMqService)
         {
-            this.rabbitMq = rabbitMq;
+            this.rabbitMqService = rabbitMqService;
         }
 
         public async Task<string> CreateTournamentAsync(Tournament tournament)
@@ -22,13 +22,13 @@ namespace Group9_SEP3_Chess.Data
             var message = new Message {Action = "CreateTournament", Data = jsonTournament};
             Console.WriteLine(message);
 
-            var response = await rabbitMq.SendRequestAsync(message);
+            var response = await rabbitMqService.SendRequestAsync(message);
             return response.Data;
         }
 
         public async Task<bool> JoinATournamentAsync(string username, int tournamentId)
         {
-            var response = await rabbitMq.SendRequestAsync(new Message
+            var response = await rabbitMqService.SendRequestAsync(new Message
             {
                 Action = "JoinTournament",
                 Data = username,
@@ -40,7 +40,7 @@ namespace Group9_SEP3_Chess.Data
 
         public async Task<IList<Tournament>> GetTournamentsByUserAsync(string loggedInUser)
         {
-            var response = await rabbitMq.SendRequestAsync(new Message
+            var response = await rabbitMqService.SendRequestAsync(new Message
             {
                 Action = "TournamentHistory",
                 Data = JsonSerializer.Serialize(loggedInUser)
