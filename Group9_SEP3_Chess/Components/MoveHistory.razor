@@ -1,0 +1,51 @@
+@using Group9_SEP3_Chess.Models
+@using Group9_SEP3_Chess.Data
+@inject IMatchService matchService
+
+@if (moves == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else if (!moves.Any())
+{
+    <p>
+        <em>No moves registered yet. </em>
+    </p>
+}
+else
+{
+    <table>
+        <thead>
+        <th>Piece</th>
+        <th>Color</th>
+        <th>Start position</th>
+        <th>End position</th>
+        </thead>
+        @foreach (var item in moves)
+        {
+            <tr>
+                <th>@item.Piece</th>
+                <th>@item.Color</th>
+                <th>@item.StartPosition</th>
+                <th>@item.EndPosition</th>
+            </tr>
+        }
+    </table>
+}
+
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private IList<Move> moves;
+
+    protected override async Task OnInitializedAsync()
+    {
+        moves = await matchService.GetMovesAsync(Id);
+    }
+
+}

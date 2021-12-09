@@ -1,0 +1,73 @@
+@using Microsoft.AspNetCore.Components
+@using Group9_SEP3_Chess.Models
+@using Group9_SEP3_Chess.Data
+
+@inject IUserService userService
+
+<h3>Register</h3>
+<EditForm Model="@newUserItem" OnValidSubmit="@HandleValidSubmitAsync" OnInvalidSubmit="@HandleInvalidSubmit">
+    <div class="row">
+        <div class="col-9">
+            <DataAnnotationsValidator/>
+            <ValidationSummary/>
+            <div style="display: grid;grid-template-columns: auto auto" data-role="listview">
+                <div class="form-group">
+                    Username:<br/>
+                    <InputText @bind-Value="newUserItem.Username"/>
+                </div>
+                <div>
+                    
+                </div>
+                <div class="form-group">
+                    Email:<br/>
+                    <InputText @bind-Value="newUserItem.Email"/>
+                </div>
+                <div class="form-group">
+                    Confirm Email:<br/>
+                    <InputText @bind-Value="newUserItem.ConfirmEmail"/>
+                </div>
+                <div class="form-group">
+                    Password:<br/>
+                    <InputText type="password" @bind-Value="newUserItem.Password"/>
+                </div>
+                <div class="form-group">
+                    Confirm Password:<br/>
+                    <InputText type="password" @bind-Value="newUserItem.ConfirmPassword"/>
+                </div>
+            </div>
+            <p class="actions">
+                <button class="btn btn-dark" type="submit">Register</button>
+            </p>
+        </div>
+    </div>
+</EditForm>
+<p id="result" style="color:red">@result</p>
+
+@code {
+    private User newUserItem;
+    private string result;
+
+    protected override void OnInitialized()
+    {
+        newUserItem = new User();
+    }
+
+    private async Task HandleValidSubmitAsync()
+    {
+        Console.WriteLine(newUserItem);
+        try
+        {
+            result = await userService.RegisterUserAsync(newUserItem);
+            // navigate to front page
+        }
+        catch (Exception e)
+        {
+            result = e.Message;
+        }
+    }
+    
+    private void HandleInvalidSubmit()
+    {
+        result = "";
+    }
+}

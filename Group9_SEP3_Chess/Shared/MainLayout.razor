@@ -1,0 +1,30 @@
+@using Group9_SEP3_Chess.Components
+@inherits LayoutComponentBase
+@inject NavigationManager nvgMngr;
+
+<div class="page">
+    <div class="main">
+        <div class="top-row px-4">
+            <a class="navbar-brand" href="" style="margin-right: auto">NOT Chess</a>
+            <Login/>
+        </div>
+
+        <div class="content px-4">
+            @Body
+        </div>
+    </div>
+</div>
+
+@code{
+    [CascadingParameter] protected Task<AuthenticationState> AuthStat { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var user = (await AuthStat).User;
+        if(!user.Identity.IsAuthenticated)
+        {
+            nvgMngr.NavigateTo($"/");
+        }
+    }
+}

@@ -1,0 +1,86 @@
+@using Group9_SEP3_Chess.Models
+@using Group9_SEP3_Chess.Data
+@using Group9_SEP3_Chess.Authentication
+@inject AuthenticationStateProvider authenticationStateProvider;
+@inject IChallengeService challengeService
+
+
+@if (challenges == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else if (!challenges.Any())
+{
+    <p>
+        <em>No Challenges</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Challenger</th>
+            @* <th>Challenged</th> *@
+            <th>Turn Time</th>
+            <th>Accept</th>
+            <th>Decline</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var c in challenges)
+        {
+            <tr>
+                <td>@c.Challenger</td>
+                @* <td>@c.Username</td> *@
+                <td>@turnLengths.TurnTimes[c.TurnLength]</td>
+                <td>
+                    <button class="btn btn-outline-dark" @onclick='() => AcceptChallengeAsync(c)'>
+                        <i class="oi oi-check" style="color:green;"></i>
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-outline-dark" @onclick='() => RejectChallengeAsync(c)'>
+                        <i class="oi oi-trash" style="color:red;"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public string? Username { get; set; }
+    
+    private TurnLengths turnLengths = new TurnLengths();
+
+    private IList<Challenge> challenges;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Username = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser().Username;
+        challenges = await challengeService.GetChallengesAsync(Username);
+    }
+
+    private async Task AcceptChallengeAsync(Challenge challenge)
+    {
+        var result = await this.challengeService.AcceptChallengeAsync(challenge);
+        if (result)
+        {
+            challenges.Remove(challenge);
+        }
+    }
+
+    private async Task RejectChallengeAsync(Challenge challenge)
+    {
+        var result = await this.challengeService.DeclineChallengeAsync(challenge);
+        if (result)
+        {
+            challenges.Remove(challenge);
+        }
+    }
+}

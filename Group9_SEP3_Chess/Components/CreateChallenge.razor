@@ -1,0 +1,72 @@
+@using Group9_SEP3_Chess.Models
+@using Group9_SEP3_Chess.Data
+@using Group9_SEP3_Chess.Authentication
+@inject AuthenticationStateProvider authenticationStateProvider;
+
+@inject IChallengeService challengeService
+
+<h3>Challenge User</h3>
+<div>
+    <EditForm Model="@newChallenge" OnValidSubmit="@HandleValidSubmitAsync" OnInvalidSubmit="@HandleInvalidSubmit">
+        <DataAnnotationsValidator/>
+        <ValidationSummary/>
+        <div class="form-group">
+            Select turn length:<br/>
+            <InputSelect @bind-Value="newChallenge.TurnLength">
+                <option></option>
+                @foreach (var (key, value) in turnLengths.TurnTimes)
+                {
+                    <option value="@key">@value</option>
+                }
+            </InputSelect>
+        </div>
+        <div style="display: flex;align-items: center">
+            <div class="form-group">
+                User to challenge:<br/>
+                <InputText @bind-Value="newChallenge.Username"/>
+            </div>
+            @if (showError)
+            {
+                <p style="color:@ErrorColor;margin: 0 10px;">@ErrorMessage</p>
+            }
+        </div>
+        <p class="actions" style="margin-bottom: 50px">
+            <button class="btn btn-outline-dark" type="submit">Challenge</button>
+        </p>
+    </EditForm>
+</div>
+
+@code {
+    private string Username { get; set; }
+    private string ErrorMessage { get; set; }
+    private string ErrorColor { get; set; }
+    private TurnLengths turnLengths = new TurnLengths();
+    private Challenge newChallenge = new Challenge
+    {
+        TurnLength = 120
+    };
+    private bool showError;
+
+    protected override void OnInitialized()
+    {
+        // load username from currently logged in user
+        Username = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser().Username;
+    }
+    
+    private async Task HandleValidSubmitAsync()
+    {
+        showError = false;
+        newChallenge.Challenger = Username;
+
+        var result = await challengeService.ChallengeUserAsync(newChallenge);
+
+        ErrorColor = result.Contains("Failed") ? "red" : "green";
+        showError = true;
+        ErrorMessage = result;
+    }
+    
+    private void HandleInvalidSubmit()
+    {
+        
+    }
+}

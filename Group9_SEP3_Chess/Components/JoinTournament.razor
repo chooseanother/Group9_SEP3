@@ -1,0 +1,111 @@
+@using Group9_SEP3_Chess.Models
+@using Group9_SEP3_Chess.Data
+@using Group9_SEP3_Chess.Authentication
+@using Microsoft.VisualBasic.CompilerServices
+@inject AuthenticationStateProvider customAuthenticationStateProvider;
+@inject ITournamentService tournamentService;
+
+
+<div>
+    <div class="HostTournament">
+        <EditForm Model="@newTournament" OnValidSubmit="@CreateTournamentAsync">
+            <DataAnnotationsValidator/>
+            <ValidationSummary/>
+            <div class="form-group">
+                <h4>Host Tournament</h4>
+                Select turn length:
+                <br/>
+                <InputSelect @bind-Value="newTournament.TurnTime">
+                    @foreach (var (key, value) in turnLengths.TurnTimes)
+                    {
+                        <option value="@key">@value</option>
+                    }
+                </InputSelect>
+                <br/>
+
+                Nr of Participants:
+                <InputSelect @bind-Value="newTournament.NrOfParticipants" style="margin-top: 19px">
+                    <option>4</option>
+                    <option>8</option>
+                    <option>16</option>
+                    <option>32</option>
+                </InputSelect>
+
+                <p style="margin-top: 10px;margin-bottom: 60px;" class="actions">
+                    <button class="btn btn-outline-dark" type="submit">Create</button>
+                </p>
+            </div>
+        </EditForm>
+    </div>
+
+    <div class="JoinTournament">
+        <form>
+
+            <h4>Join Tournament</h4>
+            Tournament ID:
+            <br/>
+            <input type="number" @bind-value="TournamentsIdInserted" required>
+        </form>
+        <button class="btn btn-outline-dark" style="margin-top: 0.5rem" @onclick="JoinATournamentAsync">Join</button>
+    </div>
+    
+    <em>@Notification</em>
+
+</div>
+
+
+<style>
+.HostTournament{margin-top: 5rem; margin-bottom: 5rem;}
+    
+</style>
+
+
+@code {
+    private Tournament newTournament = new()
+    {
+        NrOfParticipants = 4,
+        TurnTime = 120
+    };
+
+    private string Notification { get; set; }
+    private int TournamentsIdInserted { get; set; }
+    private string CurrentUser { get; set; }
+
+    private TurnLengths turnLengths = new TurnLengths();
+    
+    protected override void OnInitialized()
+    {
+        CurrentUser = ((CustomAuthenticationStateProvider) customAuthenticationStateProvider).GetCachedUser().Username;
+    }
+
+    private async Task CreateTournamentAsync()
+    {
+        newTournament.Creator = CurrentUser;
+        
+        var result = await tournamentService.CreateTournamentAsync(newTournament);
+        if (!result.Equals("0"))
+        {
+            Notification = "Tournament created, Id: " + result;
+        }
+        else
+        {
+            Notification = "Tournament can not be created";
+        }
+
+    }
+
+    private async Task JoinATournamentAsync()
+    {
+        var result = await tournamentService.JoinATournamentAsync(CurrentUser, TournamentsIdInserted);
+
+        if (result)
+        {
+            Notification = $"The tournament with ID: {TournamentsIdInserted}, was joined successfully";
+        }
+        else
+        {
+            Notification = $"The tournament with ID: {TournamentsIdInserted} can not be joined";
+        }
+    }
+
+}

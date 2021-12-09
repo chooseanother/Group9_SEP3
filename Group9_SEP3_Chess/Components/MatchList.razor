@@ -1,0 +1,86 @@
+@using Group9_SEP3_Chess.Data
+@using Group9_SEP3_Chess.Models
+@using System.Text.Json
+@using Group9_SEP3_Chess.Authentication
+@inject IMatchService matchService;
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navigationManager
+
+@if (matches == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else if (!matches.Any())
+{
+    <p>
+        <em>No matches in the system. </em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <th>Match ID</th>
+        <th>Tournament ID</th>
+        <th>Opponent</th>
+        <th>Length of turn</th>
+        <th>Latest move</th>
+        </thead>
+        @foreach (var item in matches)
+        {
+            <tr>
+                <td>@item.MatchId</td>
+                @if (item.TournamentId == 0)
+                {
+                    <td></td>
+                }
+                else
+                {
+                    <td>@item.TournamentId</td>
+                }
+                @if (item.WhitePlayer.Username.Equals(loggedInUser.Username))
+                {
+                    <td>@item.BlackPlayer.Username</td>
+                }
+                else
+                {
+                    <td>@item.WhitePlayer.Username</td>
+                }
+                <td>@item.TurnTime</td>
+                <td>@(new DateTime(1970,1,1,1,0,0,0, DateTimeKind.Utc).AddMilliseconds(item.LatestMove))</td>
+                <td>
+                    <button class="btn btn-outline-dark" @onclick="@(() => ViewMatch(item.MatchId))">@(ActiveMatches ? "Play match" : "View")</button>
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@code {
+    [Parameter]
+    public bool ActiveMatches { get; set; }
+    
+    private IList<Match> matches;
+    private User loggedInUser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loggedInUser = ((CustomAuthenticationStateProvider) authenticationStateProvider).GetCachedUser();
+        if (ActiveMatches)
+        {
+            matches = await matchService.GetMatchesAsync(loggedInUser.Username);
+        }
+        else
+        {
+            matches = await matchService.GetFinishedMatchesAsync(loggedInUser.Username);
+        }
+    }
+      
+    private void ViewMatch(int matchId)
+    {
+        navigationManager.NavigateTo($"/match/{matchId}");
+    }
+}
+
