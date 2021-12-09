@@ -6,8 +6,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 /*
+ *  Code solution was found on Stack Overflow, written by the user dbc
  *  source: https://stackoverflow.com/questions/66280645/how-can-i-serialize-a-double-2d-array-to-json-using-system-text-json
- * 
  */
 
 namespace Group9_SEP3_Chess.Json2DArrayHelp
