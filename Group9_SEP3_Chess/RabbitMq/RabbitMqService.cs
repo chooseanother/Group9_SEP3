@@ -8,7 +8,7 @@ using Group9_SEP3_Chess.Models;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace Group9_SEP3_Chess.Data
+namespace Group9_SEP3_Chess.RabbitMq
 {
     public class RabbitMqService : IRabbitMqService
     {

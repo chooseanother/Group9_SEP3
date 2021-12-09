@@ -2,6 +2,7 @@ using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Group9_SEP3_Chess.Models;
+using Group9_SEP3_Chess.RabbitMq;
 
 
 namespace Group9_SEP3_Chess.Data
