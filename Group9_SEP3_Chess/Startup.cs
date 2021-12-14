@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Group9_SEP3_Chess.Authentication;
 using Group9_SEP3_Chess.Data;
+using Group9_SEP3_Chess.RabbitMq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
